@@ -4,7 +4,7 @@
 Plugin Name: Contact Form 7 - Dynamic Text Extension
 Plugin URI: http://sevenspark.com/wordpress-plugins/contact-form-7-dynamic-text-extension
 Description: Provides a dynamic text field that accepts any shortcode to generate the content.  Requires Contact Form 7
-Version: 1.1
+Version: 1.1.0.1
 Author: Chris Mavricos, SevenSpark
 Author URI: http://sevenspark.com
 License: GPL2
@@ -281,7 +281,7 @@ function wpcf7_dynamichidden_shortcode_handler( $tag ) {
 	//if ( is_a( $wpcf7_contact_form, 'WPCF7_ContactForm' ) )
 	//	$validation_error = $wpcf7_contact_form->validation_error( $name );
 
-	$html = '<span class="wpcf7-form-control-wrap ' . $name . '">' . $html . $validation_error . '</span>';
+	$html = '<span class="wpcf7-form-control-wrap ' . $name . '">' . $html . '</span>';
 
 	return $html;
 }
