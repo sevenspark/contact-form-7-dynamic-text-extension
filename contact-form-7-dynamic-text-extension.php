@@ -55,7 +55,8 @@ add_action( 'plugins_loaded', 'wpcf7_dynamictext_init' , 20 );
  *************************************************************/
 
 function wpcf7_dynamictext_shortcode_handler( $tag ) {
-	global $wpcf7_contact_form;
+	
+	$wpcf7_contact_form = WPCF7_ContactForm::get_current();
 
 	if ( ! is_array( $tag ) )
 		return '';
@@ -148,7 +149,8 @@ function wpcf7_dynamictext_shortcode_handler( $tag ) {
 /* Validation filter */
 
 function wpcf7_dynamictext_validation_filter( $result, $tag ) {
-	global $wpcf7_contact_form;
+	
+	$wpcf7_contact_form = WPCF7_ContactForm::get_current();
 
 	$type = $tag['type'];
 	$name = $tag['name'];
@@ -229,7 +231,8 @@ function wpcf7_tg_pane_dynamictext( $type = 'dynamictext' ) {
  * DynamicHidden Shortcode
  *************************************************************/
 function wpcf7_dynamichidden_shortcode_handler( $tag ) {
-	global $wpcf7_contact_form;
+	
+	$wpcf7_contact_form = WPCF7_ContactForm::get_current();
 
 	if ( ! is_array( $tag ) )
 		return '';
