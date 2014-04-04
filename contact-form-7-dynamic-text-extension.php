@@ -76,7 +76,7 @@ function wpcf7_dynamictext_shortcode_handler( $tag ) {
 	$maxlength_att = '';
 	$tabindex_att = '';
 
-	$class_att .= ' wpcf7-text';
+	$class_att .= ' wpcf7-text wpcf7-form-control';
 
 	if ( 'dynamictext*' == $type )
 		$class_att .= ' wpcf7-validates-as-required';
@@ -97,6 +97,11 @@ function wpcf7_dynamictext_shortcode_handler( $tag ) {
 
 		}
 	}
+
+	$validation_error = wpcf7_get_validation_error( $tag->name );
+	
+	if ( $validation_error )
+		$class_att .= ' wpcf7-not-valid';
 
 	if ( $id_att )
 		$atts .= ' id="' . trim( $id_att ) . '"';
