@@ -134,7 +134,11 @@ function wpcf7_dynamictext_shortcode_handler( $tag ) {
 		$readonly = 'readonly="readonly"';
 	}
 
-	$html = '<input type="text" name="' . $name . '" value="' . esc_attr( $value ) . '"' . $atts . ' '. $readonly.' />';
+	if(in_array('textArea', $options)){
+		$html = '<textarea name="' . $name . '" ' . $atts . ' '. $readonly.' >' . esc_attr( $value ) . '</textarea>';
+	}else{
+		$html = '<input type="text" name="' . $name . '" value="' . esc_attr( $value ) . '"' . $atts . ' '. $readonly.' />';
+	}
 
 	$validation_error = '';
 	if ( is_a( $wpcf7_contact_form, 'WPCF7_ContactForm' ) )
@@ -210,6 +214,7 @@ function wpcf7_tg_pane_dynamictext( $type = 'dynamictext' ) {
 <tr>
 <td>
 <input type="checkbox" name="uneditable" class="option" />&nbsp;<?php echo esc_html( __( "Make this field Uneditable", 'wpcf7' ) ); ?><br />
+<input type="checkbox" name="textArea" class="option" />&nbsp;<?php echo esc_html( __( "Make this a text area", 'wpcf7' ) ); ?><br />
 </td>
 
 <td><?php echo esc_html( __( 'Dynamic value', 'wpcf7' ) ); ?> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br /><input type="text" name="values" class="oneline" />
