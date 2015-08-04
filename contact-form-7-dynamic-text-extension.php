@@ -4,13 +4,13 @@
 Plugin Name: Contact Form 7 - Dynamic Text Extension
 Plugin URI: http://sevenspark.com/wordpress-plugins/contact-form-7-dynamic-text-extension
 Description: Provides a dynamic text field that accepts any shortcode to generate the content.  Requires Contact Form 7
-Version: 1.2
+Version: 2.0
 Author: Chris Mavricos, SevenSpark
 Author URI: http://sevenspark.com
 License: GPL2
 */
 
-/*  Copyright 2010-2014  Chris Mavricos, SevenSpark http://sevenspark.com
+/*  Copyright 2010-2015  Chris Mavricos, SevenSpark http://sevenspark.com
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -27,140 +27,129 @@ License: GPL2
 */
 
 
-/**
- ** A base module for [dynamictext], [dynamictext*]
- **/
-function wpcf7_dynamictext_init(){
-
-	if(function_exists('wpcf7_add_shortcode')){
-
-		/* Shortcode handler */		
-		wpcf7_add_shortcode( 'dynamictext', 'wpcf7_dynamictext_shortcode_handler', true );
-		wpcf7_add_shortcode( 'dynamictext*', 'wpcf7_dynamictext_shortcode_handler', true );
-		wpcf7_add_shortcode( 'dynamichidden', 'wpcf7_dynamichidden_shortcode_handler', true );
-	
-	}
-	
-	add_filter( 'wpcf7_validate_dynamictext', 'wpcf7_dynamictext_validation_filter', 10, 2 );
-	add_filter( 'wpcf7_validate_dynamictext*', 'wpcf7_dynamictext_validation_filter', 10, 2 );
-	
-	add_action( 'admin_init', 'wpcf7_add_tag_generator_dynamictext', 15 );
-	add_action( 'admin_init', 'wpcf7_add_tag_generator_dynamichidden', 16 );
-	
+add_action( 'plugins_loaded', 'wpcf7dtx_init' , 20 );
+function wpcf7dtx_init(){
+	add_action( 'wpcf7_init', 'wpcf7dtx_add_shortcode_dynamictext' );
+	add_filter( 'wpcf7_validate_dynamictext*', 'wpcf7dtx_dynamictext_validation_filter', 10, 2 );
 }
-add_action( 'plugins_loaded', 'wpcf7_dynamictext_init' , 20 );
 
-/*************************************************************
- * DynamicText Shortcode
- *************************************************************/
 
-function wpcf7_dynamictext_shortcode_handler( $tag ) {
-	
-	$wpcf7_contact_form = WPCF7_ContactForm::get_current();
 
-	if ( ! is_array( $tag ) )
+function wpcf7dtx_add_shortcode_dynamictext() {
+	wpcf7_add_shortcode(
+		array( 'dynamictext' , 'dynamictext*' , 'dynamichidden' ),
+		'wpcf7dtx_dynamictext_shortcode_handler', true );
+}
+function wpcf7dtx_dynamictext_shortcode_handler( $tag ) {
+	$tag = new WPCF7_Shortcode( $tag );
+
+	if ( empty( $tag->name ) )
 		return '';
 
-	$type = $tag['type'];
-	$name = $tag['name'];
-	$options = (array) $tag['options'];
-	$values = (array) $tag['values'];
+	$validation_error = wpcf7_get_validation_error( $tag->name );
 
-	if ( empty( $name ) )
-		return '';
+	$class = wpcf7_form_controls_class( $tag->type, 'wpcf7dtx-dynamictext' );
 
-	$atts = '';
-	$id_att = '';
-	$class_att = '';
-	$size_att = '';
-	$maxlength_att = '';
-	$tabindex_att = '';
 
-	$class_att .= ' wpcf7-text';
+	if ( $validation_error )
+		$class .= ' wpcf7-not-valid';
 
-	if ( 'dynamictext*' == $type )
-		$class_att .= ' wpcf7-validates-as-required';
+	$atts = array();
 
-	foreach ( $options as $option ) {
-		if ( preg_match( '%^id:([-0-9a-zA-Z_]+)$%', $option, $matches ) ) {
-			$id_att = $matches[1];
+	$atts['size'] = $tag->get_size_option( '40' );
+	$atts['maxlength'] = $tag->get_maxlength_option();
+	$atts['minlength'] = $tag->get_minlength_option();
 
-		} elseif ( preg_match( '%^class:([-0-9a-zA-Z_]+)$%', $option, $matches ) ) {
-			$class_att .= ' ' . $matches[1];
-
-		} elseif ( preg_match( '%^([0-9]*)[/x]([0-9]*)$%', $option, $matches ) ) {
-			$size_att = (int) $matches[1];
-			$maxlength_att = (int) $matches[2];
-
-		} elseif ( preg_match( '%^tabindex:(\d+)$%', $option, $matches ) ) {
-			$tabindex_att = (int) $matches[1];
-
-		}
+	if ( $atts['maxlength'] && $atts['minlength'] && $atts['maxlength'] < $atts['minlength'] ) {
+		unset( $atts['maxlength'], $atts['minlength'] );
 	}
 
-	if ( $id_att )
-		$atts .= ' id="' . trim( $id_att ) . '"';
+	$atts['class'] = $tag->get_class_option( $class );
+	$atts['id'] = $tag->get_id_option();
+	$atts['tabindex'] = $tag->get_option( 'tabindex', 'int', true );
 
-	if ( $class_att )
-		$atts .= ' class="' . trim( $class_att ) . '"';
+	if ( $tag->has_option( 'readonly' ) )
+		$atts['readonly'] = 'readonly';
 
-	if ( $size_att )
-		$atts .= ' size="' . $size_att . '"';
-	else
-		$atts .= ' size="40"'; // default size
+	if ( $tag->is_required() )
+		$atts['aria-required'] = 'true';
 
-	if ( $maxlength_att )
-		$atts .= ' maxlength="' . $maxlength_att . '"';
+	$atts['aria-invalid'] = $validation_error ? 'true' : 'false';
 
-	if ( '' !== $tabindex_att )
-		$atts .= sprintf( ' tabindex="%d"', $tabindex_att );
+	$value = (string) reset( $tag->values );
 
-	// Value
-	if ( is_a( $wpcf7_contact_form, 'WPCF7_ContactForm' ) && $wpcf7_contact_form->is_posted() ) {
-		if ( isset( $_POST['_wpcf7_mail_sent'] ) && $_POST['_wpcf7_mail_sent']['ok'] )
-			$value = '';
-		else
-			$value = stripslashes_deep( $_POST[$name] );
-	} else {
-		$value = isset( $values[0] ) ? $values[0] : '';
+	if ( $tag->has_option( 'placeholder' ) || $tag->has_option( 'watermark' ) ) {
+		$atts['placeholder'] = $value;
+		$value = '';
 	}
-	
+
+	$value = $tag->get_default_option( $value );
+
+	$value = wpcf7_get_hangover( $tag->name, $value );
+
 	$scval = do_shortcode('['.$value.']');
-	if($scval != '['.$value.']') $value = $scval;
-	
-	//echo '<pre>'; print_r($options);echo '</pre>';
-	$readonly = '';
-	if(in_array('uneditable', $options)){
-		$readonly = 'readonly="readonly"';
+	if( $scval != '['.$value.']' ){
+		$value = esc_attr( $scval );
 	}
 
-	$html = '<input type="text" name="' . $name . '" value="' . esc_attr( $value ) . '"' . $atts . ' '. $readonly.' />';
+	$atts['value'] = $value;
+	
+//echo '<pre>'; print_r( $tag ); echo '</pre>';
+	switch( $tag->basetype ){
+		case 'dynamictext':
+			$atts['type'] = 'text';
+			break;
+		case 'dynamichidden':
+			$atts['type'] = 'hidden';
+			break;
+		default:
+			$atts['type'] = 'text';
+			break;
+	}
 
-	$validation_error = '';
-	if ( is_a( $wpcf7_contact_form, 'WPCF7_ContactForm' ) )
-		$validation_error = $wpcf7_contact_form->validation_error( $name );
+	$atts['name'] = $tag->name;
 
-	$html = '<span class="wpcf7-form-control-wrap ' . $name . '">' . $html . $validation_error . '</span>';
+	$atts = wpcf7_format_atts( $atts );
+
+	$html = sprintf(
+		'<span class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s</span>',
+		sanitize_html_class( $tag->name ), $atts, $validation_error );
 
 	return $html;
 }
 
+//add_filter( 'wpcf7_validate_text', 'wpcf7_text_validation_filter', 10, 2 );  // in init
+function wpcf7dtx_dynamictext_validation_filter( $result, $tag ) {
+	$tag = new WPCF7_Shortcode( $tag );
 
-/* Validation filter */
+	$name = $tag->name;
 
-function wpcf7_dynamictext_validation_filter( $result, $tag ) {
-	
-	$wpcf7_contact_form = WPCF7_ContactForm::get_current();
+	$value = isset( $_POST[$name] )
+		? trim( wp_unslash( strtr( (string) $_POST[$name], "\n", " " ) ) )
+		: '';
 
-	$type = $tag['type'];
-	$name = $tag['name'];
+	if ( 'dynamictext' == $tag->basetype ) {
+		if ( $tag->is_required() && '' == $value ) {
+			$result->invalidate( $tag, wpcf7_get_message( 'invalid_required' ) );
+		}
+	}
 
-	$_POST[$name] = trim( strtr( (string) $_POST[$name], "\n", " " ) );
+	if ( ! empty( $value ) ) {
+		$maxlength = $tag->get_maxlength_option();
+		$minlength = $tag->get_minlength_option();
 
-	if ( 'dynamictext*' == $type ) {
-		if ( '' == $_POST[$name] ) {
-			$result['valid'] = false;
-			$result['reason'][$name] = $wpcf7_contact_form->message( 'invalid_required' );
+		if ( $maxlength && $minlength && $maxlength < $minlength ) {
+			$maxlength = $minlength = null;
+		}
+
+		$code_units = wpcf7_count_code_units( $value );
+
+		if ( false !== $code_units ) {
+			if ( $maxlength && $maxlength < $code_units ) {
+				$result->invalidate( $tag, wpcf7_get_message( 'invalid_too_long' ) );
+			} elseif ( $minlength && $code_units < $minlength ) {
+				$result->invalidate( $tag, wpcf7_get_message( 'invalid_too_short' ) );
+			}
 		}
 	}
 
@@ -168,170 +157,105 @@ function wpcf7_dynamictext_validation_filter( $result, $tag ) {
 }
 
 
-/* Tag generator */
 
-function wpcf7_add_tag_generator_dynamictext() {
-	if(function_exists('wpcf7_add_tag_generator')){
-		wpcf7_add_tag_generator( 'dynamictext', __( 'Dynamic Text field', 'wpcf7' ),
-			'wpcf7-tg-pane-dynamictext', 'wpcf7_tg_pane_dynamictext_' );
+
+if ( is_admin() ) {
+	add_action( 'admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 25 );
+}
+
+function wpcf7dtx_add_tag_generator_dynamictext() {
+
+	$tag_generator = WPCF7_TagGenerator::get_instance();
+	$tag_generator->add( 'dynamictext', __( 'dynamic text', 'contact-form-7' ),
+		'wpcf7dtx_tag_generator_dynamictext' );
+
+	$tag_generator->add( 'dynamichidden', __( 'dynamic hidden', 'contact-form-7' ),
+		'wpcf7dtx_tag_generator_dynamictext' );
+}
+
+
+function wpcf7dtx_tag_generator_dynamictext( $contact_form , $args = '' ){
+	$args = wp_parse_args( $args, array() );
+	$type = $args['id'];
+
+	$description;
+
+
+	switch( $type ){
+		case 'dynamictext':
+			$description = __( "Generate a form-tag for a single-line plain text input field, with a dynamically generated default value.", 'contact-form-7' );
+			//$type = 'text';
+			break;
+		case 'dynamichidden':
+			$description = __( "Generate a form-tag for a hidden input field, with a dynamically generated default value.", 'contact-form-7' );
+			//$type = 'hidden';
+			break;
+		default:
+			//$type = 'text';
+			break;
 	}
-}
+	
 
-function wpcf7_tg_pane_dynamictext_( $contact_form ) {
-	wpcf7_tg_pane_dynamictext( 'dynamictext' );
-}
+	
 
-function wpcf7_tg_pane_dynamictext( $type = 'dynamictext' ) {
+
 ?>
-<div id="wpcf7-tg-pane-<?php echo $type; ?>" class="hidden">
-<form action="">
-<table>
-<tr><td><input type="checkbox" name="required" />&nbsp;<?php echo esc_html( __( 'Required field?', 'wpcf7' ) ); ?></td></tr>
-<tr><td><?php echo esc_html( __( 'Name', 'wpcf7' ) ); ?><br /><input type="text" name="name" class="tg-name oneline" /></td><td></td></tr>
+<div class="control-box">
+<fieldset>
+<legend><?php echo $description; ?></legend>
+
+<table class="form-table">
+<tbody>
+	<tr>
+	<th scope="row"><?php echo esc_html( __( 'Field type', 'contact-form-7' ) ); ?></th>
+	<td>
+		<fieldset>
+		<legend class="screen-reader-text"><?php echo esc_html( __( 'Field type', 'contact-form-7' ) ); ?></legend>
+		<label><input type="checkbox" name="required" /> <?php echo esc_html( __( 'Required field', 'contact-form-7' ) ); ?></label>
+		</fieldset>
+	</td>
+	</tr>
+
+	<tr>
+	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-name' ); ?>"><?php echo esc_html( __( 'Name', 'contact-form-7' ) ); ?></label></th>
+	<td><input type="text" name="name" class="tg-name oneline" id="<?php echo esc_attr( $args['content'] . '-name' ); ?>" /></td>
+	</tr>
+
+	<tr>
+	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-values' ); ?>"><?php echo esc_html( __( 'Dynamic value', 'contact-form-7' ) ); ?></label></th>
+	<td><input type="text" name="values" class="oneline" id="<?php echo esc_attr( $args['content'] . '-values' ); ?>" /><br />
+	<?php _e( 'You can enter any short code.  Just leave out the square brackets (<code>[]</code>) and only use single quotes (<code>\'</code> not <code>"</code>).  <br/>So <code>[shortcode attribute="value"]</code> becomes <code>shortcode attribute=\'value\'</code>', 'contact-form-7' ); ?></td>
+	</tr>
+
+	<tr>
+	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-id' ); ?>"><?php echo esc_html( __( 'Id attribute', 'contact-form-7' ) ); ?></label></th>
+	<td><input type="text" name="id" class="idvalue oneline option" id="<?php echo esc_attr( $args['content'] . '-id' ); ?>" /></td>
+	</tr>
+
+	<tr>
+	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-class' ); ?>"><?php echo esc_html( __( 'Class attribute', 'contact-form-7' ) ); ?></label></th>
+	<td><input type="text" name="class" class="classvalue oneline option" id="<?php echo esc_attr( $args['content'] . '-class' ); ?>" /></td>
+	</tr>
+
+</tbody>
 </table>
+</fieldset>
+</div>
 
-<table>
-<tr>
-<td><code>id</code> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br />
-<input type="text" name="id" class="idvalue oneline option" /></td>
+<div class="insert-box">
+	<input type="text" name="<?php echo $type; ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
 
-<td><code>class</code> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br />
-<input type="text" name="class" class="classvalue oneline option" /></td>
-</tr>
+	<div class="submitbox">
+	<input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr( __( 'Insert Tag', 'contact-form-7' ) ); ?>" />
+	</div>
 
-<tr>
-<td><code>size</code> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br />
-<input type="text" name="size" class="numeric oneline option" /></td>
+	<br class="clear" />
 
-<td><code>maxlength</code> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br />
-<input type="text" name="maxlength" class="numeric oneline option" /></td>
-</tr>
-
-<tr>
-<td>
-<input type="checkbox" name="uneditable" class="option" />&nbsp;<?php echo esc_html( __( "Make this field Uneditable", 'wpcf7' ) ); ?><br />
-</td>
-
-<td><?php echo esc_html( __( 'Dynamic value', 'wpcf7' ) ); ?> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br /><input type="text" name="values" class="oneline" />
-<?php echo esc_html( __( 'You can enter any short code.  Just leave out the square brackets ([]) and only use single quotes (\' not ")', 'wpcf7' )); ?>
-</td>
-</tr>
-</table>
-
-<div class="tg-tag"><?php echo esc_html( __( "Copy this code and paste it into the form left.", 'wpcf7' ) ); ?><br /><input type="text" name="<?php echo $type; ?>" class="tag" readonly="readonly" onfocus="this.select()" /></div>
-
-<div class="tg-mail-tag"><?php echo esc_html( __( "And, put this code into the Mail fields below.", 'wpcf7' ) ); ?><br /><span class="arrow">&#11015;</span>&nbsp;<input type="text" class="mail-tag" readonly="readonly" onfocus="this.select()" /></div>
-</form>
 </div>
 <?php
 }
 
 
-/*************************************************************
- * DynamicHidden Shortcode
- *************************************************************/
-function wpcf7_dynamichidden_shortcode_handler( $tag ) {
-	
-	$wpcf7_contact_form = WPCF7_ContactForm::get_current();
-
-	if ( ! is_array( $tag ) )
-		return '';
-
-	$type = $tag['type'];
-	$name = $tag['name'];
-	$options = (array) $tag['options'];
-	$values = (array) $tag['values'];
-
-	if ( empty( $name ) )
-		return '';
-
-	$atts = '';
-	$id_att = '';
-	$class_att = '';
-	$size_att = '';
-	$maxlength_att = '';
-	$tabindex_att = '';
-
-	$class_att .= ' wpcf7-text';
-
-	foreach ( $options as $option ) {
-		if ( preg_match( '%^id:([-0-9a-zA-Z_]+)$%', $option, $matches ) ) {
-			$id_att = $matches[1];
-		}
-	}
-
-	if ( $id_att )
-		$atts .= ' id="' . trim( $id_att ) . '"';
-
-	// Value
-	if ( is_a( $wpcf7_contact_form, 'WPCF7_ContactForm' ) && $wpcf7_contact_form->is_posted() ) {
-		if ( isset( $_POST['_wpcf7_mail_sent'] ) && $_POST['_wpcf7_mail_sent']['ok'] )
-			$value = '';
-		else
-			$value = stripslashes_deep( $_POST[$name] );
-	} else {
-		$value = isset( $values[0] ) ? $values[0] : '';
-	}
-	
-	$scval = do_shortcode('['.$value.']');
-	if($scval != '['.$value.']') $value = $scval;
-	//echo '<pre>'; print_r($options);echo '</pre>';
-	
-	$html = '<input type="hidden" name="' . $name . '" value="' . esc_attr( $value ) . '"' . $atts . ' />';
-
-	//No need to validate, it's a hidden field - we could validate by checking the value hasn't changed, but that seems overkill I think
-	//$validation_error = '';
-	//if ( is_a( $wpcf7_contact_form, 'WPCF7_ContactForm' ) )
-	//	$validation_error = $wpcf7_contact_form->validation_error( $name );
-
-	$html = '<span class="wpcf7-form-control-wrap ' . $name . '">' . $html . '</span>';
-
-	return $html;
-}
-
-
-/* Tag generator */
-
-function wpcf7_add_tag_generator_dynamichidden() {
-	if(function_exists('wpcf7_add_tag_generator')){
-		wpcf7_add_tag_generator( 'dynamichidden', __( 'Dynamic Hidden field', 'wpcf7' ),
-			'wpcf7-tg-pane-dynamichidden', 'wpcf7_tg_pane_dynamichidden_' );
-	}
-}
-
-function wpcf7_tg_pane_dynamichidden_( $contact_form ) {
-	wpcf7_tg_pane_dynamichidden( 'dynamichidden' );
-}
-
-function wpcf7_tg_pane_dynamichidden( $type = 'dynamichidden' ) {
-?>
-<div id="wpcf7-tg-pane-<?php echo $type; ?>" class="hidden">
-<form action="">
-<table>
-<tr><td><?php echo esc_html( __( 'Name', 'wpcf7' ) ); ?><br /><input type="text" name="name" class="tg-name oneline" /></td><td></td></tr>
-</table>
-
-<table>
-<tr>
-<td><code>id</code> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br />
-<input type="text" name="id" class="idvalue oneline option" /></td>
-</tr>
-
-<tr>
-
-<td><?php echo esc_html( __( 'Dynamic value', 'wpcf7' ) ); ?> (<?php echo esc_html( __( 'optional', 'wpcf7' ) ); ?>)<br /><input type="text" name="values" class="oneline" />
-<?php echo esc_html( __( 'You can enter any short code.  Just leave out the square brackets ([]) and only use single quotes (\' not ")', 'wpcf7' )); ?>
-</td>
-</tr>
-</table>
-
-<div class="tg-tag"><?php echo esc_html( __( "Copy this code and paste it into the form left.", 'wpcf7' ) ); ?><br /><input type="text" name="<?php echo $type; ?>" class="tag" readonly="readonly" onfocus="this.select()" /></div>
-
-<div class="tg-mail-tag"><?php echo esc_html( __( "And, put this code into the Mail fields below.", 'wpcf7' ) ); ?><br /><span class="arrow">&#11015;</span>&nbsp;<input type="text" class="mail-tag" readonly="readonly" onfocus="this.select()" /></div>
-</form>
-</div>
-<?php
-}
 
 
 
@@ -409,14 +333,16 @@ add_shortcode('CF7_get_post_var', 'cf7_get_post_var');
 /* Insert the current URL */
 function cf7_url(){
 	$pageURL = 'http';
- 	if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+ 	if( isset( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] == "on"){ $pageURL .= "s"; }
+ 	
  	$pageURL .= "://";
- 	if ($_SERVER["SERVER_PORT"] != "80") {
+ 	
+ 	if( isset( $_SERVER["SERVER_PORT"] ) && $_SERVER["SERVER_PORT"] != "80" ){
   		$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
  	} else {
   		$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
  	}
- 	return $pageURL;	
+ 	return $pageURL;
 }
 add_shortcode('CF7_URL', 'cf7_url');
 
