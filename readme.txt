@@ -230,7 +230,5 @@ None.  Yet.
 
 
 == Upgrade Notice ==
-1.0.4.2 fixes a bug that occurs when JavaScript is disabled and a form item doesn't validate on the first try
-1.0.4.1 fixes a "Headers already sent" error that can occur for some users.
 
-1.0.4 upgrade includes hidden field capability and two new shortcodes - current user info and custom post fields.
+2.0 complete rewrite for compatibility with latest Contact Form 7
