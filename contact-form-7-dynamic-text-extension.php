@@ -330,6 +330,28 @@ function cf7_get_post_var($atts){
 }
 add_shortcode('CF7_get_post_var', 'cf7_get_post_var');
 
+/* Insert a get_the_author_meta Variable */
+function cf7_get_author_meta_var($atts){
+	extract(shortcode_atts(array(
+		'key' => 'user_email',
+	), $atts));
+	
+	switch($key){
+		case 'name':
+			$key = 'display_name';
+			break;
+		case 'first_name':
+			$key = 'first_name';
+			break;
+	}
+	
+	global $post;
+	//echo '<pre>'; print_r($post); echo '</pre>';
+	$val = get_the_author_meta( $key );
+	return $val;
+}
+add_shortcode('CF7_get_author_meta_var', 'cf7_get_author_meta_var');
+
 /* Insert the current URL */
 function cf7_url(){
 	$pageURL = 'http';
