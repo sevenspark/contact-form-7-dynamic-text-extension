@@ -160,10 +160,13 @@ function wpcf7dtx_dynamictext_validation_filter( $result, $tag ) {
 
 
 if ( is_admin() ) {
-	add_action( 'admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 25 );
+	//add_action( 'admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 25 );
+	add_action( 'wpcf7_admin_init' , 'wpcf7dtx_add_tag_generator_dynamictext' , 100 );
 }
 
 function wpcf7dtx_add_tag_generator_dynamictext() {
+
+	if ( ! class_exists( 'WPCF7_TagGenerator' ) ) return;
 
 	$tag_generator = WPCF7_TagGenerator::get_instance();
 	$tag_generator->add( 'dynamictext', __( 'dynamic text', 'contact-form-7' ),
