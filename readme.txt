@@ -3,8 +3,8 @@ Contributors: sevenspark
 Donate link: http://bit.ly/bVogDN
 Tags: Contact Form 7, Contact, Contact Form, dynamic, text, input, GET, POST, title, slug
 Requires at least: 4.0
-Tested up to: 4.2.4
-Stable tag: 2.0
+Tested up to: 4.3.1
+Stable tag: 2.0.1
 
 This plugin provides 2 new tag types for the Contact Form 7 Plugin. It allows the dynamic generation of content for a text input box via any shortcode.
 It also offers dynamic hidden field functionality, which can be utilized to dynamically set the Email Recipient (To:) address. 
@@ -188,6 +188,10 @@ None.  Yet.
 
 
 == Changelog ==
+
+= 2.0.1 =
+
+* Hook change to guarantee the plugin only runs when Contact Form 7 is present in the admin (avoids errors if Contact Form 7 is disabled, or if there is a plugin sequencing issue)
 
 = 2.0 =
 
