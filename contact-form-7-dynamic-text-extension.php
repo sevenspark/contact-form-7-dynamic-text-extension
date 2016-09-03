@@ -391,6 +391,22 @@ function cf7_get_current_user($atts){
 }
 add_shortcode('CF7_get_current_user', 'cf7_get_current_user');
 
+/* Insert current user email address
+ * See http://codex.wordpress.org/Function_Reference/wp_get_current_user  
+ */
+function cf7_get_current_user_email($atts){
+	extract(shortcode_atts(array(
+		'key' => 'user_email',
+	), $atts));
+	$val = '';
+	if( is_user_logged_in() ) {
+		$current_user = wp_get_current_user();
+		$val = $current_user->$key;
+	}
+	return $val;
+}
+add_shortcode('CF7_get_current_user_email', 'cf7_get_current_user_email');
+
 function cf7_get_referrer( $atts ){
 	return isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
 }
