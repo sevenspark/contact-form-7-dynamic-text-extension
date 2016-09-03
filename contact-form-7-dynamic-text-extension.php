@@ -275,13 +275,11 @@ function wpcf7dtx_tag_generator_dynamictext( $contact_form , $args = '' ){
  *****************************************************/
 
 /* Insert a $_GET variable */
-function cf7_get($atts){
-	extract(shortcode_atts(array(
-		'key' => 0,
-	), $atts));
+function cf7_get( $atts ){
+	$keys = array_keys( $atts );
 	$value = '';
-	if( isset( $_GET[$key] ) ){
-		$value = urldecode($_GET[$key]);
+	if( isset( $_GET[$keys[0]] ) ){
+		$value = urldecode( $_GET[$keys[0]] );
 	}
 	return $value;
 }
