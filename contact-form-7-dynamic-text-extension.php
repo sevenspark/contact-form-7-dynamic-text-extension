@@ -376,23 +376,20 @@ function cf7_get_custom_field($atts){
 add_shortcode('CF7_get_custom_field', 'cf7_get_custom_field');
 
 /* Insert information about the current user
- * New in 1.0.4 
- * See http://codex.wordpress.org/Function_Reference/get_currentuserinfo 
+ * See https://codex.wordpress.org/Function_Reference/wp_get_current_user 
  */
 function cf7_get_current_user($atts){
 	extract(shortcode_atts(array(
 		'key' => 'user_login',
 	), $atts));
-
-	global $current_user;
-	get_currentuserinfo();
-
-	$val = $current_user->$key;
+	$val = '';
+	if( is_user_logged_in() ) {
+		$current_user = wp_get_current_user();
+		$val = $current_user->$key;
+	}
 	return $val;
 }
 add_shortcode('CF7_get_current_user', 'cf7_get_current_user');
-
-
 
 function cf7_get_referrer( $atts ){
 	return isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
