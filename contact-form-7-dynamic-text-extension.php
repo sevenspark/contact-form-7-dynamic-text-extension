@@ -4,13 +4,13 @@
 Plugin Name: Contact Form 7 - Dynamic Text Extension
 Plugin URI: http://sevenspark.com/wordpress-plugins/contact-form-7-dynamic-text-extension
 Description: Provides a dynamic text field that accepts any shortcode to generate the content.  Requires Contact Form 7
-Version: 2.0.1
+Version: 2.0.2
 Author: Chris Mavricos, SevenSpark
 Author URI: http://sevenspark.com
 License: GPL2
 */
 
-/*  Copyright 2010-2015  Chris Mavricos, SevenSpark http://sevenspark.com
+/*  Copyright 2010-2017  Chris Mavricos, SevenSpark http://sevenspark.com
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
