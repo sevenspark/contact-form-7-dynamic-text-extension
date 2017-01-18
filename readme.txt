@@ -191,6 +191,11 @@ None.  Yet.
 
 == Changelog ==
 
+= 2.0.2 =
+
+* Update deprecated get_currentuserinfo() function to wp_get_current_user()
+* Update deprecated functions from WPCF7_add_shortcode to WPCF7_add_formtag and class from WPCF7_Shortcode to WPCF7_FormTag to comply with CF7 4.6 changes
+
 = 2.0.1 =
 
 * Hook change to guarantee the plugin only runs when Contact Form 7 is present in the admin (avoids errors if Contact Form 7 is disabled, or if there is a plugin sequencing issue)
