@@ -2,9 +2,9 @@
 Contributors: sevenspark
 Donate link: http://bit.ly/bVogDN
 Tags: Contact Form 7, Contact, Contact Form, dynamic, text, input, GET, POST, title, slug
-Requires at least: 4.0
-Tested up to: 4.3.1
-Stable tag: 2.0.1
+Requires at least: 4.7
+Tested up to: 4.7.1
+Stable tag: 2.0.2
 
 This plugin provides 2 new tag types for the Contact Form 7 Plugin. It allows the dynamic generation of content for a text input box via any shortcode.
 It also offers dynamic hidden field functionality, which can be utilized to dynamically set the Email Recipient (To:) address. 
@@ -25,7 +25,7 @@ While default values in Contact Form 7 are static. CF7 DTX lets you create pre-p
 
 There are many more case-specific examples. I searched for a solution, and there are some decent hacks out there. Many of them are 
 explored in this forum topic: 
-[Contact Form 7 Input Fields Values as PHP Get-Viarables](http://wordpress.org/support/topic/contact-form-7-input-fields-values-as-php-get-viarables). 
+[Contact Form 7 Input Fields Values as PHP Get-Variables](http://wordpress.org/support/topic/contact-form-7-input-fields-values-as-php-get-viarables). 
 However, they all involved hacking the current Contact Form 7 code, which means next time the plugin is updated their edits will be 
 overwritten. That's bad.
 
@@ -36,6 +36,8 @@ This Dynamic Text Extension plugin provides a more elegant solution that leaves 
 This plugin provides a new tag type for the Contact Form 7 Plugin. It allows the dynamic generation of content for a text input box via any shortcode. 
 For example, it comes with several built-in shortcodes that will allow the Contact Form to be populated from any $_GET PHP variable or any info from the 
 get_bloginfo() function, among others.  See below for included shortcodes.
+
+Don't see the shortcode you need on the list?  You can write a custom one! Any shortcode that returns a string value can be used here.  The included shortcodes just cover the most common scenarios, but the plugin provides the flexibility for you to grab any value you have access to programmatically.
 
 = HOW TO USE IT =
 
