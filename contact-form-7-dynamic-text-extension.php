@@ -36,12 +36,12 @@ function wpcf7dtx_init(){
 
 
 function wpcf7dtx_add_shortcode_dynamictext() {
-	wpcf7_add_shortcode(
+	wpcf7_add_form_tag(
 		array( 'dynamictext' , 'dynamictext*' , 'dynamichidden' ),
 		'wpcf7dtx_dynamictext_shortcode_handler', true );
 }
 function wpcf7dtx_dynamictext_shortcode_handler( $tag ) {
-	$tag = new WPCF7_Shortcode( $tag );
+	$tag = new WPCF7_FormTag( $tag );
 
 	if ( empty( $tag->name ) )
 		return '';
@@ -120,7 +120,7 @@ function wpcf7dtx_dynamictext_shortcode_handler( $tag ) {
 
 //add_filter( 'wpcf7_validate_text', 'wpcf7_text_validation_filter', 10, 2 );  // in init
 function wpcf7dtx_dynamictext_validation_filter( $result, $tag ) {
-	$tag = new WPCF7_Shortcode( $tag );
+	$tag = new WPCF7_FormTag( $tag );
 
 	$name = $tag->name;
 
