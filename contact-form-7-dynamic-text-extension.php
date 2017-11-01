@@ -324,6 +324,9 @@ function cf7_get_post_var($atts){
 		case 'title':
 			$key = 'post_title';
 			break;
+		default:
+			$key = 'ID';
+			break;			
 	}
 	
 	global $post;
