@@ -2,12 +2,12 @@
 Contributors: sevenspark
 Donate link: http://bit.ly/bVogDN
 Tags: Contact Form 7, Contact, Contact Form, dynamic, text, input, GET, POST, title, slug
-Requires at least: 4.7
-Tested up to: 4.7.1
-Stable tag: 2.0.2.1
+Requires at least: 5.0
+Tested up to: 5.2.2
+Stable tag: 2.0.3
 
 This plugin provides 2 new tag types for the Contact Form 7 Plugin. It allows the dynamic generation of content for a text input box via any shortcode.
-It also offers dynamic hidden field functionality, which can be utilized to dynamically set the Email Recipient (To:) address. 
+It also offers dynamic hidden field functionality, which can be utilized to dynamically set the Email Recipient (To:) address.
 
 == Description ==
 
@@ -18,30 +18,30 @@ While default values in Contact Form 7 are static. CF7 DTX lets you create pre-p
 * Auto-filling a Post ID, title, or slug
 * Pre-populating a Product Number
 * Referencing other content on the site
-* Populating with post info 
+* Populating with post info
 * Populating with user info
 * Populating with custom fields
 * Any value you can write a shortcode for
 
-There are many more case-specific examples. I searched for a solution, and there are some decent hacks out there. Many of them are 
-explored in this forum topic: 
-[Contact Form 7 Input Fields Values as PHP Get-Variables](http://wordpress.org/support/topic/contact-form-7-input-fields-values-as-php-get-viarables). 
-However, they all involved hacking the current Contact Form 7 code, which means next time the plugin is updated their edits will be 
+There are many more case-specific examples. I searched for a solution, and there are some decent hacks out there. Many of them are
+explored in this forum topic:
+[Contact Form 7 Input Fields Values as PHP Get-Variables](http://wordpress.org/support/topic/contact-form-7-input-fields-values-as-php-get-viarables).
+However, they all involved hacking the current Contact Form 7 code, which means next time the plugin is updated their edits will be
 overwritten. That's bad.
 
 This Dynamic Text Extension plugin provides a more elegant solution that leaves the Contact Form 7 Plugin intact.
 
 = WHAT DOES IT DO? =
 
-This plugin provides a new tag type for the Contact Form 7 Plugin. It allows the dynamic generation of content for a text input box via any shortcode. 
-For example, it comes with several built-in shortcodes that will allow the Contact Form to be populated from any $_GET PHP variable or any info from the 
+This plugin provides a new tag type for the Contact Form 7 Plugin. It allows the dynamic generation of content for a text input box via any shortcode.
+For example, it comes with several built-in shortcodes that will allow the Contact Form to be populated from any $_GET PHP variable or any info from the
 get_bloginfo() function, among others.  See below for included shortcodes.
 
 Don't see the shortcode you need on the list?  You can write a custom one! Any shortcode that returns a string value can be used here.  The included shortcodes just cover the most common scenarios, but the plugin provides the flexibility for you to grab any value you have access to programmatically.
 
 = HOW TO USE IT =
 
-After installing and activating the plugin, the Contact Form 7 tag generator will have 2 new tag types: Dynamic Text Field and Dynamic Hidden Field. Most of the options will be 
+After installing and activating the plugin, the Contact Form 7 tag generator will have 2 new tag types: Dynamic Text Field and Dynamic Hidden Field. Most of the options will be
 familiar to Contact Form 7 users. There are two important fields:
 
 **Dynamic Value**
@@ -50,8 +50,8 @@ This field takes a shortcode, with two important provisions:
 
 1. The shortcode should NOT include the normal square brackets ([ and ]). So, instead of [CF7_GET key='value'] you would use CF7_GET key='value' .
 2. Any parameters in the shortcode must use single quotes. That is: CF7_GET key='value' and not CF7_GET key="value"
-	
-	
+
+
 **Uneditable Option**
 
 As these types of fields should often remain uneditable by the user, there is a checkbox to turn this option on (Not applicable for hidden fields).
@@ -63,7 +63,7 @@ The plugin includes 2 basic shortcodes for use with the Dynamic Text extension. 
 
 **PHP GET Variables**
 
-Want to use a variable from the PHP GET array? Just use the CF7_GET shortcode. For example, if you want to get the foo parameter from the url 
+Want to use a variable from the PHP GET array? Just use the CF7_GET shortcode. For example, if you want to get the foo parameter from the url
 http://mysite.com?foo=bar
 
 Enter the following into the "Dynamic Value" input
@@ -150,8 +150,8 @@ For the purposes of including an email address, you can obfuscate the custom fie
 
 **Current User Info**
 
-Get data about the current user - assuming they are logged in.  Defaults to user name, but you can set the key to any valid value in 
-http://codex.wordpress.org/Function_Reference/get_currentuserinfo 
+Get data about the current user - assuming they are logged in.  Defaults to user name, but you can set the key to any valid value in
+http://codex.wordpress.org/Function_Reference/get_currentuserinfo
 
 CF7_get_current_user
 
@@ -190,6 +190,11 @@ None.  Yet.
 
 
 == Changelog ==
+
+= 2.0.3 =
+
+* Please update!
+* Security: Fix Reflected XSS - more: https://sevenspark.com/docs/cf7-dtx-security-2019-07-24
 
 = 2.0.2.1 =
 
