@@ -4,16 +4,16 @@
 Plugin Name: Contact Form 7 - Dynamic Text Extension
 Plugin URI: http://sevenspark.com/wordpress-plugins/contact-form-7-dynamic-text-extension
 Description: Provides a dynamic text field that accepts any shortcode to generate the content.  Requires Contact Form 7
-Version: 2.0.2.1
+Version: 2.0.3
 Author: Chris Mavricos, SevenSpark
 Author URI: http://sevenspark.com
 License: GPL2
 */
 
-/*  Copyright 2010-2017  Chris Mavricos, SevenSpark http://sevenspark.com
+/*  Copyright 2010-2019  Chris Mavricos, SevenSpark http://sevenspark.com
 
     This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as 
+    it under the terms of the GNU General Public License, version 2, as
     published by the Free Software Foundation.
 
     This program is distributed in the hope that it will be useful,
@@ -21,7 +21,7 @@ License: GPL2
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
+ License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
@@ -93,8 +93,8 @@ function wpcf7dtx_dynamictext_shortcode_handler( $tag ) {
 	}
 
 	$atts['value'] = $value;
-	
-//echo '<pre>'; print_r( $tag ); echo '</pre>';
+
+
 	switch( $tag->basetype ){
 		case 'dynamictext':
 			$atts['type'] = 'text';
@@ -197,9 +197,9 @@ function wpcf7dtx_tag_generator_dynamictext( $contact_form , $args = '' ){
 			//$type = 'text';
 			break;
 	}
-	
 
-	
+
+
 
 
 ?>
@@ -265,13 +265,13 @@ function wpcf7dtx_tag_generator_dynamictext( $contact_form , $args = '' ){
 
 /*****************************************************
  * CF7 DTX Included Shortcodes
- * 
+ *
  * Used like this:
- * 
+ *
  * CF7_GET val='value'
- * 
+ *
  * No [] and single quotes ' rather than double "
- * 
+ *
  *****************************************************/
 
 /* Insert a $_GET variable */
@@ -281,7 +281,7 @@ function cf7_get($atts){
 	), $atts));
 	$value = '';
 	if( isset( $_GET[$key] ) ){
-		$value = urldecode($_GET[$key]);
+		$value = sanitize_text_field($_GET[$key]);
 	}
 	return $value;
 }
@@ -292,7 +292,7 @@ function cf7_bloginfo($atts){
 	extract(shortcode_atts(array(
 		'show' => 'name'
 	), $atts));
-	
+
 	return get_bloginfo($show);
 }
 add_shortcode('CF7_bloginfo', 'cf7_bloginfo');
@@ -305,7 +305,7 @@ function cf7_post($atts){
 	if($key == -1) return '';
 	$val = '';
 	if( isset( $_POST[$key] ) ){
-		$val = $_POST[$key];
+		$val = sanitize_text_field( $_POST[$key] );
 	}
 	return $val;
 }
@@ -316,7 +316,7 @@ function cf7_get_post_var($atts){
 	extract(shortcode_atts(array(
 		'key' => 'post_title',
 	), $atts));
-	
+
 	switch($key){
 		case 'slug':
 			$key = 'post_name';
@@ -325,9 +325,8 @@ function cf7_get_post_var($atts){
 			$key = 'post_title';
 			break;
 	}
-	
+
 	global $post;
-	//echo '<pre>'; print_r($post); echo '</pre>';
 	$val = $post->$key;
 	return $val;
 }
@@ -337,9 +336,9 @@ add_shortcode('CF7_get_post_var', 'cf7_get_post_var');
 function cf7_url(){
 	$pageURL = 'http';
  	if( isset( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] == "on"){ $pageURL .= "s"; }
- 	
+
  	$pageURL .= "://";
- 	
+
  	if( isset( $_SERVER["SERVER_PORT"] ) && $_SERVER["SERVER_PORT"] != "80" ){
   		$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
  	} else {
@@ -350,7 +349,7 @@ function cf7_url(){
 add_shortcode('CF7_URL', 'cf7_url');
 
 /* Insert a Custom Post Field
- * New in 1.0.4 
+ * New in 1.0.4
  */
 function cf7_get_custom_field($atts){
 	extract(shortcode_atts(array(
@@ -358,28 +357,28 @@ function cf7_get_custom_field($atts){
 		'post_id' => -1,
 		'obfuscate'	=> 'off'
 	), $atts));
-	
+
 	if($post_id < 0){
 		global $post;
 		if(isset($post)) $post_id = $post->ID;
 	}
-	
+
 	if($post_id < 0 || empty($key)) return '';
-		
+
 	$val = get_post_meta($post_id, $key, true);
-	
+
 	if($obfuscate == 'on'){
 		$val = cf7dtx_obfuscate($val);
 	}
-	
+
 	return $val;
-	
+
 }
 add_shortcode('CF7_get_custom_field', 'cf7_get_custom_field');
 
 /* Insert information about the current user
- * New in 1.0.4 
- * See https://codex.wordpress.org/Function_Reference/wp_get_current_user 
+ * New in 1.0.4
+ * See https://codex.wordpress.org/Function_Reference/wp_get_current_user
  */
 function cf7_get_current_user($atts){
 	extract(shortcode_atts(array(
@@ -427,12 +426,3 @@ function cf7dtx_cf7com_links() {
 	return $links;
 }
 add_filter('wpcf7_cf7com_links', 'cf7dtx_cf7com_links');
-
-/*function obf($atts){
-	extract(shortcode_atts(array(
-		'val' => ''
-	), $atts));
-	return $val.' : '. cf7dtx_obfuscate($val);
-}
-add_shortcode('obf', 'obf');*/
-
