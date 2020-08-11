@@ -37,7 +37,7 @@ function wpcf7dtx_init(){
 
 function wpcf7dtx_add_shortcode_dynamictext() {
 	wpcf7_add_form_tag(
-		array( 'dynamictext' , 'dynamictext*' , 'dynamichidden' ),
+		array( 'dynamictext' , 'dynamictext*' , 'dynamichidden' , 'dynamichidden*' ),
 		'wpcf7dtx_dynamictext_shortcode_handler', true );
 }
 function wpcf7dtx_dynamictext_shortcode_handler( $tag ) {
@@ -388,6 +388,7 @@ function cf7_get_current_user($atts){
 	if( is_user_logged_in() ) {
 		$current_user = wp_get_current_user();
 		$val = $current_user->$key;
+		//echo '<pre>';var_dump( $current_user ); echo '</pre>';
 	}
 	return $val;
 }
