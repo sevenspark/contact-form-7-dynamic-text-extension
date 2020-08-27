@@ -165,6 +165,9 @@ if ( is_admin() ) {
 }
 
 function wpcf7dtx_add_tag_generator_dynamictext() {
+	if ( ! class_exists( 'WPCF7_TagGenerator' ) ) {
+		return;		
+	}	
 
 	if ( ! class_exists( 'WPCF7_TagGenerator' ) ) return;
 
