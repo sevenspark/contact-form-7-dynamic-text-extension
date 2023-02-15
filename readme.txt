@@ -240,6 +240,7 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 = 3.2 =
 
 * Feature: Add optional 'part' parameter to CF7_URL shortcode to retrieve Host, Query, or Path from current URL
+* Updated minimum PHP requirement to 7.4 moving forward
 * Update branding assets
 * Update Tested Up To to 6.1.1
 * Plugin will now be jointly maintained by SevenSpark and AuRise Creative
