@@ -91,19 +91,45 @@ function wpcf7dtx_post($atts = array(), $content = '', $tag = '')
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_url($atts = array(), $content = '', $tag = '')
-{
+function wpcf7dtx_url($atts = array(), $content = '', $tag = '') {
+
     extract(shortcode_atts(array(
         'allowed_protocols' => 'http,https',
         'obfuscate' => '',
+        'part' => '',
     ), array_change_key_case((array)$atts, CASE_LOWER)));
+
     $allowed_protocols = explode(',', sanitize_text_field($allowed_protocols));
+    
+    // Build the full URL from the $_SERVER array
     $url = sprintf('http%s://', is_ssl() ? 's' : '');
     if (!empty($_SERVER['SERVER_PORT']) && intval($_SERVER['SERVER_PORT']) !== 80) {
-        $value = sanitize_url($url . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'], $allowed_protocols);
+        $url = $url . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
     } else {
-        $value = sanitize_url($url . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'], $allowed_protocols);
+        $url = $url . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
     }
+
+    // Determine the value to return
+    $value = '';
+
+    // If an individual part is requested, get that specific value using parse_url()
+    if( $part ){
+        $part_constant_map = [
+            'host'  => PHP_URL_HOST,
+            'query' => PHP_URL_QUERY,
+            'path'  => PHP_URL_PATH,
+            // 'fragment'  => PHP_URL_FRAGMENT, // Can't get fragment because it's not part of the $_SERVER array
+        ];
+        if( isset( $part_constant_map[$part] ) ) {
+            $value = sanitize_text_field(parse_url($url, $part_constant_map[$part]));
+        }
+    }
+    // No part requested, return the whole thing
+    else {
+        $value = sanitize_url($url, $allowed_protocols);
+    }
+
+    // Obfuscate if requested
     if ($obfuscate && !empty($value)) {
         return wpcf7dtx_obfuscate($value);
     }
