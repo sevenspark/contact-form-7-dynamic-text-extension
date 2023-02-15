@@ -55,11 +55,17 @@ Only available for the dynamic text form tag, simply check this box if you do no
 
 The plugin includes several shortcodes for use with the Dynamic Text Extension right out of the box. You can write your own as well—any self-closing shortcode will work, even with attributes!
 
-**Current URL**
+**Current URL or Current URL Part**
 
-Retrieve the current URL. This shortcode takes no parameters: `CF7_URL`
+Retrieve the current URL: `CF7_URL`
 
 Your Contact Form 7 Tag would look like: `[dynamictext dynamicname "CF7_URL"]`
+
+Optional parameter: `part`, which will return a parsed part of the URL.  Valid values are `host`, `query`, and `path`
+
+Host: Just the domain name and tld
+Query: The query string after the ?, if one exists 
+Path: The URL path, for example, /contact, if one exists
 
 **Referrer URL**
 
