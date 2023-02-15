@@ -63,9 +63,11 @@ Your Contact Form 7 Tag would look like: `[dynamictext dynamicname "CF7_URL"]`
 
 Optional parameter: `part`, which will return a parsed part of the URL.  Valid values are `host`, `query`, and `path`
 
-Host: Just the domain name and tld
-Query: The query string after the ?, if one exists 
-Path: The URL path, for example, /contact, if one exists
+Host: Just the domain name and tld `[dynamictext host "CF7_URL part='host'"]
+Query: The query string after the ?, if one exists `[dynamictext query "CF7_URL part='query'"]`
+Path: The URL path, for example, /contact, if one exists `[dynamictext path "CF7_URL part='path'"]`
+
+
 
 **Referrer URL**
 
