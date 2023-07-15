@@ -179,8 +179,9 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
 
     //Output the HTML
     return sprintf(
-        '<span class="wpcf7-form-control-wrap %s"><input %s />%s</span>',
+        '<span class="wpcf7-form-control-wrap %s" data-name="%s"><input %s />%s</span>',
         sanitize_html_class($tag->name),
+        esc_attr($tag->name),
         wpcf7_format_atts($atts), //This function already escapes attribute values
         $validation_error
     );
