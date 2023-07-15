@@ -22,7 +22,7 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_URL', 'wpcf7dtx_url', 10, 1);
     add_shortcode('CF7_referrer', 'wpcf7dtx_referrer', 10, 1);
     add_shortcode('CF7_bloginfo', 'wpcf7dtx_bloginfo', 10, 1);
-    add_shortcode('CF7_get_post_var', 'wpcf7dtx_get_post_var');
+    add_shortcode('CF7_get_post_var', 'wpcf7dtx_get_post_var', 10, 1);
     add_shortcode('CF7_get_custom_field', 'wpcf7dtx_get_custom_field');
     add_shortcode('CF7_get_current_user', 'wpcf7dtx_get_current_user');
     add_shortcode('CF7_get_attachment', 'wpcf7dtx_get_attachment');
@@ -158,20 +158,24 @@ function wpcf7dtx_bloginfo($atts = array())
 /**
  * Get Variable from a Post Object
  *
+ * @link https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-post-page-variables/
+ *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_get_post_var($atts = array(), $content = '', $tag = '')
+function wpcf7dtx_get_post_var($atts = array())
 {
     extract(shortcode_atts(array(
         'key' => 'post_title',
         'post_id' => '',
         'obfuscate' => ''
     ), array_change_key_case((array)$atts, CASE_LOWER)));
+    $key = strtolower(apply_filters('wpcf7dtx_sanitize', $key));
     switch ($key) {
+        case 'id':
+            $key = 'ID';
+            break;
         case 'slug':
             $key = 'post_name';
             break;
@@ -182,12 +186,8 @@ function wpcf7dtx_get_post_var($atts = array(), $content = '', $tag = '')
             break;
     }
     $post_id = wpcf7dtx_get_post_id($post_id);
-    if ($post_id && is_string($key) && !empty($key)) {
-        $value = sanitize_text_field(trim(strval(get_post_field($key, $post_id))));
-        if ($obfuscate && !empty($value)) {
-            return wpcf7dtx_obfuscate($value);
-        }
-        return $value;
+    if ($post_id) {
+        return apply_filters('wpcf7dtx_escape', get_post_field($key, $post_id), $obfuscate);
     }
     return '';
 }
