@@ -25,7 +25,8 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_get_post_var', 'wpcf7dtx_get_post_var', 10, 1);
     add_shortcode('CF7_get_custom_field', 'wpcf7dtx_get_custom_field', 10, 1);
     add_shortcode('CF7_get_current_user', 'wpcf7dtx_get_current_user', 10, 1);
-    add_shortcode('CF7_get_attachment', 'wpcf7dtx_get_attachment');
+    add_shortcode('CF7_get_attachment', 'wpcf7dtx_get_attachment', 10, 1);
+    add_shortcode('CF7_get_cookie', 'wpcf7dtx_get_cookie', 10, 1);
     add_shortcode('CF7_guid', 'wpcf7dtx_guid', 10, 0);
 }
 add_action('init', 'wpcf7dtx_init_shortcodes'); //Add init hook to add shortcodes
@@ -283,6 +284,31 @@ function wpcf7dtx_get_attachment($atts = array())
         }
     }
     return '';
+}
+
+/**
+ * Get Cookie
+ *
+ * Retreives the value of a cookie
+ *
+ * @since 3.3.0
+ *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-cookie/
+ *
+ * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
+ *
+ * @return string Output of the shortcode
+ */
+function wpcf7dtx_get_cookie($atts = array())
+{
+    extract(shortcode_atts(array(
+        'key' => '',
+        'default' => '',
+        'obfuscate' => '' // Optionally obfuscate returned value
+    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    $key = apply_filters('wpcf7dtx_sanitize', $key);
+    $value = wpcf7dtx_array_has_key($key, $_COOKIE, $default);
+    return apply_filters('wpcf7dtx_escape', $value, $obfuscate);
 }
 
 /**
