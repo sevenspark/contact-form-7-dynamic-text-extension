@@ -20,7 +20,7 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_GET', 'wpcf7dtx_get', 10, 1);
     add_shortcode('CF7_POST', 'wpcf7dtx_post', 10, 1);
     add_shortcode('CF7_URL', 'wpcf7dtx_url', 10, 1);
-    add_shortcode('CF7_referrer', 'wpcf7dtx_referrer');
+    add_shortcode('CF7_referrer', 'wpcf7dtx_referrer', 10, 1);
     add_shortcode('CF7_bloginfo', 'wpcf7dtx_bloginfo');
     add_shortcode('CF7_get_post_var', 'wpcf7dtx_get_post_var');
     add_shortcode('CF7_get_custom_field', 'wpcf7dtx_get_custom_field');
@@ -116,24 +116,23 @@ function wpcf7dtx_url($atts = array())
 /**
  * Get Referrer
  *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-referrer-url/
+ *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_referrer($atts = array(), $content = '', $tag = '')
+function wpcf7dtx_referrer($atts = array())
 {
     extract(shortcode_atts(array(
-        'allowed_protocols' => 'http,https',
+        'allowed_protocols' => '',
         'obfuscate' => ''
     ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $allowed_protocols = explode(',', sanitize_text_field($allowed_protocols));
-    $value = empty($_SERVER['HTTP_REFERER']) ? '' : sanitize_url($_SERVER['HTTP_REFERER'], $allowed_protocols);
-    if ($obfuscate && !empty($value)) {
-        return wpcf7dtx_obfuscate($value);
+    if ($value = wpcf7dtx_array_has_key('HTTP_REFERER', $_SERVER)) {
+        $value = apply_filters('wpcf7dtx_sanitize', $value, 'url', $allowed_protocols);
+        return apply_filters('wpcf7dtx_escape', $value, $obfuscate, 'url');
     }
-    return $value;
+    return '';
 }
 
 /**
