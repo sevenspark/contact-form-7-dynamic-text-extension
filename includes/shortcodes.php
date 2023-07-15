@@ -17,7 +17,7 @@
  */
 function wpcf7dtx_init_shortcodes()
 {
-    add_shortcode('CF7_GET', 'wpcf7dtx_get');
+    add_shortcode('CF7_GET', 'wpcf7dtx_get', 10, 1);
     add_shortcode('CF7_POST', 'wpcf7dtx_post');
     add_shortcode('CF7_URL', 'wpcf7dtx_url');
     add_shortcode('CF7_referrer', 'wpcf7dtx_referrer');
@@ -33,27 +33,21 @@ add_action('init', 'wpcf7dtx_init_shortcodes'); //Add init hook to add shortcode
 /**
  * Get Variable from $_GET Array
  *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-php-get-variables/
+ *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_get($atts = array(), $content = '', $tag = '')
+function wpcf7dtx_get($atts = array())
 {
     extract(shortcode_atts(array(
         'key' => 0,
+        'default' => '',
         'obfuscate' => ''
     ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $valid_key = (is_numeric($key) && intval($key) > -1) || (is_string($key) && !empty($key));
-    if ($valid_key && is_array($_GET) && count($_GET) && array_key_exists($key, $_GET) && !empty($_GET[$key])) {
-        $value = sanitize_text_field(strval($_GET[$key]));
-        if ($obfuscate && !empty($value)) {
-            return wpcf7dtx_obfuscate($value);
-        }
-        return $value;
-    }
-    return '';
+    $value = apply_filters('wpcf7dtx_sanitize', wpcf7dtx_array_has_key($key, $_GET, $default));
+    return apply_filters('wpcf7dtx_escape', $value, $obfuscate);
 }
 
 /**
