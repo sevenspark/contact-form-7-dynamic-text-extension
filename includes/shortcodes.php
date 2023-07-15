@@ -19,7 +19,7 @@ function wpcf7dtx_init_shortcodes()
 {
     add_shortcode('CF7_GET', 'wpcf7dtx_get', 10, 1);
     add_shortcode('CF7_POST', 'wpcf7dtx_post', 10, 1);
-    add_shortcode('CF7_URL', 'wpcf7dtx_url');
+    add_shortcode('CF7_URL', 'wpcf7dtx_url', 10, 1);
     add_shortcode('CF7_referrer', 'wpcf7dtx_referrer');
     add_shortcode('CF7_bloginfo', 'wpcf7dtx_bloginfo');
     add_shortcode('CF7_get_post_var', 'wpcf7dtx_get_post_var');
@@ -73,53 +73,44 @@ function wpcf7dtx_post($atts = array())
 /**
  * Get the Current URL
  *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-url/
+ *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_url($atts = array(), $content = '', $tag = '') {
-
+function wpcf7dtx_url($atts = array())
+{
     extract(shortcode_atts(array(
-        'allowed_protocols' => 'http,https',
-        'obfuscate' => '',
+        'allowed_protocols' => '',
         'part' => '',
+        'obfuscate' => ''
     ), array_change_key_case((array)$atts, CASE_LOWER)));
-
     $allowed_protocols = explode(',', sanitize_text_field($allowed_protocols));
-    
+
     // Build the full URL
     if (!empty($_SERVER['SERVER_PORT']) && intval($_SERVER['SERVER_PORT']) !== 80) {
         $url = network_home_url() . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
     } else {
         $url = network_home_url($_SERVER['REQUEST_URI']);
     }
+    $url = apply_filters('wpcf7dtx_sanitize', $url, 'url', $allowed_protocols);
 
-    // Determine the value to return
-    $value = '';
-
-    // If an individual part is requested, get that specific value using parse_url()
-    if( $part ){
+    if ($url && !empty($part = sanitize_key(strtolower($part)))) {
+        // If an individual part is requested, get that specific value using parse_url()
         $part_constant_map = [
+            'scheme' => PHP_URL_SCHEME, // e.g. `http`
             'host'  => PHP_URL_HOST,
-            'query' => PHP_URL_QUERY,
-            'path'  => PHP_URL_PATH
+            'path'  => PHP_URL_PATH,
+            'query' => PHP_URL_QUERY // after the question mark ?
         ];
         if (array_key_exists($part, $part_constant_map)) {
-            $value = sanitize_text_field(parse_url($url, $part_constant_map[$part]));
+            $value = apply_filters('wpcf7dtx_sanitize', strval(wp_parse_url($url, $part_constant_map[$part])), 'text');
         }
+        return apply_filters('wpcf7dtx_escape', $value, $obfuscate, 'text');
     }
     // No part requested, return the whole thing
-    else {
-        $value = sanitize_url($url, $allowed_protocols);
-    }
-
-    // Obfuscate if requested
-    if ($obfuscate && !empty($value)) {
-        return wpcf7dtx_obfuscate($value);
-    }
-    return $value;
+    return apply_filters('wpcf7dtx_escape', $url, $obfuscate, 'url', $allowed_protocols);
 }
 
 /**
