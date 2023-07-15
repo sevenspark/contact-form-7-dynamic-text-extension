@@ -101,12 +101,11 @@ function wpcf7dtx_url($atts = array(), $content = '', $tag = '') {
 
     $allowed_protocols = explode(',', sanitize_text_field($allowed_protocols));
     
-    // Build the full URL from the $_SERVER array
-    $url = sprintf('http%s://', is_ssl() ? 's' : '');
+    // Build the full URL
     if (!empty($_SERVER['SERVER_PORT']) && intval($_SERVER['SERVER_PORT']) !== 80) {
-        $url = $url . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
+        $url = network_home_url() . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
     } else {
-        $url = $url . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        $url = network_home_url($_SERVER['REQUEST_URI']);
     }
 
     // Determine the value to return
@@ -117,10 +116,9 @@ function wpcf7dtx_url($atts = array(), $content = '', $tag = '') {
         $part_constant_map = [
             'host'  => PHP_URL_HOST,
             'query' => PHP_URL_QUERY,
-            'path'  => PHP_URL_PATH,
-            // 'fragment'  => PHP_URL_FRAGMENT, // Can't get fragment because it's not part of the $_SERVER array
+            'path'  => PHP_URL_PATH
         ];
-        if( isset( $part_constant_map[$part] ) ) {
+        if (array_key_exists($part, $part_constant_map)) {
             $value = sanitize_text_field(parse_url($url, $part_constant_map[$part]));
         }
     }
