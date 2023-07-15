@@ -21,7 +21,7 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_POST', 'wpcf7dtx_post', 10, 1);
     add_shortcode('CF7_URL', 'wpcf7dtx_url', 10, 1);
     add_shortcode('CF7_referrer', 'wpcf7dtx_referrer', 10, 1);
-    add_shortcode('CF7_bloginfo', 'wpcf7dtx_bloginfo');
+    add_shortcode('CF7_bloginfo', 'wpcf7dtx_bloginfo', 10, 1);
     add_shortcode('CF7_get_post_var', 'wpcf7dtx_get_post_var');
     add_shortcode('CF7_get_custom_field', 'wpcf7dtx_get_custom_field');
     add_shortcode('CF7_get_current_user', 'wpcf7dtx_get_current_user');
@@ -138,27 +138,21 @@ function wpcf7dtx_referrer($atts = array())
 /**
  * Get Variable from Bloginfo
  *
- * See possible values: https://developer.wordpress.org/reference/functions/get_bloginfo/
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-post-page-variables/
  *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_bloginfo($atts = array(), $content = '', $tag = '')
+function wpcf7dtx_bloginfo($atts = array())
 {
     extract(shortcode_atts(array(
         'show' => 'name', //Backwards compatibility
         'key' => 'name',
         'obfuscate' => ''
     ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $key = $show != $key && $show != 'name' ? $show : $key; //Use old value of "show" if not set to default value
-    $value = sanitize_text_field(strval(get_bloginfo($key)));
-    if ($obfuscate && !empty($value)) {
-        return wpcf7dtx_obfuscate($value);
-    }
-    return $value;
+    $key = $show != $key && $show != 'name' ? $show : $key; // Use old value of "show" if not set to default value
+    return apply_filters('wpcf7dtx_escape', get_bloginfo($key), $obfuscate);
 }
 
 /**
