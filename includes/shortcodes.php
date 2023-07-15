@@ -26,7 +26,7 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_get_custom_field', 'wpcf7dtx_get_custom_field');
     add_shortcode('CF7_get_current_user', 'wpcf7dtx_get_current_user');
     add_shortcode('CF7_get_attachment', 'wpcf7dtx_get_attachment');
-    add_shortcode('CF7_guid', 'wpcf7dtx_guid');
+    add_shortcode('CF7_guid', 'wpcf7dtx_guid', 10, 0);
 }
 add_action('init', 'wpcf7dtx_init_shortcodes'); //Add init hook to add shortcodes
 
@@ -330,19 +330,19 @@ function wpcf7dtx_get_attachment($atts = array(), $content = '', $tag = '')
 /**
  * GUID Field
  *
+ * Generate a random GUID (globally unique identifier)
+ *
  * @since 3.1.0
  *
- * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-guid/
  *
- * @return string Output of the shortcode
+ * @return string a randomly generated 128-bit text string.
  */
 function wpcf7dtx_guid()
 {
     if (function_exists('com_create_guid') === true) {
-        return trim(com_create_guid(), '{}');
+        return esc_attr(trim(com_create_guid(), '{}'));
     }
-    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    return esc_attr(sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535)));
 }
 
