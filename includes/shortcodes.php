@@ -303,17 +303,9 @@ function wpcf7dtx_get_attachment($atts = array(), $content = '', $tag = '')
 
     //No attachment ID was provided, check for post ID to get it's featured image
     if (empty($id)) {
-        if ($post_id = sanitize_text_field(strval($post_id))) {
+        if ($post_id = wpcf7dtx_get_post_id($post_id)) {
             //If a post ID was provided, get it's featured image
-            if (is_numeric($post_id) && (int)$post_id > 0) {
-                $id = get_post_thumbnail_id($post_id);
-            }
-        } else {
-            //If no post ID was provided, get current featured image
-            global $post;
-            if (isset($post) && property_exists($post, 'ID') && is_numeric($post->ID)) {
-                $id = get_post_thumbnail_id(intval($post->ID));
-            }
+            $id = get_post_thumbnail_id($post_id);
         }
     }
 

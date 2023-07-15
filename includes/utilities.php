@@ -28,17 +28,26 @@ function wpcf7dtx_obfuscate($value = '')
 /**
  * Get Post ID
  *
+ * @access private
+ *
  * @param mixed $post_id
+ *
  * @return int An integer value of the passed post ID or the post ID of the current `$post` global object. 0 on Failure.
  */
-function wpcf7dtx_get_post_id($post_id)
+function wpcf7dtx_get_post_id($post_id, $context = 'dtx')
 {
-    $post_id = is_numeric($post_id) && (int)$post_id > 0 ? intval($post_id) : 0;
-    if (!$post_id) {
-        //No post ID was provided, look it up
-        global $post;
-        if (isset($post) && property_exists($post, 'ID')) {
-            $post_id = $post->ID;
+    $post_id = $post_id ? intval(sanitize_text_field(strval($post_id))) : '';
+    if (!$post_id || !is_numeric($post_id)) {
+        if ($context == 'dtx') {
+            global $post;
+            if (isset($post)) {
+                $post_id = $post->ID; // If the global $post object is set, get its ID
+            } else {
+                $post_id = get_the_ID(); // Otherwise get it from "the loop"
+            }
+        } elseif ($context == 'acf') {
+            // When a post ID is not specified for ACF keys, it accepts the boolean `false`
+            $post_id = false;
         }
     }
     return $post_id;
@@ -89,7 +98,6 @@ function wpcf7dtx_get_shortcode_atts($content)
             }
         }
     }
-
     return $return;
 }
 
