@@ -24,7 +24,7 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_bloginfo', 'wpcf7dtx_bloginfo', 10, 1);
     add_shortcode('CF7_get_post_var', 'wpcf7dtx_get_post_var', 10, 1);
     add_shortcode('CF7_get_custom_field', 'wpcf7dtx_get_custom_field', 10, 1);
-    add_shortcode('CF7_get_current_user', 'wpcf7dtx_get_current_user');
+    add_shortcode('CF7_get_current_user', 'wpcf7dtx_get_current_user', 10, 1);
     add_shortcode('CF7_get_attachment', 'wpcf7dtx_get_attachment');
     add_shortcode('CF7_guid', 'wpcf7dtx_guid', 10, 0);
 }
@@ -220,15 +220,14 @@ function wpcf7dtx_get_custom_field($atts = array())
  * Get Value from Current User
  *
  * Retreives data from the `users` and `usermeta` tables.
- * Documentation: https://developer.wordpress.org/reference/classes/wp_user/get/
+ *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-user-user-meta/
  *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_get_current_user($atts = array(), $content = '', $tag = '')
+function wpcf7dtx_get_current_user($atts = array())
 {
     extract(shortcode_atts(array(
         'key' => 'user_login',
@@ -236,11 +235,7 @@ function wpcf7dtx_get_current_user($atts = array(), $content = '', $tag = '')
     ), array_change_key_case((array)$atts, CASE_LOWER)));
     if (is_user_logged_in()) {
         $user = wp_get_current_user();
-        $value = $user->get($key);
-        if ($obfuscate && !empty($value)) {
-            return wpcf7dtx_obfuscate($value);
-        }
-        return $value;
+        return apply_filters('wpcf7dtx_escape', $user->get($key), $obfuscate);
     }
     return '';
 }
