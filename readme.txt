@@ -3,7 +3,7 @@ Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, contact, contact form, dynamic, text, input, GET, POST, title, slug, autofill, auto-fill, prepopulate, pre-populate, form field
 Tested up to: 6.2
-Stable tag: 3.2.1
+Stable tag: 3.3.0
 
 This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text or hidden input fields using any shortcode.
 
@@ -19,6 +19,9 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 * Populating with user info
 * Populating with custom fields
 * Generating unique identifiers for support tickets
+* Getting a list of post categories or other custom taxonomies
+* Getting a value from a cookie
+* Getting custom theme modifications
 * Any value using custom shortcodes
 
 The possibilities are endless!
@@ -63,13 +66,13 @@ Your Contact Form 7 Tag would look like: `[dynamictext dynamicname "CF7_URL"]`
 
 Optional parameter: `part`, which will return a parsed part of the URL.  Valid values are `host`, `query`, and `path`
 
-Host: Just the domain name and tld 
+Host: Just the domain name and tld
 `[dynamictext host "CF7_URL part='host'"]`
 
-Query: The query string after the ?, if one exists 
+Query: The query string after the ?, if one exists
 `[dynamictext query "CF7_URL part='query'"]`
 
-Path: The URL path, for example, /contact, if one exists 
+Path: The URL path, for example, /contact, if one exists
 `[dynamictext path "CF7_URL part='path'"]`
 
 
@@ -240,10 +243,28 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 == Upgrade Notice ==
 
-= 3.2 =
-Plugin will now be jointly maintained by [SevenSpark](https://sevenspark.com/) and [AuRise Creative](https://aurisecreative.com)
+= 3.3.0 =
+Fixed several bugs from support forums and added 3 new built-in shortcodes!
 
 == Changelog ==
+
+= 3.3.0 =
+
+* Feature: Added the `CF7_get_cookie` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-cookie/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: Added the `CF7_get_taxonomy` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-taxonomy/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: Added the `CF7_get_theme_option` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-theme-option/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: Added `wpcf7dtx_sanitize` filter that sanitizes attribute values in built-in shortcodes
+* Feature: Added `wpcf7dtx_escape` filter that escapes values in built-in shortcodes
+* Feature: Added `wpcf7dtx_allow_protocols` filter to customize allowed protocols in escaping URLs in built-in shortcodes
+* Fix: Updated how plugin gets dynamic value in form tags, now uses `wpcf7dtx_get_dynamic()` function
+* Fix: Added case-insensitive ID in `CF7_get_post_var`
+* Fix: Sanitizes post variable keys as keys in `wpcf7dtx_get_post_var()`
+* Fix: Updated `wpcf7dtx_get_post_id()` to pull from "the loop" if `$post` is unavailable and now used consistently across built-in shortcodes
+* Fix: Updated tag markup to be compatible with Contact Form 7 version 5.6 Beta for successful form validation, [see support thread](https://wordpress.org/support/topic/required-field-no-error-is-output-when-validating-when-field-is-empty/)
+* Fix: Updated the `CF7_GET` shortcode to use `network_home_url()`, [see support thread](https://wordpress.org/support/topic/current-url-not-working/)
+* Fix: Updated GUID function to return appropriately escaped values
+* Fix: Updated all existing built-in shortcodes to use the the sanitizing, escaping, and obfuscating shortcodes, [see support thread](https://wordpress.org/support/topic/cant-get-obfuscate-to-work/)
+* Fix: Marked compatible with WordPress core version 6.2.
 
 = 3.2 =
 
