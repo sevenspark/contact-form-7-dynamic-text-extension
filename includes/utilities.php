@@ -1,6 +1,126 @@
 <?php
 
 /**
+ * Custom DTX Allowed Protocols Filter
+ *
+ * @since 3.3.0
+ *
+ * @param array|string $protocols Optional. Specify protocols to allow either as an array of string values or a string value of comma separated protocols.
+ * @param bool $replace Optional. If true, this function will only return the specified values. If false, will merge specified values with default values. Default is false.
+ *
+ * @return array An array of string values, default only includes `http` and `https` protocols.
+ */
+function wpcf7dtx_allow_protocols($protocols = false, $replace = false)
+{
+    // Get user-inputted protocols
+    $user_protocols = false;
+    if (is_string($protocols) && !empty($protocols)) {
+        $user_protocols = explode(',', sanitize_text_field($protocols));
+    } elseif (is_array($protocols) && count($protocols)) {
+        $user_protocols = array_filter(array_values($protocols));
+    }
+    $default = array('http', 'https');
+    if (is_array($user_protocols) && count($user_protocols)) {
+        // Sanitize each value before adding
+        $allowed_protocols = array();
+        foreach ($user_protocols as $protocol) {
+            $allowed_protocols[] = sanitize_text_field($protocol);
+        }
+        if ($replace) {
+            return array_unique($allowed_protocols);
+        }
+        return array_unique(array_merge(array('http', 'https'), $allowed_protocols)); // Return merged values
+    } elseif ($replace) {
+        return array(); // None allowed, apparently
+    }
+    return $default; // Return only default values
+}
+add_filter('wpcf7dtx_allow_protocols', 'wpcf7dtx_allow_protocols', 10, 1);
+
+/**
+ * Custom DTX Sanitize Filter
+ *
+ * @since 3.3.0
+ *
+ * @param string $value value to be sanitized
+ * @param string $type Optional. The type of sanitation to return. Default is `auto` where automatic identification will be used to attempt to identify URLs and email addresses vs text.
+ * @param array|string $protocols Optional. Specify protocols to allow either as an array of string values or a string value of comma separated protocols.
+ *
+ * @return string the sanitized value
+ */
+function wpcf7dtx_sanitize($value = '', $type = 'auto', $protocols = false)
+{
+    $value = is_string($value) ? $value : strval($value); // Force string value
+    if (!empty($value)) {
+        $type = $type == 'auto' ? wpcf7dtx_detect_value_type($value) : sanitize_text_field($type);
+        switch ($type) {
+            case 'email':
+                return sanitize_email($value);
+            case 'url':
+                return sanitize_url($value, apply_filters('wpcf7dtx_allow_protocols', $protocols));
+            case 'key':
+                return sanitize_key($value);
+            case 'slug':
+                return sanitize_title($value);
+        }
+    }
+    return sanitize_text_field($value);
+}
+add_filter('wpcf7dtx_sanitize', 'wpcf7dtx_sanitize', 10, 2);
+
+/**
+ * Custom DTX Escape Filter
+ *
+ * @since 3.3.0
+ *
+ * @param string $value value to be escaped
+ * @param bool $obfuscate Optional. If true, returned value will be obfuscated. Default is false.
+ * @param string $type Optional. The type of escape to return. Default is `auto` where automatic identification will be used to attempt to identify the type of text.
+ * @param array|string $protocols Optional. Specify protocols to allow either as an array of string values or a string value of comma separated protocols.
+ *
+ * @return string the escaped value
+ */
+function wpcf7dtx_escape($value = '', $obfuscate = false, $type = 'auto', $protocols = false)
+{
+    $value = apply_filters('wpcf7dtx_sanitize', $value, $type); // Sanitize value
+    if (!empty($value)) {
+        if ($obfuscate) {
+            return apply_filters('wpcf7dtx_obfuscate', $value); // Return obfuscated value
+        }
+        $type = $type == 'auto' ? wpcf7dtx_detect_value_type($value) : sanitize_text_field($type);
+        switch ($type) {
+            case 'url':
+                return esc_url($value, apply_filters('wpcf7dtx_allow_protocols', $protocols));
+        }
+    }
+    return esc_attr($value); // Return attribute value
+}
+add_filter('wpcf7dtx_escape', 'wpcf7dtx_escape', 10, 3);
+
+/**
+ * Detect Value Type
+ *
+ * @since 3.3.0
+ *
+ * @access private
+ *
+ * @param string $value the value to be identified
+ *
+ * @return string Potentially identifies string values as `url`, `email`, or `text`.
+ */
+function wpcf7dtx_detect_value_type($value)
+{
+    // Try to detect the value type
+    $value = trim($value);
+    if (stripos($value, 'http') === 0 && strlen($value) > 4) {
+        return 'url';
+    } elseif (preg_match('/^[^\s@]+@[^\s@]+\.[^\s@]+$/', $value)) {
+        return 'email';
+    }
+    return 'text';
+}
+
+/**
  * Obfuscate a value
  *
  * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-obfuscate/
@@ -24,6 +144,7 @@ function wpcf7dtx_obfuscate($value = '')
     }
     return esc_attr($value); // Return default attribute escape
 }
+add_filter('wpcf7dtx_obfuscate', 'wpcf7dtx_obfuscate', 10, 1);
 
 /**
  * Get Post ID
