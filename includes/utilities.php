@@ -38,57 +38,6 @@ function wpcf7dtx_get_post_id($post_id)
 }
 
 /**
- * Mark a shortcode as deprecated and inform when it has been used.
- *
- * The current behavior is to trigger a user error if WP_DEBUG is true.
- *
- * This function is to be used in every function that is deprecated.
- *
- * @since 3.1.0
- * @access private
- *
- * @param string $tag The tag of the shortcode that was called.
- * @param string $version The version of the plugin that deprecated the shortcode.
- * @param string $replacement Optional. The shortcode that should have been used. Default null.
- */
-function wpcf7dtx_deprecated_shortcode($tag, $version, $replacement = null, $documentation = null)
-{
-    /**
-     * Filter whether to trigger an error for deprecated shortcodes.
-     *
-     * @since 3.1.0
-     *
-     * @param bool $trigger Whether to trigger the error for deprecated functions. Default true.
-     */
-    if (WP_DEBUG && apply_filters('deprecated_function_trigger_error', true)) {
-        if (!is_null($replacement)) {
-            if (!is_null($documentation)) {
-                trigger_error(sprintf(
-                    __('%1$s is <strong>deprecated</strong> since version %2$s! Use Contact Form 7\'s built-in attribute "%3$s" instead. Contact Form 7 Documentation: %4$s', 'contact-form-7-dynamic-text-extension'),
-                    $tag,
-                    $version,
-                    $replacement,
-                    $documentation
-                ));
-            } else {
-                trigger_error(sprintf(
-                    __('%1$s is <strong>deprecated</strong> since version %2$s! Use Contact Form 7\'s built-in attribute "%3$s" instead.', 'contact-form-7-dynamic-text-extension'),
-                    $tag,
-                    $version,
-                    $replacement
-                ));
-            }
-        } else {
-            trigger_error(sprintf(
-                __('%1$s is <strong>deprecated</strong> since version %2$s with no alternative currently available.', 'contact-form-7-dynamic-text-extension'),
-                $tag,
-                $version
-            ));
-        }
-    }
-}
-
-/**
  * Parse Content for Specified Shortcodes
  *
  * Parse a string of content for a specific shortcode to retrieve its attributes and content
