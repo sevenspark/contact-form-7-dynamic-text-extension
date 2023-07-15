@@ -194,17 +194,15 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
 /**
  *  Validate Required Dynamic Text Field
  *
- * @param mixed $result
- * @param WPCF7_FormTag $tag
+ * @param WPCF7_Validation $result the current validation result object
+ * @param WPCF7_FormTag $tag the current form tag being filtered for validation
  *
- * @return mixed
+ * @return WPCF7_Validation a possibly modified validation result object
  */
 function wpcf7dtx_dynamictext_validation_filter($result, $tag)
 {
-    $tag = new WPCF7_FormTag($tag);
-
     //Sanitize value
-    $value = empty($_POST[$tag->name]) ? '' : sanitize_text_field(trim(strval($_POST[$tag->name])));
+    $value = empty($_POST[$tag->name]) ? '' : sanitize_text_field(strval($_POST[$tag->name]));
 
     //Validate
     if ('dynamictext' == $tag->basetype) {
