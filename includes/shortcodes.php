@@ -27,6 +27,7 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_get_current_user', 'wpcf7dtx_get_current_user', 10, 1);
     add_shortcode('CF7_get_attachment', 'wpcf7dtx_get_attachment', 10, 1);
     add_shortcode('CF7_get_cookie', 'wpcf7dtx_get_cookie', 10, 1);
+    add_shortcode('CF7_get_taxonomy', 'wpcf7dtx_get_taxonomy', 10, 1);
     add_shortcode('CF7_guid', 'wpcf7dtx_guid', 10, 0);
 }
 add_action('init', 'wpcf7dtx_init_shortcodes'); //Add init hook to add shortcodes
@@ -309,6 +310,43 @@ function wpcf7dtx_get_cookie($atts = array())
     $key = apply_filters('wpcf7dtx_sanitize', $key);
     $value = wpcf7dtx_array_has_key($key, $_COOKIE, $default);
     return apply_filters('wpcf7dtx_escape', $value, $obfuscate);
+}
+
+/**
+ * Get Taxonomy
+ *
+ * Retreives a list of taxonomy values
+ *
+ * @since 3.3.0
+ *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-taxonomy/
+ * @see https://developer.wordpress.org/reference/classes/wp_term_query/get_terms/
+ *
+ * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
+ *
+ * @return string Output of the shortcode
+ */
+function wpcf7dtx_get_taxonomy($atts = array())
+{
+    extract(shortcode_atts(array(
+        'post_id' => '',
+        'taxonomy' => 'category', // Default taxonomy is `category`
+        'fields' => 'names', // Return an array of term names
+        'obfuscate' => '' // Optionally obfuscate returned value
+    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    $post_id = wpcf7dtx_get_post_id($post_id);
+    $fields = apply_filters('wpcf7dtx_sanitize', $fields, 'key');
+    if ($post_id && in_array($fields, array('names', 'slugs', 'ids'))) {
+        $terms = wp_get_object_terms(
+            $post_id, // Get only the ones assigned to this post
+            apply_filters('wpcf7dtx_sanitize', $taxonomy, 'slug'),
+            array('fields' => $fields)
+        );
+        if (is_array($terms) && count($values = array_values($terms)) && (is_string($values[0]) || is_numeric($values[0]))) {
+            return apply_filters('wpcf7dtx_escape', implode(', ', $values), $obfuscate, 'text');
+        }
+    }
+    return '';
 }
 
 /**
