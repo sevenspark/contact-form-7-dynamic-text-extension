@@ -28,6 +28,7 @@ function wpcf7dtx_init_shortcodes()
     add_shortcode('CF7_get_attachment', 'wpcf7dtx_get_attachment', 10, 1);
     add_shortcode('CF7_get_cookie', 'wpcf7dtx_get_cookie', 10, 1);
     add_shortcode('CF7_get_taxonomy', 'wpcf7dtx_get_taxonomy', 10, 1);
+    add_shortcode('CF7_get_theme_option', 'wpcf7dtx_get_theme_option', 10, 1);
     add_shortcode('CF7_guid', 'wpcf7dtx_guid', 10, 0);
 }
 add_action('init', 'wpcf7dtx_init_shortcodes'); //Add init hook to add shortcodes
@@ -350,6 +351,34 @@ function wpcf7dtx_get_taxonomy($atts = array())
 }
 
 /**
+ * Get Theme Customization Option
+ *
+ * Retreives theme modification value for the active theme
+ *
+ * @since 3.3.0
+ *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-theme-option/
+ * @see https://developer.wordpress.org/reference/functions/get_theme_mod/
+ *
+ * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
+ *
+ * @return string Output of the shortcode
+ */
+function wpcf7dtx_get_theme_option($atts = array())
+{
+    extract(shortcode_atts(array(
+        'key' => '',
+        'default' => '', // Optional default value
+        'obfuscate' => '' // Optionally obfuscate returned value
+    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    if ($key = apply_filters('wpcf7dtx_sanitize', $key, 'text')) {
+        $default = apply_filters('wpcf7dtx_sanitize', $default);
+        return apply_filters('wpcf7dtx_escape', get_theme_mod($key, $default), $obfuscate);
+    }
+    return '';
+}
+
+/**
  * GUID Field
  *
  * Generate a random GUID (globally unique identifier)
@@ -367,4 +396,3 @@ function wpcf7dtx_guid()
     }
     return esc_attr(sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535)));
 }
-
