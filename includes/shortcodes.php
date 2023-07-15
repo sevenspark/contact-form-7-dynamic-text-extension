@@ -247,13 +247,13 @@ function wpcf7dtx_get_current_user($atts = array())
  *
  * @since 3.1.0
  *
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-media-attachment/
+ *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
- * @param string $content Optional. A string of content between the opening and closing tags. Default is an empty string.
- * @param string $tag Optional. The shortcode tag. Default is an empty string.
  *
  * @return string Output of the shortcode
  */
-function wpcf7dtx_get_attachment($atts = array(), $content = '', $tag = '')
+function wpcf7dtx_get_attachment($atts = array())
 {
     extract(shortcode_atts(array(
         'id' => '', //Get attachment by ID
@@ -272,23 +272,17 @@ function wpcf7dtx_get_attachment($atts = array(), $content = '', $tag = '')
     }
 
     //Get the value
-    $value = '';
     if ($id) {
         $id = intval(sanitize_text_field(strval($id)));
         switch ($return) {
             case 'id': //Return the attachment ID
-                $value = esc_attr($id);
-                break;
+                return apply_filters('wpcf7dtx_escape', $id, $obfuscate);
             default: //Return attachment URL
                 $url = wp_get_attachment_image_url(intval($id), sanitize_text_field(strval($size)));
-                $value = $url ? esc_url($url) : '';
-                break;
-        }
-        if ($obfuscate && !empty($value)) {
-            return wpcf7dtx_obfuscate($value);
+                return apply_filters('wpcf7dtx_escape', $url, $obfuscate, 'url');
         }
     }
-    return $value;
+    return '';
 }
 
 /**
