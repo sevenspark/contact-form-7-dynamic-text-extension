@@ -3,19 +3,26 @@
 /**
  * Obfuscate a value
  *
- * @param mixed $value
+ * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-obfuscate/
+ *
+ * @param mixed $value the value to be obfuscated
+ *
  * @return string obfuscated value
  */
 function wpcf7dtx_obfuscate($value = '')
 {
-    $return = '';
-    $value = strval($value); //Force value to be string
-    if (!empty($value)) {
-        foreach (str_split($value) as $letter) {
-            $return .= '&#' . ord($letter) . ';';
-        }
+    $o = '';
+    if (!is_string($value)) {
+        $value = sanitize_text_field(strval($value)); // Force value to be string and sanitize it
     }
-    return sanitize_text_field(trim($return));
+    if (!empty($value)) {
+        $value = htmlentities($value, ENT_QUOTES);
+        foreach (str_split($value) as $letter) {
+            $o .= '&#' . ord($letter) . ';';
+        }
+        return $o; // Return obfuscated value
+    }
+    return esc_attr($value); // Return default attribute escape
 }
 
 /**
