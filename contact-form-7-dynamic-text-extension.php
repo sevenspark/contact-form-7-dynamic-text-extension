@@ -134,7 +134,7 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
     $atts['name'] = $tag->name;
     $atts['id'] = $tag->get_id_option();
     $atts['class'] = $tag->get_class_option($class);
-    $atts['tabindex'] = $tag->get_option('tabindex', 'int', true);
+    $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
     $atts['size'] = $tag->get_size_option('40');
     $atts['maxlength'] = $tag->get_maxlength_option();
     $atts['minlength'] = $tag->get_minlength_option();
@@ -155,6 +155,7 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
     }
     if ($tag->is_required() && $atts['type'] !== 'hidden') {
         $atts['aria-required'] = 'true';
+        $atts['required'] = 'required';
     }
 
     // Evaluate the dynamic value
@@ -176,6 +177,9 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
     } else {
         $atts['value'] = $value;
     }
+
+    // Disable autocomplete for this field if a value has been specified
+    $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
 
     //Output the HTML
     return sprintf(
