@@ -91,14 +91,8 @@ function wpcf7dtx_url($atts = array())
     ), array_change_key_case((array)$atts, CASE_LOWER)));
     $allowed_protocols = explode(',', sanitize_text_field($allowed_protocols));
 
-    // Build the full URL
-    if (!empty($_SERVER['SERVER_PORT']) && intval($_SERVER['SERVER_PORT']) !== 80) {
-        $url = network_home_url() . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
-    } else {
-        $url = network_home_url($_SERVER['REQUEST_URI']);
-    }
-    $url = apply_filters('wpcf7dtx_sanitize', $url, 'url', $allowed_protocols);
-
+    // Get the absolute URL
+    $url = apply_filters('wpcf7dtx_sanitize', network_home_url($_SERVER['REQUEST_URI']), 'url', $allowed_protocols);
     if ($url && !empty($part = sanitize_key(strtolower($part)))) {
         // If an individual part is requested, get that specific value using parse_url()
         $part_constant_map = [
@@ -107,6 +101,7 @@ function wpcf7dtx_url($atts = array())
             'path'  => PHP_URL_PATH,
             'query' => PHP_URL_QUERY // after the question mark ?
         ];
+        $value = '';
         if (array_key_exists($part, $part_constant_map)) {
             $value = apply_filters('wpcf7dtx_sanitize', strval(wp_parse_url($url, $part_constant_map[$part])), 'text');
         }
