@@ -3,7 +3,7 @@ Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, contact, contact form, dynamic, text, input, GET, POST, title, slug, autofill, auto-fill, prepopulate, pre-populate, form field
 Tested up to: 6.2
-Stable tag: 3.3.0
+Stable tag: 3.4.0
 
 This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text or hidden input fields using any shortcode.
 
@@ -13,6 +13,7 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 
 * Auto-filling a URL
 * Auto-filling a post ID, title, or slug
+* Auto-filling a title, URL, or slug for the current page
 * Pre-populating a product number
 * Referencing other content on the site
 * Populating with post info
@@ -243,10 +244,15 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 == Upgrade Notice ==
 
-= 3.3.0 =
-Fixed several bugs from support forums and added 3 new built-in shortcodes!
+= 3.4.0 =
+Fixed a bug and added a new shortcode as requested in our support forums :) -Tessa Watkins
 
 == Changelog ==
+
+= 3.4.0 =
+
+* Feature: Feature: Added the `CF7_get_current_var` shortcode, [see support thread for user request](https://wordpress.org/support/topic/wrong-page-title-7/). For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-variables/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Fix: Updated the `CF7_URL` shortcode to no longer check for ports since that's handled in `network_home_url()` function, [see support thread](https://wordpress.org/support/topic/version-3-3-0-breaking/)
 
 = 3.3.0 =
 
@@ -261,7 +267,7 @@ Fixed several bugs from support forums and added 3 new built-in shortcodes!
 * Fix: Sanitizes post variable keys as keys in `wpcf7dtx_get_post_var()`
 * Fix: Updated `wpcf7dtx_get_post_id()` to pull from "the loop" if `$post` is unavailable and now used consistently across built-in shortcodes
 * Fix: Updated tag markup to be compatible with Contact Form 7 version 5.6 Beta for successful form validation, [see support thread](https://wordpress.org/support/topic/required-field-no-error-is-output-when-validating-when-field-is-empty/)
-* Fix: Updated the `CF7_GET` shortcode to use `network_home_url()`, [see support thread](https://wordpress.org/support/topic/current-url-not-working/)
+* Fix: Updated the `CF7_URL` shortcode to use `network_home_url()`, [see support thread](https://wordpress.org/support/topic/current-url-not-working/)
 * Fix: Updated GUID function to return appropriately escaped values
 * Fix: Updated all existing built-in shortcodes to use the the sanitizing, escaping, and obfuscating shortcodes, [see support thread](https://wordpress.org/support/topic/cant-get-obfuscate-to-work/)
 * Fix: Marked compatible with WordPress core version 6.2.
