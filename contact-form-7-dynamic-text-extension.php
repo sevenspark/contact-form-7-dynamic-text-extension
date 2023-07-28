@@ -178,8 +178,13 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
         $atts['value'] = $value;
     }
 
-    // Disable autocomplete for this field if a value has been specified
-    $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
+    if ($atts['type'] == 'hidden') {
+        // Always disable for hidden fields
+        $atts['autocomplete'] = 'off';
+    } else {
+        // Disable autocomplete for this field if a value has been specified
+        $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
+    }
 
     //Output the HTML
     return sprintf(
