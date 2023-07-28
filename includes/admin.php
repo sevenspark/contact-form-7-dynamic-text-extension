@@ -8,12 +8,15 @@
  * @since 3.1.0
  *
  * @param string $hook Hook suffix for the current admin page
+ *
+ * @return void
  */
 function wpcf7dtx_enqueue_admin_assets($hook)
 {
-    //Only load on CF7 Form pages
+    // Only load on CF7 Form pages
     if ($hook == 'toplevel_page_wpcf7') {
         $prefix = 'wpcf7dtx-';
+        $debug = defined('WP_DEBUG') && constant('WP_DEBUG');
         $url = plugin_dir_url(WPCF7DTX_FILE);
         $path = plugin_dir_path(WPCF7DTX_FILE);
 
@@ -21,7 +24,7 @@ function wpcf7dtx_enqueue_admin_assets($hook)
             $prefix . 'admin', //Handle
             $url . 'assets/styles/tag-generator.css', //Source
             array('contact-form-7-admin'), //Dependencies
-            @filemtime($path . 'assets/styles/tag-generator.css') //Version
+            $debug ? @filemtime($path . 'assets/styles/tag-generator.css') : WPCF7DTX_VERSION //Version
         );
 
         //Plugin Scripts
@@ -29,8 +32,8 @@ function wpcf7dtx_enqueue_admin_assets($hook)
             $prefix . 'taggenerator', //Handle
             $url . 'assets/scripts/tag-generator.js', //Source
             array('jquery', 'wpcf7-admin-taggenerator'), //Dependencies
-            @filemtime($path . 'assets/scripts/tag-generator.js'), //Version
-            true //In footer
+            $debug ? @filemtime($path . 'assets/scripts/tag-generator.js') : WPCF7DTX_VERSION, //Version
+            array('in_footer' => true, 'strategy' => 'defer') // Defer loading in footer
         );
     }
 }
