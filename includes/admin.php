@@ -73,6 +73,7 @@ add_action('wpcf7_admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 100);
  *
  * @param WPCF7_ContactForm $contact_form
  * @param array $options
+ *
  * @return void
  */
 function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
@@ -89,17 +90,18 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
     }
     $utm_source = urlencode(home_url());
     $description .= sprintf(
-        ' %s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a>.',
-        __('For more details, see', 'contact-form-7-dynamic-text-extension'),
+        ' %s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" title="%s" target="_blank" rel="noopener">%s</a>.',
+        esc_html__('For more details, see', 'contact-form-7-dynamic-text-extension'),
         esc_attr($utm_source), //UTM source
         esc_attr($type), //UTM content
-        __('DTX knowledge base', 'contact-form-7-dynamic-text-extension')
+        esc_attr__('Go to DTX Documentation website', 'contact-form-7-dynamic-text-extension'),
+        esc_html__('DTX knowledge base', 'contact-form-7-dynamic-text-extension')
     );
 
     //Open Form-Tag Generator
     printf(
         '<div class="control-box"><fieldset><legend>%s</legend><table class="form-table"><tbody>',
-        wp_kses($description, 'a') //Tag generator description
+        wp_kses($description, array('a' => array('href' => array(), 'target' => array(), 'rel' => array(), 'title' => array()))) //Tag generator description
     );
 
     //Input field - Required checkbox (not available for hidden fields)
