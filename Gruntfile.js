@@ -1,10 +1,10 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     grunt.initConfig({
 
         clean: {
             build: {
-                src: ['./_build'],
+                src: ['./_build', './**/*.min.js'],
             },
         },
         copy: {
@@ -13,6 +13,26 @@ module.exports = function (grunt) {
                 dest: './_build',
                 expand: true,
             },
+        },
+        uglify: {
+            options: {
+                banner: '/*! Do not edit, this file is generated automatically - <%= grunt.template.today("yyyy-mm-dd HH:mm:ss Z") %> */',
+                mangle: {
+                    eval: true, // Mangle names visible in scops where `eval` or `with` are used
+                    reserved: ['wpcf7', 'wpcf7dtx', 'dtx'], // Exclude these variables from mangling
+                    toplevel: true // Mangle names declared in the top level scope
+                },
+                compress: true
+            },
+            build: {
+                files: [{
+                    expand: true, // Enable dynamic expansion
+                    cwd: 'assets/scripts/', // Src matches are relative to this path
+                    src: ['*.js'], // Actual pattern(s) to match
+                    dest: './assets/scripts/', // Destination path prefix - generate it in working file, it will be copied to build
+                    ext: '.min.js', // Dest filepaths will have this extension
+                }]
+            }
         },
         wp_deploy: {
             deploy: {
@@ -27,13 +47,13 @@ module.exports = function (grunt) {
         },
     })
 
-
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-wp-deploy');
 
     // grunt.registerTask('clean', ['clean:build']); // causes issues due to same task name I believe
-    grunt.registerTask('build', ['clean:build', 'copy:build']);
+    grunt.registerTask('build', ['clean:build', 'uglify:build', 'copy:build']);
 
     // Deploy
     grunt.registerTask('deploy', ['wp_deploy:deploy']);
