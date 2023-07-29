@@ -112,7 +112,9 @@ function wpcf7dtx_detect_value_type($value)
 {
     // Try to detect the value type
     $value = trim($value);
-    if (stripos($value, 'http') === 0 && strlen($value) > 4) {
+    $is_https_url = stripos($value, 'https') === 0 && strlen($value) > 5;
+    $is_http_url = stripos($value, 'http') === 0 && strlen($value) > 4 && sanitize_key($value) != 'https';
+    if ($is_https_url || $is_http_url) {
         return 'url';
     } elseif (preg_match('/^[^\s@]+@[^\s@]+\.[^\s@]+$/', $value)) {
         return 'email';
