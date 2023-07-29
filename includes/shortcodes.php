@@ -218,6 +218,8 @@ function wpcf7dtx_get_custom_field($atts = array())
 /**
  * Get Variable from the current Post Object
  *
+ * @since 3.4.0
+ *
  * @link https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-variables/
  *
  * @param array $atts Optional. An associative array of shortcode attributes. Default is an empty array.
@@ -235,10 +237,27 @@ function wpcf7dtx_get_current_var($atts = array())
     if ($temp_key === 'url') {
         return wpcf7dtx_url($atts); // Getting the current URL is the same for all WordPress pages
     } elseif (!empty($key)) {
-        $obj = get_queried_object(); // Get the current WordPress queried object
-        if (!is_null($obj)) {
-            if ($obj instanceof WP_User) {
-                // This is an author page
+        $type = '';
+        $obj = null;
+        if (wpcf7dtx_use_session()) {
+            $obj = $_SESSION['dtx_obj'];
+            $type = $_SESSION['dtx_obj_type'];
+        } elseif (!wp_doing_ajax()) {
+            $obj = get_queried_object(); // Get the current WordPress queried object
+            if (!is_null($obj)) {
+                if ($obj instanceof WP_User) {
+                    $type = 'user';
+                } elseif (property_exists($obj, 'ID')) {
+                    $type = 'post';
+                } elseif (property_exists($obj, 'term_id')) {
+                    $type = 'term';
+                }
+            } elseif (is_archive()) {
+                $type = 'archive';
+            }
+        }
+        switch ($type) {
+            case 'user': // This is an author page
                 switch ($temp_key) {
                     case 'acf_id': // Get handle for Advanced Custom Fields
                         return apply_filters('wpcf7dtx_escape', 'user_' . $obj->ID, $obfuscate);
@@ -252,8 +271,7 @@ function wpcf7dtx_get_current_var($atts = array())
                     default: // Get user value by key should it exist
                         return apply_filters('wpcf7dtx_escape', $obj->get($key), $obfuscate);
                 }
-            } elseif (property_exists($obj, 'ID')) {
-                // This is a post object
+            case 'post': // This is a post object
                 switch ($temp_key) {
                     case 'image':
                     case 'featured_image': // Get the current post's featured image
@@ -269,8 +287,7 @@ function wpcf7dtx_get_current_var($atts = array())
                         }
                         return $value;
                 }
-            } elseif (property_exists($obj, 'term_id')) {
-                // This is a taxonomy with a term ID
+            case 'term': // This is a taxonomy with a term ID
                 switch ($key) {
                     case 'id': // Get term ID
                         return apply_filters('wpcf7dtx_escape', $obj->term_id, $obfuscate);
@@ -286,20 +303,19 @@ function wpcf7dtx_get_current_var($atts = array())
                         // Otherwise, try meta data if the property doesn't exist
                         return apply_filters('wpcf7dtx_escape', get_metadata('term', $obj->ID, $key, true), $obfuscate);
                 }
-            }
-        } elseif (is_archive()) {
-            // Possibly a date or formats archive because the queried object is null
-            switch ($temp_key) {
-                case 'title': // Get author's display name
-                    return apply_filters('wpcf7dtx_escape', get_the_archive_title(), $obfuscate);
-                case 'slug': // Not all author pages use the `user_login` variable for security reasons, so get what is currently displayed as slug
+            case 'archive': // Possibly a date or formats archive
+                switch ($temp_key) {
+                    case 'title': // Get archive title
+                        return apply_filters('wpcf7dtx_escape', get_the_archive_title(), $obfuscate);
+                    default:
+                        break;
+                }
+            default: // Possibly a search or 404 page at this point
+                if ($temp_key == 'slug') {
+                    // no idea what else to get except the slug maybe
                     return apply_filters('wpcf7dtx_escape', basename(wpcf7dtx_url(array('part' => 'path'))), $obfuscate);
-                default:
-                    break;
-            }
-        } elseif ($temp_key == 'slug') {
-            // Possibly a search or 404 page at this point, no idea what else to get except the slug maybe
-            return apply_filters('wpcf7dtx_escape', basename(wpcf7dtx_url(array('part' => 'path'))), $obfuscate);
+                }
+                break;
         }
     }
     return '';
