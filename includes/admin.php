@@ -56,14 +56,15 @@ function wpcf7dtx_add_tag_generator_dynamictext()
         'dynamictext', //id
         __('dynamic text', 'contact-form-7-dynamic-text-extension'), //title
         'wpcf7dtx_tag_generator_dynamictext', //callback
-        array('placeholder', 'readonly') //options
+        array('placeholder', 'readonly', 'dtx_pageload') //options
     );
 
     //Dynamic Hidden Field
     $tag_generator->add(
         'dynamichidden', //id
         __('dynamic hidden', 'contact-form-7-dynamic-text-extension'), //title
-        'wpcf7dtx_tag_generator_dynamictext' //callback
+        'wpcf7dtx_tag_generator_dynamictext', //callback
+        array('dtx_pageload') // options
     );
 }
 add_action('wpcf7_admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 100);
@@ -216,6 +217,20 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
             esc_html__('Do not let users edit this field', 'contact-form-7-dynamic-text-extension') // checkbox label
         );
     }
+
+    // Page load data attribute (triggers the loading of a frontend script)
+    printf(
+        '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+        esc_attr($options['content'] . '-frontend'), // field id
+        esc_html__('After Page Load', 'contact-form-7-dynamic-text-extension'), // field Label
+        wpcf7_format_atts(array(
+            'type' => 'checkbox',
+            'name' => 'dtx_pageload',
+            'id' => $options['content'] . '-dtx_pageload',
+            'class' => 'dtx_pageloadvalue option'
+        )),
+        esc_html__('Check this box to get value after the page has loaded—this will add JavaScript to the frontend; recommended if page HTML has been cached', 'contact-form-7-dynamic-text-extension') // checkbox label
+    );
 
     //Close Form-Tag Generator
     printf(

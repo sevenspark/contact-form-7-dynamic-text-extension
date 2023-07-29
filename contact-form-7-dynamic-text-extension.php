@@ -67,9 +67,44 @@ function wpcf7dtx_add_shortcode_dynamictext()
             'dynamichidden', 'dynamichidden*' //Required hidden fields do nothing
         ),
         'wpcf7dtx_dynamictext_shortcode_handler', //Callback
-        array('name-attr' => true) //Features
+        array( //Features
+            'name-attr' => true,
+            'dtx_pageload' => true
+        )
     );
 }
+
+/**
+ * Register Frontend Script
+ *
+ * Register the frontend script to be optionally loaded later.
+ *
+ * @since 3.5.0
+ *
+ * @param string $hook Hook suffix for the current page
+ *
+ * @return void
+ */
+function wpcf7dtx_enqueue_frontend_assets($hook = '')
+{
+    $debug = defined('WP_DEBUG') && constant('WP_DEBUG');
+    $url = plugin_dir_url(WPCF7DTX_FILE);
+    $path = plugin_dir_path(WPCF7DTX_FILE);
+    wp_register_script(
+        'wpcf7dtx', // Handle
+        $url . 'assets/scripts/dtx' . ($debug ? '' : '.min') . '.js', // Source
+        array('jquery-core'), // Dependencies
+        $debug ? @filemtime($path . 'assets/scripts/dtx.js') : WPCF7DTX_VERSION, // Version
+        array('in_footer' => true, 'strategy' => 'defer') // Defer loading in footer
+
+    );
+    wp_localize_script(
+        'wpcf7dtx', // Handle
+        'dtx_obj', // Object
+        array('ajax_url' => admin_url('admin-ajax.php')) // Data
+    );
+}
+add_action('wp_enqueue_scripts', 'wpcf7dtx_enqueue_frontend_assets');
 
 /**
  * Include Utility Functions
@@ -133,7 +168,6 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
     $atts = array();
     $atts['name'] = $tag->name;
     $atts['id'] = $tag->get_id_option();
-    $atts['class'] = $tag->get_class_option($class);
     $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
     $atts['size'] = $tag->get_size_option('40');
     $atts['maxlength'] = $tag->get_maxlength_option();
@@ -184,6 +218,27 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
     } else {
         // Disable autocomplete for this field if a value has been specified
         $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
+    }
+
+    // Page load attribute
+    if ($tag->has_option('dtx_pageload')) {
+        $atts['data-dtx-value'] = rawurlencode(sanitize_text_field(implode('', (array)$tag->raw_values)));
+        $class .= ' dtx-pageload';
+        if (wp_style_is('wpcf7dtx', 'registered') && !wp_script_is('wpcf7dtx', 'queue')) {
+            // If already registered, just enqueue it
+            wp_enqueue_script('wpcf7dtx');
+        } elseif (!wp_style_is('wpcf7dtx', 'registered')) {
+            // If not registered, do that first, then enqueue it
+            wpcf7dtx_enqueue_frontend_assets();
+            wp_enqueue_script('wpcf7dtx');
+        }
+    }
+
+    // Wrap up class attribute
+    $atts['class'] = $tag->get_class_option($class);
+
+    if ($atts['name'] == 'url_scheme') {
+        au_debug_log($atts, '[DTX] Input Attributes');
     }
 
     //Output the HTML
@@ -269,6 +324,36 @@ function wpcf7dtx_start_session()
     }
 }
 add_action('get_header', 'wpcf7dtx_start_session');
+
+/**
+ * AJAX Request Handler for After Page Loading
+ *
+ * @since 3.5.0
+ *
+ * @param array $_POST A sequential array of url encoded shortcode values to evaluate
+ *
+ * @return array A sequential array of objects with `raw_value` and `value` keys
+ */
+function wpcf7dtx_js_handler()
+{
+    $return = array();
+    $shortcodes = wpcf7dtx_array_has_key('shortcodes', $_POST);
+    if (is_array($shortcodes) && count($shortcodes)) {
+        foreach ($shortcodes as $raw_value) {
+            $value = sanitize_text_field(rawurldecode($raw_value));
+            if (!empty($value)) {
+                $value = wpcf7dtx_get_dynamic($value);
+            }
+            $return[] = array(
+                'raw_value' => esc_attr($raw_value),
+                'value' => esc_attr($value)
+            );
+        }
+    }
+    wp_die(json_encode($return));
+}
+add_action('wp_ajax_wpcf7dtx', 'wpcf7dtx_js_handler'); // Add AJAX call for logged in users
+add_action('wp_ajax_nopriv_wpcf7dtx', 'wpcf7dtx_js_handler'); // Add AJAX call for anonymous users
 
 if (is_admin()) {
     /**
