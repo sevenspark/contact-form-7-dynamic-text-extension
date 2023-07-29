@@ -17,11 +17,7 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 banner: '/*! Do not edit, this file is generated automatically - <%= grunt.template.today("yyyy-mm-dd HH:mm:ss Z") %> */',
-                mangle: {
-                    eval: true, // Mangle names visible in scops where `eval` or `with` are used
-                    reserved: ['wpcf7', 'wpcf7dtx', 'dtx'], // Exclude these variables from mangling
-                    toplevel: true // Mangle names declared in the top level scope
-                },
+                mangle: false,
                 compress: true
             },
             build: {
