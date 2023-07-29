@@ -101,7 +101,7 @@ function wpcf7dtx_get_dynamic($value, $tag = false)
         $shortcode_tag = '[' . $value . ']';
         $shortcode_output = do_shortcode($shortcode_tag); //Shortcode value
         if (is_string($shortcode_output) && $shortcode_output != $shortcode_tag) {
-            return $shortcode_output;
+            return apply_filters('wpcf7dtx_sanitize', $shortcode_output);
         }
     }
     return $value;
