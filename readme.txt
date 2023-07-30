@@ -1,24 +1,24 @@
 === Contact Form 7 - Dynamic Text Extension ===
 Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
-Tags: Contact Form 7, contact, contact form, dynamic, text, input, GET, POST, title, slug, autofill, auto-fill, prepopulate, pre-populate, form field
-Tested up to: 6.2
-Stable tag: 3.4.0
+Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, GET, POST, title, slug, auto-fill, pre-populate
+Tested up to: 6.3
+Stable tag: 3.5.0
 
 This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text or hidden input fields using any shortcode.
 
 == Description ==
 
-Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. Contact Form 7 - Dynamic Text Extension (DTX) makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields based on other values. Some examples might include:
+Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. Contact Form 7 - Dynamic Text Extension (DTX) makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields pulled from other locations. Some examples might include:
 
-* Auto-filling a URL
+* Auto-filling a URL or just getting the domain name or path
 * Auto-filling a post ID, title, or slug
 * Auto-filling a title, URL, or slug for the current page
 * Pre-populating a product number
 * Referencing other content on the site
-* Populating with post info
-* Populating with user info
-* Populating with custom fields
+* Populating with post or page info
+* Populating with the current user's info
+* Populating with custom and meta fields
 * Generating unique identifiers for support tickets
 * Getting a list of post categories or other custom taxonomies
 * Getting a value from a cookie
@@ -27,43 +27,91 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 
 The possibilities are endless!
 
-= WHAT DOES IT DO? =
+## WHAT DOES IT DO? ##
 
 DTX comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
 
 Don't see the shortcode you need on the list? You can write a [custom one](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/custom-shortcodes/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)! Any shortcode that returns a string or numeric value can be used here. The included shortcodes just cover the most common scenarios, but DTX provides the flexibility for you to grab any value you have access to programmatically.
 
-= HOW TO USE IT =
+= Dynamic Value =
 
-After installing and activating the plugin, you will have 2 new tag types to select from when creating or editing a Contact Form 7 form: the dynamic text field and dynamic hidden field. Most of the options in their tag generators will be familiar to Contact Form 7 users but there have been some upgrades.
-
-**Dynamic Value**
-
-This fields can take a shortcode, with two important provisions:
+The bread and butter of this plugin, set a dynamic value! This field can take any shortcode, with two important provisions:
 
 1. The shortcode should NOT include the normal square brackets (`[` and `]`). So, instead of `[CF7_GET key='value']` you would use `CF7_GET key='value'`.
 1. Any parameters in the shortcode must use single quotes. That is: `CF7_GET key='value'` and not `CF7_GET key="value"`
 
-**Dynamic placeholder**
+= Dynamic Placeholder =
 
-Only available for the dynamic text form tag, this field can take static text or a shortcode. If using a shortcode, the same syntax applies from the dynamic value field. However, this field also has a few more needs:
+Set a dynamic placeholder with this attribute! This feature accepts static text or a shortcode. If using a shortcode, the same syntax applies from the dynamic value field. However, this field also has a few more needs:
 
 1. The text/shortcode must first have apostrophes converted to it's HTML entity code, `&#39;`
 1. After that, it must be URL encoded so that spaces become `%20` and other non-alphanumeric characters are converted.
 
-**Read Only Attribute**
+If you're using Contact Form 7's tag generator to create the form tag, those extra needs are already taken care of. Dynamic placeholders are not available for dynamic hidden form tags.
 
-Only available for the dynamic text form tag, simply check this box if you do not want to let users edit this field. It will add the `readonly` attribute to your form field.
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-placeholder/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
 
-= INCLUDED SHORTCODES =
+= Compatible with Caching Plugins =
+
+DTX is cache friendly! You can set a field to be calculated after the page loads by setting the `dtx_pageload` attribute to any dynamic form tag.
+
+Many websites use caching plugins to optimize for performance. If your website caches the HTML of the form, then any dynamic form fields you have get their first calculated value cached alongside it. This becomes an issue if you're using DTX to pull values from a cookie or the current URL's query string.
+
+This is best for dynamic form fields that:
+
+* gets the current URL
+* gets a value from the URL query
+* gets a value from a cookie
+* gets the current user's info
+* generates a unique identifier (GUID)
+
+For dynamic fields that are page-specific, it's perfectly safe to cache those values. For example, dynamic form fields that:
+
+* getting the page or post's ID, title, or slug
+* getting post meta for the current page
+* getting the post's assigned categories, tags, or other custom taxonomy
+* getting site info
+* getting theme modification values
+
+*Note: Enabling a dynamic field to be calculated after the page loads will add frontend JavaScript. Depending on the shortcode used as the dynamic value, an AJAX call to the server may be sent to be processed. The script is minified and loaded in the footer and is deferred, minimizing impact on site performance and the AJAX calls are called asynchronously to avoid being a render-blocking resource and minimizing main-thread work. The script itself can be safely cached too.*
+
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-after-page-load/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Read Only Form Fields =
+
+Check this box if you do not want to let users edit this field. It will add the `readonly` attribute to the input form field. This feature is not available for dynamic hidden form tags.
+
+= Obfuscate Values for Enhanced Privacy =
+
+If you're pre-filling a form field with an email address, bots can scrape that value from the page and use it for spam. You can add an additional layer of protecting by obfuscating the value, which turns each character into it's ASCII code. To the human eye, it looks like the character it's supposed to be because browsers will render the ASCII code, but for bots, it won't look like an email address!
+
+## HOW TO USE IT ##
+
+After installing and activating the plugin, you will have 2 new tag types to select from when creating or editing a Contact Form 7 form: the dynamic text field and dynamic hidden field. Most of the options in their tag generators will be familiar to Contact Form 7 users but there have been some upgrades.
+
+= How to Obfuscate Values =
+
+All of the shortcodes included with the DTX plugin allow the `obfuscate` attribute that you can set to any truthy value to provide an additional layer of security for sensitive data.
+
+The Contact Form 7 tag with obfuscation turned on would look like this: `[dynamictext user_email "CF7_get_current_user key='user_email' obfuscate='on'"]`
+
+= How to Enable Cache-Friendly Mode =
+
+All of the dynamic form tags can be enabled for processing on the frontend of the website, or the client-side, by adding the `dtx_pageload` attribute to the Contact Form 7 form tag.
+
+In the form editor of Contact Form 7, your form tag would look like: `[dynamictext current_url dtx_pageload "CF7_URL"]`
+
+If using the tag generator, it's as simple as checking a box!
+
+## INCLUDED SHORTCODES ##
 
 The plugin includes several shortcodes for use with the Dynamic Text Extension right out of the box. You can write your own as well—any self-closing shortcode will work, even with attributes!
 
-**Current URL or Current URL Part**
+= Current URL or Part =
 
 Retrieve the current URL: `CF7_URL`
 
-Your Contact Form 7 Tag would look like: `[dynamictext dynamicname "CF7_URL"]`
+In the form editor of Contact Form 7, your form tag would look like: `[dynamictext dynamicname "CF7_URL"]`
 
 Optional parameter: `part`, which will return a parsed part of the URL.  Valid values are `host`, `query`, and `path`
 
@@ -76,17 +124,46 @@ Query: The query string after the ?, if one exists
 Path: The URL path, for example, /contact, if one exists
 `[dynamictext path "CF7_URL part='path'"]`
 
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-url/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
 
-
-**Referrer URL**
+= Referrer URL =
 
 Get the referral URL, if it exists. Note that this is not necessarily reliable as not all browsers send this data.
 
 CF7 Tag: `[dynamictext dynamicname "CF7_referrer"]`
 
-**Post/Page Info**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-referrer-url/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
 
-Retrieve information about the current post or page that the contact form is displayed on. The shortcode works as follows:
+= Current Page Variables =
+
+Retrieve information about the current page that the contact form is displayed on. Works great for use in templated areas like the site header, footer, widget, or sidebar! The shortcode works as follows:
+
+Built-in shortcode: `CF7_get_current_var`
+
+Required attribute: `key`
+
+Possible values for `key` include:
+
+* `id`
+* `title`
+* `url` (an alias for `CF7_URL`)
+* `slug`
+* `featured_image`
+* `terms` (an alias for `CF7_get_taxonomy`)
+
+For pages that use a `WP_POST` object, this acts as an alias for `CF7_get_post_var` so those attributes work here as well.
+
+For author pages, this acts as an alias for `CF7_get_current_user` so those attributes work here as well.
+
+In the form editor of Contact Form 7, your form tag's value could look like: `CF7_get_current_var key='title'`
+
+And then the full form tag would be: `[dynamictext dynamicname "CF7_get_current_var key='title'"]`
+
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-variables/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Post/Page Info =
+
+Retrieve information about the current post or page (must be for a WP_POST object) that the contact form is displayed on. The shortcode works as follows:
 
 `CF7_get_post_var key='title'`      <-- retrieves the Post's Title
 `CF7_get_post_var key='slug'`       <-- retrieves the Post's Slug
@@ -101,7 +178,9 @@ Dynamic value: `CF7_get_post_var key='title' post_id='245'`
 
 Contact Form 7 Tag: `[dynamictext dynamicname "CF7_get_post_var key='title' post_id='245'"]`
 
-**Post Meta & Custom Fields**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-post-page-variables//?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Post Meta & Custom Fields =
 
 Retrieve custom fields from the current post/page. Just set the custom field as the key in the shortcode.
 
@@ -112,7 +191,9 @@ And the tag looks like this: `[dynamictext dynamicname "CF7_get_custom_field key
 For the purposes of including an email address, you can obfuscate the custom field value by setting obfuscate='on' in the shortcode like this:
 `[dynamictext dynamicname "CF7_get_custom_field key='my_custom_field' obfuscate='on'"]`
 
-**Featured Images & Media Attachments**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-post-meta-custom-fields/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Featured Images & Media Attachments =
 
 Retrieve the current post's featured image, the featured image of a different page, or any attachment from the Media Library with this shortcode!
 
@@ -134,7 +215,9 @@ If I wanted to get a specific image at a specific size, I can use this:
 
 The only two attributes that can’t play together is `id` and `post_id`. If both are specified, it will get the attachment specified by `id` and completely ignore the `post_id` attribute. If neither are specified, then it looks to the current featured image assigned to the global `$post` object.
 
-**Current User Info & User Meta**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-media-attachment/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Current User Info & User Meta =
 
 Get data about the current logged-in user.
 
@@ -156,7 +239,9 @@ But also custom meta user keys!
 For the purposes of including an email address, you can obfuscate the value by setting obfuscate='on' in the shortcode like this:
 `[dynamictext dynamicname "CF7_get_current_user key='user_email' obfuscate='on'"]`
 
-**Site/Blog Info**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-user-user-meta/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Site/Blog Info =
 
 Want to grab some information from your blog like the URL or the site name? Use the `CF7_bloginfo` shortcode. For example, to get the site's URL:
 
@@ -166,7 +251,15 @@ Your Content Form 7 Tag will look something like this: `[dynamictext dynamicname
 
 Your form's dynamicname text input will then be pre-populated with your site's URL
 
-**HTTP GET Variables**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-site-blog-information/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Theme Options =
+
+Want to retrieve values from your active theme's Customizer? Now you can with the `CF7_get_theme_option` shortcode.
+
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-theme-option/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= HTTP GET Variables =
 
 Want to use a variable from the PHP `$_GET` array? Just use the `CF7_GET` shortcode. For example, if you want to get the foo parameter from the url
 `http://mysite.com?foo=bar`
@@ -177,7 +270,9 @@ Your Content Form 7 Tag will look something like this: `[dynamictext dynamicname
 
 Your form's dynamicname text input will then be pre-populated with the value of `foo`, in this case, `bar`
 
-**HTTP POST Variables**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-php-get-variables/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= HTTP POST Variables =
 
 Grab variables from the PHP `$_POST` array. The shortcode is much like the GET shortcode:
 
@@ -185,15 +280,25 @@ Dynamic value: `CF7_POST key='foo'`
 
 Your Content Form 7 Tag will look something like this: `[dynamictext dynamicname "CF7_POST key='foo'"]`
 
-**GUID**
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-php-post-variables/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Cookie Values =
+
+If your WordPress website uses cookies, you might want to pull the value of a specific cookie into a form. You can do that with the `CF7_get_cookie` shortcode. It only needs a `key` attribute.
+
+Dynamic value: `CF7_get_cookie key='foo'`
+
+Your Content Form 7 Tag will look something like this: `[dynamictext dynamicname "CF7_get_cookie key='foo'"]`
+
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-cookie/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= GUID =
 
 Generate a globally unique identifier (GUID) in a form field. This is a great utility shortcode for forms that need unique identifiers for support tickets, receipts, reference numbers, etc., without having to expose personally identifiable information (PII). This shortcode takes no parameters: `CF7_guid`
 
-Your Contact Form 7 Tag would look like: `[dynamictext dynamicname "CF7_guid"]`
+In the form editor of Contact Form 7, your form tag would look like: `[dynamictext dynamicname "CF7_guid"]`
 
-**Shortcode attribute: obfuscate**
-
-All of the included shortcodes have an `obfuscate` attribute that you can set to any truthy value to provide an additional layer of security for sensitive data.
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-guid/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
 
 == Installation ==
 
@@ -253,138 +358,3 @@ Fixed a bug and added a new shortcode as requested in our support forums :) -Tes
 
 * Feature: Feature: Added the `CF7_get_current_var` shortcode, [see support thread for user request](https://wordpress.org/support/topic/wrong-page-title-7/). For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-variables/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
 * Fix: Updated the `CF7_URL` shortcode to no longer check for ports since that's handled in `network_home_url()` function, [see support thread](https://wordpress.org/support/topic/version-3-3-0-breaking/)
-
-= 3.3.0 =
-
-* Feature: Added the `CF7_get_cookie` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-cookie/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: Added the `CF7_get_taxonomy` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-taxonomy/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: Added the `CF7_get_theme_option` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-theme-option/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: Added `wpcf7dtx_sanitize` filter that sanitizes attribute values in built-in shortcodes
-* Feature: Added `wpcf7dtx_escape` filter that escapes values in built-in shortcodes
-* Feature: Added `wpcf7dtx_allow_protocols` filter to customize allowed protocols in escaping URLs in built-in shortcodes
-* Fix: Updated how plugin gets dynamic value in form tags, now uses `wpcf7dtx_get_dynamic()` function
-* Fix: Added case-insensitive ID in `CF7_get_post_var`
-* Fix: Sanitizes post variable keys as keys in `wpcf7dtx_get_post_var()`
-* Fix: Updated `wpcf7dtx_get_post_id()` to pull from "the loop" if `$post` is unavailable and now used consistently across built-in shortcodes
-* Fix: Updated tag markup to be compatible with Contact Form 7 version 5.6 Beta for successful form validation, [see support thread](https://wordpress.org/support/topic/required-field-no-error-is-output-when-validating-when-field-is-empty/)
-* Fix: Updated the `CF7_URL` shortcode to use `network_home_url()`, [see support thread](https://wordpress.org/support/topic/current-url-not-working/)
-* Fix: Updated GUID function to return appropriately escaped values
-* Fix: Updated all existing built-in shortcodes to use the the sanitizing, escaping, and obfuscating shortcodes, [see support thread](https://wordpress.org/support/topic/cant-get-obfuscate-to-work/)
-* Fix: Marked compatible with WordPress core version 6.2.
-
-= 3.2 =
-
-* Feature: Add optional 'part' parameter to CF7_URL shortcode to retrieve Host, Query, or Path from current URL
-* Updated minimum PHP requirement to 7.4 moving forward
-* Update branding assets
-* Update Tested Up To to 6.1.1
-* Plugin will now be jointly maintained by [SevenSpark](https://sevenspark.com/) and [AuRise Creative](https://aurisecreative.com)
-
-= 3.1.3 =
-
-* Fix: Fixed the syntax error that reappeared in 3.1.2.
-
-= 3.1.2 =
-
-**Release Date: January 27, 2023**
-
-* Fix: updated the text domain to match the plugin slug
-* Fix: updated all of the translated strings to match
-
-= 3.1.1 =
-
-**Release Date: January 26, 2023**
-
-* Fix: Fixed the syntax error: Parse error: syntax error, unexpected `)` in /wp-content/plugins/contact-form-7-dynamic-text extension/includes/admin.php on line 212
-
-= 3.1.0 =
-
-**Release Date: January 25, 2023**
-
-* Feature: Added the `CF7_get_attachment` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-media-attachment/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: Added the `CF7_guid` shortcode. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-guid/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
-* Feature: Added the dynamic placeholder option to the dynamic form tags that allows you to specify dynamic or static placeholder content while also setting dynamic values. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-placeholder/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: Added a "required" dynamic hidden tag (e.g., `[dynamichidden* ...]`). It is identical to the original dynamic hidden tag (as in the field is not actually validated as required because it is hidden); it just doesn't break your website if you use it. This feature was requested by a user.
-* Feature: Added the `obfuscate` attribute to all included shortcodes
-
-= 3.0.0 =
-
-**Release Date: January 17, 2023**
-
-* Major: Plugin was adopted by AuRise Creative
-* Major: All functions use the `wpcf7dtx_` prefix
-* Feature: Added a `post_id` key for the `CF7_get_post_var` shortcode so you can specify a different post
-* Feature: Updated the `CF7_get_current_user` shortcode to be able to pull data from user metadata too
-* Feature: Added the "obfuscate" option to `CF7_get_custom_field` shortcode
-* Feature: Added the "placeholder" checkbox option to the `dynamictext` tag
-* Fix: Added additional validation for post ID input
-* Fix: Added additional validation for the `key` attribute in the `CF7_GET` and `CF7_POST` shortcodes
-* Fix: Shortcode keys are normalized into lowercase before processing
-* Security: Sanitizing URLs for the `CF7_URL` and `CF7_referrer` shortcode outputs
-* Feature/Security: Added a `allowed_protocols` attribute to the `CF7_URL` and `CF7_referrer` shortcodes that defaults to `http,https`
-
-= 2.0.3 =
-
-* Security: [Fix Reflected XSS](https://web.archive.org/web/20230121180428/https://sevenspark.com/docs/cf7-dtx-security-2019-07-24)
-
-= 2.0.2.1 =
-
-* Update changelog properly for 2.0.2 changes:
-
-= 2.0.2 =
-
-* Update deprecated `get_currentuserinfo()` function to `wp_get_current_user()`
-* Update deprecated functions from `WPCF7_add_shortcode` to `WPCF7_add_formtag` and class from `WPCF7_Shortcode` to `WPCF7_FormTag` to comply with CF7 4.6 changes
-
-= 2.0.1 =
-
-* Hook change to guarantee the plugin only runs when Contact Form 7 is present in the admin (avoids errors if Contact Form 7 is disabled, or if there is a plugin sequencing issue)
-
-= 2.0 =
-
-* Complete rewrite for Compatibility with Contact Form 7 v4
-
-= 1.2 =
-
-* Compatibility update for Contact Form 7 v3.9
-
-= 1.1.0.2 =
-
-* Updated to work with Contact Form 7 v3.7.x
-
-= 1.1.0.1 =
-
-* Removed undefined variable warning
-
-= 1.1 =
-
-* Updated for compatibility with Contact Form 7 v3.6
-* Added Referrer shortcode
-
-= 1.0.4.2 =
-
-* Fixed a bug that created repeating square brackets around dynamic text values in cases where the form doesn't validate and JavaScript is deactivated.
-
-= 1.0.4.1 =
-
-* Removed trailing whitespace to fix "Headers already sent" errors
-
-= 1.0.4 =
-
-* Added Current User Info shortcode
-* Added Post Custom Field shortcode (with obfuscation support)
-* Added Hidden Field capability
-
-= 1.0.3 =
-
-* Added $_POST shortcode
-* Added current post/page variable shortcode
-* Added current URL shortcode
-
-= 1.0.2 =
-
-* Fixed administrative control panel dependency issue
-
-= 1.0.1 =
-
-* Fixed dependency issue.
