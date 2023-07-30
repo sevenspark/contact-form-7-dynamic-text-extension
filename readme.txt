@@ -27,35 +27,57 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 
 The possibilities are endless!
 
-= WHAT DOES IT DO? =
+## WHAT DOES IT DO? ##
 
 DTX comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
 
 Don't see the shortcode you need on the list? You can write a [custom one](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/custom-shortcodes/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)! Any shortcode that returns a string or numeric value can be used here. The included shortcodes just cover the most common scenarios, but DTX provides the flexibility for you to grab any value you have access to programmatically.
 
-= HOW TO USE IT =
+= Dynamic Value =
 
-After installing and activating the plugin, you will have 2 new tag types to select from when creating or editing a Contact Form 7 form: the dynamic text field and dynamic hidden field. Most of the options in their tag generators will be familiar to Contact Form 7 users but there have been some upgrades.
-
-**Dynamic Value**
-
-This fields can take a shortcode, with two important provisions:
+The bread and butter of this plugin, set a dynamic value! This field can take any shortcode, with two important provisions:
 
 1. The shortcode should NOT include the normal square brackets (`[` and `]`). So, instead of `[CF7_GET key='value']` you would use `CF7_GET key='value'`.
 1. Any parameters in the shortcode must use single quotes. That is: `CF7_GET key='value'` and not `CF7_GET key="value"`
 
-**Dynamic placeholder**
+= Dynamic Placeholder =
 
-Only available for the dynamic text form tag, this field can take static text or a shortcode. If using a shortcode, the same syntax applies from the dynamic value field. However, this field also has a few more needs:
+Set a dynamic placeholder with this attribute! This feature accepts static text or a shortcode. If using a shortcode, the same syntax applies from the dynamic value field. However, this field also has a few more needs:
 
 1. The text/shortcode must first have apostrophes converted to it's HTML entity code, `&#39;`
 1. After that, it must be URL encoded so that spaces become `%20` and other non-alphanumeric characters are converted.
 
-**Read Only Attribute**
+If you're using Contact Form 7's tag generator to create the form tag, those extra needs are already taken care of. Dynamic placeholders are not available for dynamic hidden form tags.
 
-Only available for the dynamic text form tag, simply check this box if you do not want to let users edit this field. It will add the `readonly` attribute to your form field.
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-placeholder/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
 
-= INCLUDED SHORTCODES =
+= Read Only Form Fields =
+
+Check this box if you do not want to let users edit this field. It will add the `readonly` attribute to the input form field. This feature is not available for dynamic hidden form tags.
+
+= Obfuscate Values for Enhanced Privacy =
+
+If you're pre-filling a form field with an email address, bots can scrape that value from the page and use it for spam. You can add an additional layer of protecting by obfuscating the value, which turns each character into it's ASCII code. To the human eye, it looks like the character it's supposed to be because browsers will render the ASCII code, but for bots, it won't look like an email address!
+
+## HOW TO USE IT ##
+
+After installing and activating the plugin, you will have 2 new tag types to select from when creating or editing a Contact Form 7 form: the dynamic text field and dynamic hidden field. Most of the options in their tag generators will be familiar to Contact Form 7 users but there have been some upgrades.
+
+= How to Obfuscate Values =
+
+All of the shortcodes included with the DTX plugin allow the `obfuscate` attribute that you can set to any truthy value to provide an additional layer of security for sensitive data.
+
+The Contact Form 7 tag with obfuscation turned on would look like this: `[dynamictext user_email "CF7_get_current_user key='user_email' obfuscate='on'"]`
+
+= How to Enable Cache-Friendly Mode =
+
+All of the dynamic form tags can be enabled for processing on the frontend of the website, or the client-side, by adding the `dtx_pageload` attribute to the Contact Form 7 form tag.
+
+In the form editor of Contact Form 7, your form tag would look like: `[dynamictext current_url dtx_pageload "CF7_URL"]`
+
+If using the tag generator, it's as simple as checking a box!
+
+## INCLUDED SHORTCODES ##
 
 The plugin includes several shortcodes for use with the Dynamic Text Extension right out of the box. You can write your own as well—any self-closing shortcode will work, even with attributes!
 
