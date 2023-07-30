@@ -35,7 +35,7 @@ function wpcf7dtx_allow_protocols($protocols = false, $replace = false)
     }
     return $default; // Return only default values
 }
-add_filter('wpcf7dtx_allow_protocols', 'wpcf7dtx_allow_protocols', 10, 1);
+add_filter('wpcf7dtx_allow_protocols', 'wpcf7dtx_allow_protocols', 10, 2);
 
 /**
  * Custom DTX Sanitize Filter
@@ -66,7 +66,7 @@ function wpcf7dtx_sanitize($value = '', $type = 'auto', $protocols = false)
     }
     return sanitize_text_field($value);
 }
-add_filter('wpcf7dtx_sanitize', 'wpcf7dtx_sanitize', 10, 2);
+add_filter('wpcf7dtx_sanitize', 'wpcf7dtx_sanitize', 10, 3);
 
 /**
  * Custom DTX Escape Filter
@@ -95,7 +95,7 @@ function wpcf7dtx_escape($value = '', $obfuscate = false, $type = 'auto', $proto
     }
     return esc_attr($value); // Return attribute value
 }
-add_filter('wpcf7dtx_escape', 'wpcf7dtx_escape', 10, 3);
+add_filter('wpcf7dtx_escape', 'wpcf7dtx_escape', 10, 4);
 
 /**
  * Detect Value Type
