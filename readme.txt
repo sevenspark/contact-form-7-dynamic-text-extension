@@ -9,16 +9,16 @@ This plugin provides additional form tags for the Contact Form 7 plugin. It allo
 
 == Description ==
 
-Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. Contact Form 7 - Dynamic Text Extension (DTX) makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields based on other values. Some examples might include:
+Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. Contact Form 7 - Dynamic Text Extension (DTX) makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields pulled from other locations. Some examples might include:
 
-* Auto-filling a URL
+* Auto-filling a URL or just getting the domain name or path
 * Auto-filling a post ID, title, or slug
 * Auto-filling a title, URL, or slug for the current page
 * Pre-populating a product number
 * Referencing other content on the site
-* Populating with post info
-* Populating with user info
-* Populating with custom fields
+* Populating with post or page info
+* Populating with the current user's info
+* Populating with custom and meta fields
 * Generating unique identifiers for support tickets
 * Getting a list of post categories or other custom taxonomies
 * Getting a value from a cookie
