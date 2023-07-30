@@ -47,7 +47,59 @@ Set a dynamic placeholder with this attribute! This feature accepts static text 
 1. The text/shortcode must first have apostrophes converted to it's HTML entity code, `&#39;`
 1. After that, it must be URL encoded so that spaces become `%20` and other non-alphanumeric characters are converted.
 
-**Read Only Attribute**
+If you're using Contact Form 7's tag generator to create the form tag, those extra needs are already taken care of. Dynamic placeholders are not available for dynamic hidden form tags.
+
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-placeholder/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Compatible with Caching Plugins =
+
+DTX is cache friendly! You can set a field to be calculated after the page loads by setting the `dtx_pageload` attribute to any dynamic form tag.
+
+Many websites use caching plugins to optimize for performance. If your website caches the HTML of the form, then any dynamic form fields you have get their first calculated value cached alongside it. This becomes an issue if you're using DTX to pull values from a cookie or the current URL's query string.
+
+This is best for dynamic form fields that:
+
+* gets the current URL
+* gets a value from the URL query
+* gets a value from a cookie
+* gets the current user's info
+* generates a unique identifier (GUID)
+
+For dynamic fields that are page-specific, it's perfectly safe to cache those values. For example, dynamic form fields that:
+
+* getting the page or post's ID, title, or slug
+* getting post meta for the current page
+* getting the post's assigned categories, tags, or other custom taxonomy
+* getting site info
+* getting theme modification values
+
+*Note: Enabling a dynamic field to be calculated after the page loads will add frontend JavaScript. Depending on the shortcode used as the dynamic value, an AJAX call to the server may be sent to be processed. The script is minified and loaded in the footer and is deferred, minimizing impact on site performance and the AJAX calls are called asynchronously to avoid being a render-blocking resource and minimizing main-thread work. The script itself can be safely cached too.*
+
+Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-after-page-load/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+
+= Read Only Form Fields =
+
+Check this box if you do not want to let users edit this field. It will add the `readonly` attribute to the input form field. This feature is not available for dynamic hidden form tags.
+
+= Obfuscate Values for Enhanced Privacy =
+
+If you're pre-filling a form field with an email address, bots can scrape that value from the page and use it for spam. You can add an additional layer of protecting by obfuscating the value, which turns each character into it's ASCII code. To the human eye, it looks like the character it's supposed to be because browsers will render the ASCII code, but for bots, it won't look like an email address!
+
+## HOW TO USE IT ##
+
+After installing and activating the plugin, you will have 2 new tag types to select from when creating or editing a Contact Form 7 form: the dynamic text field and dynamic hidden field. Most of the options in their tag generators will be familiar to Contact Form 7 users but there have been some upgrades.
+
+= How to Obfuscate Values =
+
+All of the shortcodes included with the DTX plugin allow the `obfuscate` attribute that you can set to any truthy value to provide an additional layer of security for sensitive data.
+
+The Contact Form 7 tag with obfuscation turned on would look like this: `[dynamictext user_email "CF7_get_current_user key='user_email' obfuscate='on'"]`
+
+= How to Enable Cache-Friendly Mode =
+
+All of the dynamic form tags can be enabled for processing on the frontend of the website, or the client-side, by adding the `dtx_pageload` attribute to the Contact Form 7 form tag.
+
+In the form editor of Contact Form 7, your form tag would look like: `[dynamictext current_url dtx_pageload "CF7_URL"]`
 
 If using the tag generator, it's as simple as checking a box!
 
@@ -376,68 +428,6 @@ Fixed a bug and added a new shortcode as requested in our support forums :) -Tes
 * Security: Sanitizing URLs for the `CF7_URL` and `CF7_referrer` shortcode outputs
 * Feature/Security: Added a `allowed_protocols` attribute to the `CF7_URL` and `CF7_referrer` shortcodes that defaults to `http,https`
 
-= 2.0.3 =
+= Older Releases =
 
-* Security: [Fix Reflected XSS](https://web.archive.org/web/20230121180428/https://sevenspark.com/docs/cf7-dtx-security-2019-07-24)
-
-= 2.0.2.1 =
-
-* Update changelog properly for 2.0.2 changes:
-
-= 2.0.2 =
-
-* Update deprecated `get_currentuserinfo()` function to `wp_get_current_user()`
-* Update deprecated functions from `WPCF7_add_shortcode` to `WPCF7_add_formtag` and class from `WPCF7_Shortcode` to `WPCF7_FormTag` to comply with CF7 4.6 changes
-
-= 2.0.1 =
-
-* Hook change to guarantee the plugin only runs when Contact Form 7 is present in the admin (avoids errors if Contact Form 7 is disabled, or if there is a plugin sequencing issue)
-
-= 2.0 =
-
-* Complete rewrite for Compatibility with Contact Form 7 v4
-
-= 1.2 =
-
-* Compatibility update for Contact Form 7 v3.9
-
-= 1.1.0.2 =
-
-* Updated to work with Contact Form 7 v3.7.x
-
-= 1.1.0.1 =
-
-* Removed undefined variable warning
-
-= 1.1 =
-
-* Updated for compatibility with Contact Form 7 v3.6
-* Added Referrer shortcode
-
-= 1.0.4.2 =
-
-* Fixed a bug that created repeating square brackets around dynamic text values in cases where the form doesn't validate and JavaScript is deactivated.
-
-= 1.0.4.1 =
-
-* Removed trailing whitespace to fix "Headers already sent" errors
-
-= 1.0.4 =
-
-* Added Current User Info shortcode
-* Added Post Custom Field shortcode (with obfuscation support)
-* Added Hidden Field capability
-
-= 1.0.3 =
-
-* Added $_POST shortcode
-* Added current post/page variable shortcode
-* Added current URL shortcode
-
-= 1.0.2 =
-
-* Fixed administrative control panel dependency issue
-
-= 1.0.1 =
-
-* Fixed dependency issue.
+Please see our [additional changelog.txt file](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt)
