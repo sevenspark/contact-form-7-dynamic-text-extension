@@ -1,7 +1,7 @@
 === Contact Form 7 - Dynamic Text Extension ===
 Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
-Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, GET, POST, title, slug, auto-fill, pre-populate
+Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, dynamic, GET, POST, title, slug, auto-fill, pre-populate
 Tested up to: 6.3
 Stable tag: 3.5.0
 
@@ -349,14 +349,23 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 == Upgrade Notice ==
 
-= 3.4.0 =
-Fixed a bug and added a new shortcode as requested in our support forums :) -Tessa Watkins
+= 3.5.0 =
+DTX is now compatible with caching plugins! Update now to take advantage of this new feature.
 
 == Changelog ==
 
+= 3.5.0 =
+
+* Feature: Added the `dtx_pageload` form tag attribute for cache compatibility. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-after-page-load/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Fix: Updated to be compatible with WordPress version 6.3
+* Fix: Addressed a bug where `scheme` in `CF7_URL part='scheme'` was incorrectly sanitizing as URL instead of text
+* Fix: Fixed `wp_kses()` in tag generator that stripped out link opening in new tab
+* Update: `CF7_get_current_var` utilizes PHP session variables where appropriate
+* Update: All JavaScript assets will load with the `defer` strategy in the footer in [WordPress 6.3](https://make.wordpress.org/core/2023/07/14/registering-scripts-with-async-and-defer-attributes-in-wordpress-6-3/)
+
 = 3.4.0 =
 
-* Feature: Feature: Added the `CF7_get_current_var` shortcode, [see support thread for user request](https://wordpress.org/support/topic/wrong-page-title-7/). For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-variables/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: Added the `CF7_get_current_var` shortcode, [see support thread for user request](https://wordpress.org/support/topic/wrong-page-title-7/). For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-variables/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
 * Fix: Updated the `CF7_URL` shortcode to no longer check for ports since that's handled in `network_home_url()` function, [see support thread](https://wordpress.org/support/topic/version-3-3-0-breaking/)
 
 = 3.3.0 =
