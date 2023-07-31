@@ -1,5 +1,10 @@
 == Changelog ==
 
+= 3.5.1 =
+
+* Fix: fixed bug so tag generator for dynamic fields work on "Add New Contact Form" page of Contact Form 7
+* Updated: Updated text in tag generator for cache compatible checkbox and added link to documentation
+
 = 3.5.0 =
 
 * Feature: Added the `dtx_pageload` form tag attribute for cache compatibility. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-after-page-load/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)

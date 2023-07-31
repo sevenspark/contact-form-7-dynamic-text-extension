@@ -3,7 +3,7 @@ Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, dynamic, GET, POST, title, slug, auto-fill, pre-populate
 Tested up to: 6.3
-Stable tag: 3.5.0
+Stable tag: 3.5.1
 
 This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text or hidden input fields using any shortcode.
 
@@ -341,7 +341,9 @@ This method is the most involved as it requires you to be familiar with the proc
 
 == Screenshots ==
 
-1. A screenshot of the form-tag generator for the dynamic text field.
+1. Screenshot of the form tag buttons in the form editor of Contact Form 7. A red square highlights the addition of two new buttons for "dynamic text" and "dynamic hidden"
+2. The form tag generator screen for the dynamic text form tag
+3. The form tag generator screen for the dynamic hidden form tag
 
 == Frequently Asked Questions ==
 
@@ -349,10 +351,15 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 == Upgrade Notice ==
 
-= 3.5.0 =
+= 3.5.1 =
 DTX is now compatible with caching plugins! Update now to take advantage of this new feature.
 
 == Changelog ==
+
+= 3.5.1 =
+
+* Fix: fixed bug so tag generator for dynamic fields work on "Add New Contact Form" page of Contact Form 7
+* Updated: Updated text in tag generator for cache compatible checkbox and added link to documentation
 
 = 3.5.0 =
 
