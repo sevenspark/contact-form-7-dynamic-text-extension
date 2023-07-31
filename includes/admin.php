@@ -13,8 +13,8 @@
  */
 function wpcf7dtx_enqueue_admin_assets($hook)
 {
-    // Only load on CF7 Form pages
-    if ($hook == 'toplevel_page_wpcf7') {
+    // Only load on CF7 Form pages (both editing forms and creating new forms)
+    if ($hook === 'toplevel_page_wpcf7' || $hook === 'contact_page_wpcf7-new') {
         $prefix = 'wpcf7dtx-';
         $debug = defined('WP_DEBUG') && constant('WP_DEBUG');
         $url = plugin_dir_url(WPCF7DTX_FILE);
@@ -30,7 +30,7 @@ function wpcf7dtx_enqueue_admin_assets($hook)
         //Plugin Scripts
         wp_enqueue_script(
             $prefix . 'taggenerator', //Handle
-            $url . 'assets/scripts/tag-generator.js', //Source
+            $url . 'assets/scripts/tag-generator' . ($debug ? '' : '.min') . '.js', //Source
             array('jquery', 'wpcf7-admin-taggenerator'), //Dependencies
             $debug ? @filemtime($path . 'assets/scripts/tag-generator.js') : WPCF7DTX_VERSION, //Version
             array('in_footer' => true, 'strategy' => 'defer') // Defer loading in footer
@@ -169,7 +169,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
                 'class' => 'oneline dtx-option',
                 'placeholder' => 'CF7_get_post_var key=\'post_title\''
             )),
-            esc_html__('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension'),
+            esc_html__('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension'), // Small note below input
             esc_attr($utm_source), //UTM source
             esc_attr($type), //UTM content
             esc_html__('View DTX placeholder documentation', 'contact-form-7-dynamic-text-extension') //Link label
@@ -220,16 +220,21 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
 
     // Page load data attribute (triggers the loading of a frontend script)
     printf(
-        '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+        '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-after-page-load/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
         esc_attr($options['content'] . '-frontend'), // field id
-        esc_html__('After Page Load', 'contact-form-7-dynamic-text-extension'), // field Label
+        esc_html__('Cache Compatible', 'contact-form-7-dynamic-text-extension'), // field Label
         wpcf7_format_atts(array(
             'type' => 'checkbox',
             'name' => 'dtx_pageload',
             'id' => $options['content'] . '-dtx_pageload',
             'class' => 'dtx_pageloadvalue option'
         )),
-        esc_html__('Check this box to get value after the page has loaded—this will add JavaScript to the frontend; recommended if page HTML has been cached', 'contact-form-7-dynamic-text-extension') // checkbox label
+        esc_html__('Get the dynamic value after the page has loaded', 'contact-form-7-dynamic-text-extension'), // checkbox label
+        esc_html('May impact page performance.', 'contact-form-7-dynamic-text-extension'), // Small note below input
+        esc_attr($utm_source), //UTM source
+        esc_attr($type), //UTM content
+        esc_html__('View DTX page load documentation', 'contact-form-7-dynamic-text-extension') //Link label
+
     );
 
     //Close Form-Tag Generator
