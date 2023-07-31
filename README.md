@@ -21,7 +21,15 @@ The possibilities are endless!
 
 ## WHAT DOES IT DO? ##
 
-DTX comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
+DTX gives you two new form tags, dynamic text and dynamic hidden, to use in your contact forms. Using these dynamic form tags, you can dynamically pre-populate them with almost anything!
+
+![Screenshot of the form tag buttons in the form editor of Contact Form 7. A red square highlights the addition of two new buttons for "dynamic text" and "dynamic hidden"](/wp-assets/screenshot-1.png)
+
+New users can use the form tag generators while advanced users can dive straight into the shortcodes.
+
+<img src="/wp-assets/screenshot-2.png" alt="The form tag generator screen for the dynamic text form tag" width="300" /> <img src="/wp-assets/screenshot-3.png" alt="The form tag generator screen for the dynamic hidden form tag" width="300" />
+
+DTX also comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
 
 Don't see the shortcode you need on the list? You can write a [custom one](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/custom-shortcodes/?utm_source=github.com&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)! Any shortcode that returns a string or numeric value can be used here. The included shortcodes just cover the most common scenarios, but DTX provides the flexibility for you to grab any value you have access to programmatically.
 
