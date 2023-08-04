@@ -3,7 +3,7 @@ Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, dynamic, GET, POST, title, slug, auto-fill, pre-populate
 Tested up to: 6.3
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 
 This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text or hidden input fields using any shortcode.
 
@@ -351,10 +351,15 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 == Upgrade Notice ==
 
-= 3.5.1 =
-DTX is now compatible with caching plugins! Update now to take advantage of this new feature.
+= 3.5.2 =
+Made changes to how `CF7_URL` works based on bug reported by user. See changelog for more details.
 
 == Changelog ==
+
+= 3.5.2 =
+
+* Fix: Updated the `CF7_URL` shortcode to only use `network_home_url()` for multisite installs that do not use subdomains, and use `home_url()` for all others to [maybe address this support thread](https://wordpress.org/support/topic/cf7_url-return-only-domain-and-not-subdomain/)
+* Fix: Removed a lingering debug call
 
 = 3.5.1 =
 
