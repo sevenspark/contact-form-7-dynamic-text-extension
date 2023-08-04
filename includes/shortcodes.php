@@ -93,7 +93,13 @@ function wpcf7dtx_url($atts = array())
     $allowed_protocols = explode(',', sanitize_text_field($allowed_protocols));
 
     // Get the absolute URL
-    $url = apply_filters('wpcf7dtx_sanitize', network_home_url($_SERVER['REQUEST_URI']), 'url', $allowed_protocols);
+    if (is_multisite() && !is_subdomain_install()) {
+        // Network installs not using subdomains
+        $url = apply_filters('wpcf7dtx_sanitize', network_home_url($_SERVER['REQUEST_URI']), 'url', $allowed_protocols);
+    } else {
+        // Single installs and network installs using subdomains
+        $url = apply_filters('wpcf7dtx_sanitize', home_url($_SERVER['REQUEST_URI']), 'url', $allowed_protocols);
+    }
     if ($url && !empty($part = sanitize_key(strtolower($part)))) {
         // If an individual part is requested, get that specific value using parse_url()
         $part_constant_map = [
