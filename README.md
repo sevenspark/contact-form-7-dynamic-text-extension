@@ -308,16 +308,16 @@ There are three (3) ways to install this plugin: automatically, upload, or manua
 
 Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser.
 
-1. Log in to your WordPress dashboard.
+1. Log into your WordPress dashboard.
 1. Navigate to **Plugins > Add New**.
-1. Where it says “Keyword” in a dropdown, change it to “Author”
-1. In the search form, type “TessaWatkinsLLC” (results may begin populating as you type but my plugins will only show when the full name is there)
-1. Once you’ve found this plugin in the search results that appear, click the **Install Now** button and wait for the installation process to complete.
+1. Where it says "Keyword" in a dropdown, change it to "Author"
+1. In the search form, type `TessaWatkinsLLC` (results may begin populating as you type but my plugins will only show when the full name is there)
+1. Once you've found this plugin in the search results that appear, click the **Install Now** button and wait for the installation process to complete.
 1. Once the installation process is completed, click the **Activate** button to activate the plugin.
 
 ### Install Method 2: Upload via WordPress Admin ###
 
-This method is a little more involved. You don’t need to leave your web browser, but you’ll need to download and then upload the files yourself.
+This method is a little more involved. You don't need to leave your web browser, but you'll need to download and then upload the files yourself.
 
 1. [Download this plugin](https://wordpress.org/plugins/contact-form-7-dynamic-text-extension/) from WordPress.org; it will be in the form of a zip file.
 1. Log in to your WordPress dashboard.
@@ -337,7 +337,7 @@ This method is the most involved as it requires you to be familiar with the proc
 1. Copy the folder from step 2 to the `/wp-content/plugins/` folder in your WordPress directory. Once the folder and all of its files are there, installation is complete.
 1. Now log in to your WordPress dashboard.
 1. Navigate to **Plugins > Installed Plugins**. You should now see my plugin in your list.
-1. Click the **Activate** button under my plugin to activate it.
+1. Click the **Activate** button that appeared to activate it.
 
 ## Frequently Asked Questions ##
 
