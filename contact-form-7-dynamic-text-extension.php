@@ -237,10 +237,6 @@ function wpcf7dtx_dynamictext_shortcode_handler($tag)
     // Wrap up class attribute
     $atts['class'] = $tag->get_class_option($class);
 
-    if ($atts['name'] == 'url_scheme') {
-        au_debug_log($atts, '[DTX] Input Attributes');
-    }
-
     //Output the HTML
     return sprintf(
         '<span class="wpcf7-form-control-wrap %s" data-name="%s"><input %s />%s</span>',
