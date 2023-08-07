@@ -42,14 +42,16 @@ var $ = jQuery.noConflict(),
                                 if (dtx.validKey(atts, 'key') && atts.key == 'url') {
                                     value = dtx.current_url(atts);
                                 } else {
-                                    // Current post variables are safe to cache, just use the value
-                                    value = $input.val();
+                                    return; // Do nothing, current page variables are safe to cache, just use the value that was calculated by server
                                 }
                                 break;
-                            case 'CF7_get_post_var':
-                                // Current post variables are safe to cache, just use the value that was calculated by server
-                                value = $input.val();
-                                break;
+                            case 'CF7_get_post_var': // Current post variables are safe to cache
+                            case 'CF7_get_custom_field': // Meta data is safe to cache
+                            case 'CF7_get_taxonomy': // Terms are safe to cache
+                            case 'CF7_get_attachment': // Media attachment info is safe to cache
+                            case 'CF7_bloginfo': // Site info is safe to cache
+                            case 'CF7_get_theme_option': // Theme options are safe to cache
+                                return; // Do nothing, just use the value that was calculated by server
                             default:
                                 if (tag) {
                                     // Queue the requests for an AJAX call at the end of init
