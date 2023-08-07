@@ -104,8 +104,8 @@ function wpcf7dtx_url($atts = array())
         // If an individual part is requested, get that specific value using parse_url()
         $part_constant_map = [
             'scheme' => PHP_URL_SCHEME, // e.g. `http`
-            'host'  => PHP_URL_HOST,
-            'path'  => PHP_URL_PATH,
+            'host'  => PHP_URL_HOST, // the domain (or subdomain) of the current website
+            'path'  => PHP_URL_PATH, // e.g. `/path/to/current/page/`
             'query' => PHP_URL_QUERY // after the question mark ?
         ];
         $value = '';
@@ -114,7 +114,7 @@ function wpcf7dtx_url($atts = array())
         }
         return apply_filters('wpcf7dtx_escape', $value, $obfuscate, 'text');
     }
-    // No part requested, return the whole thing
+    // No part requested, return the absolute URL
     return apply_filters('wpcf7dtx_escape', $url, $obfuscate, 'url', $allowed_protocols);
 }
 
@@ -181,10 +181,10 @@ function wpcf7dtx_get_post_var($atts = array())
         case 'id':
             $key = 'ID';
             break;
-        case 'slug':
+        case 'slug': // Alias
             $key = 'post_name';
             break;
-        case 'title':
+        case 'title': // Alias
             $key = 'post_title';
             break;
         default:
@@ -222,7 +222,7 @@ function wpcf7dtx_get_custom_field($atts = array())
 }
 
 /**
- * Get Variable from the current Post Object
+ * Get Variable from the Current Object
  *
  * @since 3.4.0
  *
