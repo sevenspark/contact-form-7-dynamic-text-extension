@@ -3,7 +3,7 @@ Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, dynamic, GET, POST, title, slug, auto-fill, pre-populate
 Tested up to: 6.3
-Stable tag: 3.5.3
+Stable tag: 3.5.4
 
 This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text or hidden input fields using any shortcode.
 
@@ -352,9 +352,13 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = 3.5.3 =
-Made changes to how cache compatibility works based on bug reported by user. See changelog for more details.
+Optimized JavaScript used in cache compatibility mode.
 
 == Changelog ==
+
+= 3.5.4 =
+
+* Fix: Updated JavaScript to prevent cacheable fields from making unnecessary AJAX requests
 
 = 3.5.3 =
 

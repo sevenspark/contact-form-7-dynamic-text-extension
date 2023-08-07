@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 3.5.4 =
+
+* Fix: Updated JavaScript to prevent cacheable fields from making unnecessary AJAX requests
+
 = 3.5.3 =
 
 * Update: removed the use of sessions, [see support thread](https://wordpress.org/support/topic/add-option-to-disable-session-data/)
