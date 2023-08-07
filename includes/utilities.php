@@ -163,10 +163,8 @@ function wpcf7dtx_get_post_id($post_id, $context = 'dtx')
     if (!$post_id || !is_numeric($post_id)) {
         if ($context == 'dtx') {
             if (wp_doing_ajax()) {
-                // If we're doing an AJAX call, get the current object from session (if available)
-                if (wpcf7dtx_use_session()) {
-                    $post_id = intval(sanitize_text_field(strval(wpcf7dtx_array_has_key('dtx_obj_id', $_SESSION))));
-                }
+                // If we're doing an AJAX call, just fail quietly
+                return 0;
             } else {
                 global $post;
                 if (isset($post)) {
@@ -181,25 +179,6 @@ function wpcf7dtx_get_post_id($post_id, $context = 'dtx')
         }
     }
     return $post_id;
-}
-
-/**
- * Can Use Sessions?
- *
- * Check if PHP Sessions are enabled and if none exist, start or resume it.
- *
- * @since 3.5.0
- *
- * @return bool Returns true if there is an active session. False otherwise.
- */
-function wpcf7dtx_use_session()
-{
-    $session_status = session_status();
-    if ($session_status === PHP_SESSION_NONE || $session_status === 1) {
-        @session_start(); // Sessions are enabled but none exist, so start or resume session
-        $session_status = session_status();
-    }
-    return $session_status === PHP_SESSION_ACTIVE || $session_status === 2;
 }
 
 /**

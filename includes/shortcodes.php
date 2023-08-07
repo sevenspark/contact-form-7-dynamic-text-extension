@@ -245,10 +245,7 @@ function wpcf7dtx_get_current_var($atts = array())
     } elseif (!empty($key)) {
         $type = '';
         $obj = null;
-        if (wpcf7dtx_use_session()) {
-            $obj = $_SESSION['dtx_obj'];
-            $type = $_SESSION['dtx_obj_type'];
-        } elseif (!wp_doing_ajax()) {
+        if (!wp_doing_ajax()) {
             $obj = get_queried_object(); // Get the current WordPress queried object
             if (!is_null($obj)) {
                 if ($obj instanceof WP_User) {

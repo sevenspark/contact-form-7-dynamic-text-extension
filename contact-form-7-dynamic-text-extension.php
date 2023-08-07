@@ -285,43 +285,6 @@ function wpcf7dtx_dynamictext_validation_filter($result, $tag)
 }
 
 /**
- * Set Session Variables on Page Load
- *
- * These are needed for AJAX calls.
- *
- * @since 3.5.0
- *
- * @return void
- */
-function wpcf7dtx_start_session()
-{
-    if (wpcf7dtx_use_session()) {
-        $obj = get_queried_object(); // Get the current WordPress queried object
-        if (!is_null($obj)) {
-            $_SESSION['dtx_obj'] = $obj;
-            if ($obj instanceof WP_User) {
-                // This is an author page
-                $_SESSION['dtx_obj_type'] = 'user';
-                $_SESSION['dtx_obj_id'] = esc_html($obj->ID);
-            } elseif (property_exists($obj, 'ID')) {
-                // This is a post object
-                $_SESSION['dtx_obj_type'] = 'post';
-                $_SESSION['dtx_obj_id'] = esc_html($obj->ID);
-            } elseif (property_exists($obj, 'term_id')) {
-                // This is a taxonomy with a term ID
-                $_SESSION['dtx_obj_type'] = 'term';
-                $_SESSION['dtx_obj_id'] = esc_html($obj->term_id);
-            }
-        } elseif (is_archive()) {
-            // Possibly a date or formats archive because the queried object is null
-            $_SESSION['dtx_obj_type'] = 'archive';
-            $_SESSION['dtx_archive_title'] = esc_html(get_the_archive_title());
-        }
-    }
-}
-add_action('get_header', 'wpcf7dtx_start_session');
-
-/**
  * AJAX Request Handler for After Page Loading
  *
  * @since 3.5.0
