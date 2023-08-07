@@ -17,7 +17,6 @@ var $ = jQuery.noConflict(),
                                 var att = v[x].split('=');
                                 if (att.length === 2) {
                                     var key = att[0];
-                                    //atts[key] = att[1].replaceAll(); // Waiting on full browser support
                                     atts[key] = att[1].split("'").join('');
                                 }
                             }
@@ -122,7 +121,6 @@ var $ = jQuery.noConflict(),
             return dtx.obfuscate(document.referrer, atts);
         },
         current_url: function(atts) {
-            console.info('Get Current URL!', atts);
             if (atts.hasOwnProperty('part')) {
                 var parts = [
                     'scheme', // e.g. `http`
@@ -136,7 +134,6 @@ var $ = jQuery.noConflict(),
                     // return part of the url
                     switch (atts.part) {
                         case 'scheme':
-                            console.info('Returning the scheme in JS!', window.location.protocol.replace(':', ''));
                             return dtx.obfuscate(window.location.protocol.replace(':', ''), atts);
                         case 'host':
                             return dtx.obfuscate(window.location.host, atts);

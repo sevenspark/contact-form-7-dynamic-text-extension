@@ -75,7 +75,7 @@ function wpcf7dtx_post($atts = array())
 }
 
 /**
- * Get the Current URL
+ * Get Current URL or Part
  *
  * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-url/
  *
@@ -119,7 +119,7 @@ function wpcf7dtx_url($atts = array())
 }
 
 /**
- * Get Referrer
+ * Get Referrering URL
  *
  * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-referrer-url/
  *
@@ -395,7 +395,7 @@ function wpcf7dtx_get_attachment($atts = array())
 }
 
 /**
- * Get Cookie
+ * Get Cookie Value
  *
  * Retreives the value of a cookie
  *
