@@ -90,9 +90,17 @@ var $ = jQuery.noConflict(),
                 }
             }
         },
+        /**
+         * Check if Key Exists in Object
+         */
         validKey: function(obj, key) {
             return obj.hasOwnProperty(key) && typeof(obj[key]) == 'string' && obj[key].trim();
         },
+        /**
+         * Maybe Obfuscate Value
+         *
+         * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-obfuscate/
+         */
         obfuscate: function(value, atts) {
             value = value.trim();
             if (dtx.validKey(atts, 'obfuscate') && atts.obfuscate) {
@@ -104,9 +112,17 @@ var $ = jQuery.noConflict(),
             }
             return value;
         },
+        /**
+         * Set Value for Form Field
+         */
         set: function($input, value) {
             $input.attr('value', value).addClass('dtx-loaded');
         },
+        /**
+         * Get Value form URL Query by Key
+         *
+         * @see @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-php-get-variables/
+         */
         get: function(atts) {
             if (dtx.validKey(atts, 'key')) {
                 var query = window.location.search;
@@ -117,9 +133,19 @@ var $ = jQuery.noConflict(),
             }
             return '';
         },
+        /**
+         * Get Referrering URL
+         *
+         * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-referrer-url/
+         */
         referrer: function(atts) {
             return dtx.obfuscate(document.referrer, atts);
         },
+        /**
+         * Get Current URL or Part
+         *
+         * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-url/
+         */
         current_url: function(atts) {
             if (atts.hasOwnProperty('part')) {
                 var parts = [
@@ -154,6 +180,13 @@ var $ = jQuery.noConflict(),
             }
             return '';
         },
+        /**
+         * Get Cookie Value
+         *
+         * @since 3.3.0
+         *
+         * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-cookie/
+         */
         get_cookie: function(atts) {
             if (atts.hasOwnProperty('key') && typeof(atts.key) == 'string' && atts.key.trim() != '') {
                 var keyValue = document.cookie.match('(^|;) ?' + atts.key.trim() + '=([^;]*)(;|$)');
@@ -161,6 +194,11 @@ var $ = jQuery.noConflict(),
             }
             return '';
         },
+        /**
+         * Generate a random GUID (globally unique identifier)
+         *
+         * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-guid/
+         */
         guid: function() {
             if (typeof(window.crypto) != 'undefined' && typeof(window.crypto.getRandomValues) != 'undefined') {
                 return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
