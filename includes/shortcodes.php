@@ -178,6 +178,7 @@ function wpcf7dtx_get_post_var($atts = array())
     ), array_change_key_case((array)$atts, CASE_LOWER)));
     $key = strtolower(apply_filters('wpcf7dtx_sanitize', $key));
     switch ($key) {
+        case 'acf_id': // If requesting the handle for ACF, return the post ID
         case 'id':
             $key = 'ID';
             break;
