@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 3.5.3 =
+
+* Update: removed the use of sessions, [see support thread](https://wordpress.org/support/topic/add-option-to-disable-session-data/)
+
 = 3.5.2 =
 
 * Fix: Updated the `CF7_URL` shortcode to only use `network_home_url()` for multisite installs that do not use subdomains, and use `home_url()` for all others to [maybe address this support thread](https://wordpress.org/support/topic/cf7_url-return-only-domain-and-not-subdomain/)
