@@ -135,22 +135,49 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         );
     }
 
-    //Input field - Dynamic value
+    // Input field - Dynamic value/options
+    $value_name = __('Dynamic value', 'contact-form-7-dynamic-text-extension');
+    $value_description = __('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+    $value_placeholder = "CF7_GET key='foo'";
+    $value_input_type = '<input %s />';
+    switch ($input_type) {
+        case 'textarea':
+            $value_placeholder = "CF7_get_post_var key='post_excerpt'";
+            $value_input_type = '<textarea %s></textarea>';
+            break;
+        case 'select':
+            $value_name = __('Dynamic options', 'contact-form-7-dynamic-text-extension');
+            $value_description .= ' ' . __('If static text, use one option per line. Can define static key/value pairs using pipes.', 'contact-form-7-dynamic-text-extension');
+            $value_description .= ' ' . __('If shortcode, it must return only option or optgroup HTML and can override the first option and select default settings here.', 'contact-form-7-dynamic-text-extension');
+            $value_placeholder = "hello-world | Hello World" . PHP_EOL . "Foo";
+            $value_input_type = '<textarea %s></textarea>';
+            break;
+        case 'checkbox':
+        case 'radio':
+            $value_name = __('Dynamic options', 'contact-form-7-dynamic-text-extension');
+            $value_description .= ' ' . __('If static text, use one option per line. Can define static key/value pairs using pipes.', 'contact-form-7-dynamic-text-extension');
+            $value_description .= ' ' . __('If shortcode, it must return only option or optgroup HTML.', 'contact-form-7-dynamic-text-extension');
+            $value_placeholder = "hello-world | Hello World" . PHP_EOL . "Foo";
+            $value_input_type = '<textarea %s></textarea>';
+            break;
+        default: // All other text fields
+            break;
+    }
     printf(
-        '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+        '<tr><th scope="row"><label for="%s">%s</label></th><td>' . $value_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
         esc_attr($options['content'] . '-values'), // field id
-        esc_html__('Dynamic value', 'contact-form-7-dynamic-text-extension'), // field label
+        esc_html($value_name), // field label
         wpcf7_format_atts(array(
-            'type' => 'text',
             'name' => 'values',
             'id' => $options['content'] . '-values',
-            'class' => 'oneline',
-            'placeholder' => "CF7_GET key='foo'"
+            'class' => 'multiline',
+            'placeholder' => $value_placeholder,
+            'list' => 'dtx-shortcodes'
         )),
-        esc_html__('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension'),
-        esc_attr($utm_source), //UTM source
-        esc_attr($type), //UTM content
-        esc_html__('View DTX shortcode syntax documentation', 'contact-form-7-dynamic-text-extension') //Link label
+        esc_html($value_description),
+        esc_attr($utm_source), // UTM source
+        esc_attr($type), // UTM content
+        esc_html__('View DTX shortcode syntax documentation', 'contact-form-7-dynamic-text-extension') // Link label
     );
 
     //Input field - Dynamic placeholder (not available for hidden fields)
