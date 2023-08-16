@@ -195,15 +195,16 @@ function wpcf7dtx_shortcode_handler($tag)
     }
 
     // Evaluate the dynamic value
-    $value = wpcf7dtx_get_dynamic(false, $tag);
+    $sanitize_type = $atts['type'] == 'textarea' ? $atts['type'] : 'auto';
+    $value = wpcf7dtx_get_dynamic(false, $tag, $sanitize_type);
 
     // Identify placeholder
     if ($tag->has_option('placeholder') || $tag->has_option('watermark')) {
         //Reverse engineer what JS did (converted quotes to HTML entities --> URL encode) then sanitize
-        $placeholder = html_entity_decode(urldecode(implode('', (array)$tag->get_option('placeholder'))), ENT_QUOTES);
+        $placeholder = html_entity_decode(urldecode($tag->get_option('placeholder', '', true)), ENT_QUOTES);
         if ($placeholder) {
             //If a different placeholder text has been specified, set both attributes
-            $placeholder = wpcf7dtx_get_dynamic($placeholder);
+            $placeholder = wpcf7dtx_get_dynamic($placeholder, false, $sanitize_type);
             $atts['placeholder'] = $placeholder;
             $atts['value'] = $value;
         } else {
