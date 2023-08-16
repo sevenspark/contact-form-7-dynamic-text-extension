@@ -241,21 +241,3 @@ function wpcf7dtx_array_has_key($key, $array = array(), $default = '')
     }
     return $default;
 }
-
-if (!function_exists('array_key_first')) {
-    /**
-     * Gets the first key of an array
-     *
-     * Gets the first key of the given array without affecting the internal array pointer.
-     *
-     * @param array $array
-     * @return int|string|null
-     */
-    function array_key_first($array = array())
-    {
-        foreach ($array as $key => $value) {
-            return $key;
-        }
-        return null;
-    }
-}
