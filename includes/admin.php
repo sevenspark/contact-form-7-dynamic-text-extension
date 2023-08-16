@@ -180,25 +180,34 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         esc_html__('View DTX shortcode syntax documentation', 'contact-form-7-dynamic-text-extension') // Link label
     );
 
-    //Input field - Dynamic placeholder (not available for hidden fields)
-    if ($type != 'dynamichidden') {
+    // Input field - Dynamic placeholder (not available for some fields)
+    if (!in_array($input_type, array('hidden', 'quiz', 'submit', 'reset'))) {
+        $placeholder_description = '';
+        if (in_array($input_type, array('select', 'checkbox', 'radio'))) {
+            $placeholder_label = __('First Option Label', 'contact-form-7-dynamic-text-extension');
+            $placeholder_description .= __('Optionally define a label for the first option.', 'contact-form-7-dynamic-text-extension') . ' ';
+        } else {
+            $placeholder_label = __('Dynamic placeholder', 'contact-form-7-dynamic-text-extension');
+        }
+        $placeholder_description .= __('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+        $placeholder_input_type = $input_type == 'textarea' ? $value_input_type : '<input %s />';
         printf(
-            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /><input %s /><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-placeholder/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $placeholder_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-placeholder/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
             esc_attr($options['content'] . '-placeholder'), // field id
-            esc_html__('Dynamic placeholder', 'contact-form-7-dynamic-text-extension'), // field label
+            esc_html($placeholder_label), // field label
             wpcf7_format_atts(array(
                 'type' => 'hidden',
                 'name' => 'placeholder',
                 'class' => 'option'
             )),
             wpcf7_format_atts(array(
-                'type' => 'text',
                 'name' => 'dtx-placeholder',
                 'id' => $options['content'] . '-placeholder', // field id
-                'class' => 'oneline dtx-option',
-                'placeholder' => 'CF7_get_post_var key=\'post_title\''
+                'class' => 'multiline dtx-option',
+                'placeholder' => "CF7_get_post_var key='post_title'",
+                'list' => 'dtx-shortcodes'
             )),
-            esc_html__('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension'), // Small note below input
+            esc_html($placeholder_description), // Small note below input
             esc_attr($utm_source), //UTM source
             esc_attr($type), //UTM content
             esc_html__('View DTX placeholder documentation', 'contact-form-7-dynamic-text-extension') //Link label
