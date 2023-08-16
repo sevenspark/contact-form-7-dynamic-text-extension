@@ -52,6 +52,32 @@ function wpcf7dtx_init()
 }
 add_action('plugins_loaded', 'wpcf7dtx_init', 20);
 
+/**
+ * DTX Formg Tag Configuration
+ *
+ * @since 3.6.0
+ *
+ * @return array
+ */
+function wpcf7dtx_config()
+{
+    global $wpcf7_dynamic_fields_config;
+    if (!isset($wpcf7_dynamic_fields_config)) {
+        $wpcf7_dynamic_fields_config = array(
+            'dynamic_text' => array(
+                'title' => __('dynamic text', 'contact-form-7-dynamic-text-extension'), //title
+                'options' => array('placeholder', 'readonly', 'dtx_pageload'),
+                'description' => __('single-line plain text', 'contact-form-7-dynamic-text-extension')
+            ),
+            'dynamic_hidden' => array(
+                'title' => __('dynamic hidden', 'contact-form-7-dynamic-text-extension'), //title
+                'options' => array('dtx_pageload'),
+                'description' => __('single-line plain text hidden input field', 'contact-form-7-dynamic-text-extension')
+            )
+        );
+    }
+    return $wpcf7_dynamic_fields_config;
+}
 
 /**
  * Add Custom Shortcodes to Contact Form 7
