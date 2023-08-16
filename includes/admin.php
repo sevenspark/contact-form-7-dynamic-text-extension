@@ -104,8 +104,8 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         wp_kses($description, array('a' => array('href' => array(), 'target' => array(), 'rel' => array(), 'title' => array()))) //Tag generator description
     );
 
-    //Input field - Required checkbox (not available for hidden fields)
-    if ($type != 'dynamichidden') {
+    // Input field - Required checkbox (not available for some fields)
+    if (!in_array($input_type, array('hidden', 'quiz', 'submit', 'reset'))) {
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
             esc_attr($options['content'] . '-required'), // field id
