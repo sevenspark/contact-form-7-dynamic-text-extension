@@ -218,54 +218,6 @@ function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto')
 }
 
 /**
- * Parse Content for Specified Shortcodes
- *
- * Parse a string of content for a specific shortcode to retrieve its attributes and content
- *
- * @since 3.1.0
- *
- * @param string $content The content to parse
- * @param string $tag The shortcode tag
- *
- * @return array An associative array with `tag` (string) and `shortcodes` (sequential array). If shortcodes were discovered, each one has keys for `atts` (associative array) and `content` (string)
- */
-function wpcf7dtx_get_shortcode_atts($content)
-{
-    $return = array(
-        'tag' => '',
-        'atts' => array()
-    );
-    //Search for shortcodes with attributes
-    if (false !== ($start = strpos($content, ' '))) {
-        $return['tag'] = substr($content, 0, $start); //Opens the start tag, assumes there are attributes because of the space
-
-        //Parse for shortcode attributes: `shortcode att1='foo' att2='bar'`
-
-        //Chop only the attributes e.g. `att1="foo" att2="bar"`
-        $atts_str =  trim(str_replace($return['tag'], '', $content));
-        if (strpos($atts_str, "'") !== false) {
-            $atts = explode("' ", substr(
-                $atts_str,
-                0,
-                -1 //Clip off the last character, which is a single quote
-            ));
-            if (is_array($atts) && count($atts)) {
-                foreach ($atts as $att_str) {
-                    $pair = explode("='", $att_str);
-                    if (is_array($pair) && count($pair) > 1) {
-                        $key = sanitize_key(trim($pair[0])); //Validate & normalize the key
-                        if (!empty($key)) {
-                            $return['atts'][$key] = sanitize_text_field(html_entity_decode($pair[1]));
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return $return;
-}
-
-/**
  * Array Key Exists and Has Value
  *
  * @since 3.1.0
