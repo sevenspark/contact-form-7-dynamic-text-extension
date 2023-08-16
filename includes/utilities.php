@@ -62,6 +62,8 @@ function wpcf7dtx_sanitize($value = '', $type = 'auto', $protocols = false)
                 return sanitize_key($value);
             case 'slug':
                 return sanitize_title($value);
+            case 'textarea':
+                return sanitize_textarea_field($value);
         }
     }
     return sanitize_text_field($value);
@@ -91,6 +93,8 @@ function wpcf7dtx_escape($value = '', $obfuscate = false, $type = 'auto', $proto
         switch ($type) {
             case 'url':
                 return esc_url($value, apply_filters('wpcf7dtx_allow_protocols', $protocols));
+            case 'textarea':
+                return esc_textarea($value);
         }
     }
     return esc_attr($value); // Return attribute value
