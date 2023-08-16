@@ -150,13 +150,14 @@ include_once(WPCF7DTX_DIR . '/includes/utilities.php');
  *
  * @return string HTML output of the shortcode
  */
-function wpcf7dtx_dynamictext_shortcode_handler($tag)
+function wpcf7dtx_shortcode_handler($tag)
 {
+    // Name attribute is required for these form tags
     if (empty($tag->name)) {
         return '';
     }
 
-    //Validate
+    // Validate
     $validation_error = wpcf7_get_validation_error($tag->name);
 
     //Configure classes
