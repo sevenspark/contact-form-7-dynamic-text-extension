@@ -160,21 +160,25 @@ function wpcf7dtx_shortcode_handler($tag)
     // Validate
     $validation_error = wpcf7_get_validation_error($tag->name);
 
-    //Configure classes
-    $class = wpcf7_form_controls_class($tag->type, 'wpcf7dtx-dynamictext');
-    if ($validation_error) {
-        $class .= ' wpcf7-not-valid';
-    }
-
     //Configure input attributes
     $atts = array();
+    $atts['type'] = sanitize_key(str_replace(array('dynamic_', 'dynamic'), '', $tag->basetype));
     $atts['name'] = $tag->name;
     $atts['id'] = $tag->get_id_option();
     $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
     $atts['size'] = $tag->get_size_option('40');
+    $atts['class'] = explode(' ', wpcf7_form_controls_class($atts['type']));
+    $atts['class'][] = 'wpcf7dtx';
+    $atts['class'][] = sanitize_html_class('wpcf7dtx-' . str_replace('_', '-', $tag->basetype));
+    if ($validation_error) {
+        $atts['class'][] = 'wpcf7-not-valid';
+        $atts['aria-invalid'] = 'true';
+        $atts['aria-describedby'] = wpcf7_get_validation_error_reference($tag->name);
+    } else {
+        $atts['aria-invalid'] = 'false';
+    }
     $atts['maxlength'] = $tag->get_maxlength_option();
     $atts['minlength'] = $tag->get_minlength_option();
-    $atts['aria-invalid'] = $validation_error ? 'true' : 'false';
     switch ($tag->basetype) {
         case 'dynamichidden':
             $atts['type'] = 'hidden'; //Override type as hidden
@@ -226,7 +230,7 @@ function wpcf7dtx_shortcode_handler($tag)
     // Page load attribute
     if ($tag->has_option('dtx_pageload')) {
         $atts['data-dtx-value'] = rawurlencode(sanitize_text_field(implode('', (array)$tag->raw_values)));
-        $class .= ' dtx-pageload';
+        $atts['class'][] = 'dtx-pageload';
         if (wp_style_is('wpcf7dtx', 'registered') && !wp_script_is('wpcf7dtx', 'queue')) {
             // If already registered, just enqueue it
             wp_enqueue_script('wpcf7dtx');
@@ -238,9 +242,9 @@ function wpcf7dtx_shortcode_handler($tag)
     }
 
     // Wrap up class attribute
-    $atts['class'] = $tag->get_class_option($class);
+    $atts['class'] = $tag->get_class_option(implode(' ', array_unique(array_filter($atts['class']))));
 
-    //Output the HTML
+    // Output the HTML
     return sprintf(
         '<span class="wpcf7-form-control-wrap %s" data-name="%s"><input %s />%s</span>',
         sanitize_html_class($tag->name),
