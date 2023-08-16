@@ -236,6 +236,36 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
 
     );
 
+    // Input field - Akismet module (only available for text, email, and url fields)
+    if (in_array($input_type, array('text', 'email', 'url'))) {
+        switch ($input_type) {
+            case 'email':
+                $akismet_name = 'author_email';
+                $akismet_desc = __("This field requires author's email address",  'contact-form-7-dynamic-text-extension');
+                break;
+            case 'url':
+                $akismet_name = 'author_url';
+                $akismet_desc = __("This field requires author's URL",  'contact-form-7-dynamic-text-extension');
+                break;
+            default:
+                $akismet_name = 'author';
+                $akismet_desc = __("This field requires author's name",  'contact-form-7-dynamic-text-extension');
+                break;
+        }
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+            esc_attr($options['content'] . '-readonly'), // field id
+            esc_html__('Akismet', 'contact-form-7-dynamic-text-extension'), // field Label
+            wpcf7_format_atts(array(
+                'type' => 'checkbox',
+                'name' => 'akismet:' . $akismet_name,
+                'id' => $options['content'] . '-akismet-' . $akismet_name,
+                'class' => 'akismetvalue option'
+            )),
+            esc_html($akismet_desc) // checkbox label
+        );
+    }
+    
     //Close Form-Tag Generator
     printf(
         '</tbody></table></fieldset></div><div class="insert-box"><input type="text" name="%s" class="tag code" readonly="readonly" onfocus="this.select()" /><div class="submitbox"><input type="button" class="button button-primary insert-tag" value="%s" /></div><br class="clear" /></div>',
