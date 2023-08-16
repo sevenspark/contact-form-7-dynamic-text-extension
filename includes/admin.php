@@ -180,6 +180,36 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         esc_html__('View DTX shortcode syntax documentation', 'contact-form-7-dynamic-text-extension') // Link label
     );
 
+    if ($input_type == 'select') {
+        // Input field - Multiple selections checkbox
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+            esc_attr($options['content'] . '-multiple'), // field id
+            esc_html__('Multiple Options', 'contact-form-7-dynamic-text-extension'), // field Label
+            wpcf7_format_atts(array(
+                'type' => 'checkbox',
+                'name' => 'multiple',
+                'id' => $options['content'] . '-multiple',
+                'class' => 'option'
+            )),
+            esc_html__('Allow user to select multiple options', 'contact-form-7-dynamic-text-extension') // checkbox label
+        );
+
+        // Input field - Include blank checkbox
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+            esc_attr($options['content'] . '-include_blank'), // field id
+            esc_html__('First Option', 'contact-form-7-dynamic-text-extension'), // field Label
+            wpcf7_format_atts(array(
+                'type' => 'checkbox',
+                'name' => 'include_blank',
+                'id' => $options['content'] . '-include_blank',
+                'class' => 'include_blankvalue option'
+            )),
+            esc_html__('Insert a blank item as the first option', 'contact-form-7-dynamic-text-extension') // checkbox label
+        );
+    }
+
     // Input field - Dynamic placeholder (not available for some fields)
     if (!in_array($input_type, array('hidden', 'quiz', 'submit', 'reset'))) {
         $placeholder_description = '';
