@@ -217,16 +217,16 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         );
     }
 
-    // Page load data attribute (triggers the loading of a frontend script)
+    // Input field - Page load data attribute (triggers the loading of a frontend script)
     printf(
         '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-after-page-load/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
-        esc_attr($options['content'] . '-frontend'), // field id
+        esc_attr($options['content'] . '-dtx_pageload'), // field id
         esc_html__('Cache Compatible', 'contact-form-7-dynamic-text-extension'), // field Label
         wpcf7_format_atts(array(
             'type' => 'checkbox',
             'name' => 'dtx_pageload',
             'id' => $options['content'] . '-dtx_pageload',
-            'class' => 'dtx_pageloadvalue option'
+            'class' => 'option'
         )),
         esc_html__('Get the dynamic value after the page has loaded', 'contact-form-7-dynamic-text-extension'), // checkbox label
         esc_html('May impact page performance.', 'contact-form-7-dynamic-text-extension'), // Small note below input
