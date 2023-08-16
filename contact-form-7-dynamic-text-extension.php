@@ -177,19 +177,7 @@ function wpcf7dtx_shortcode_handler($tag)
     } else {
         $atts['aria-invalid'] = 'false';
     }
-    $atts['maxlength'] = $tag->get_maxlength_option();
-    $atts['minlength'] = $tag->get_minlength_option();
-    switch ($tag->basetype) {
-        case 'dynamichidden':
-            $atts['type'] = 'hidden'; //Override type as hidden
-            break;
-        default: // Includes `dynamictext`
-            $atts['type'] = 'text'; //Override type as text
-            break;
-    }
-    if ($atts['maxlength'] && $atts['minlength'] && $atts['maxlength'] < $atts['minlength']) {
-        unset($atts['maxlength'], $atts['minlength']);
-    }
+
     if ($tag->has_option('readonly')) {
         $atts['readonly'] = 'readonly';
     }
@@ -220,17 +208,9 @@ function wpcf7dtx_shortcode_handler($tag)
         $atts['value'] = $value;
     }
 
-    if ($atts['type'] == 'hidden') {
-        // Always disable for hidden fields
-        $atts['autocomplete'] = 'off';
-    } else {
-        // Disable autocomplete for this field if a value has been specified
-        $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
-    }
-
     // Page load attribute
-    if ($tag->has_option('dtx_pageload')) {
-        $atts['data-dtx-value'] = rawurlencode(sanitize_text_field(implode('', (array)$tag->raw_values)));
+    if ($tag->has_option('dtx_pageload') && is_array($tag->raw_values) && count($tag->raw_values)) {
+        $atts['data-dtx-value'] = rawurlencode(sanitize_text_field($tag->raw_values[0]));
         $atts['class'][] = 'dtx-pageload';
         if (wp_style_is('wpcf7dtx', 'registered') && !wp_script_is('wpcf7dtx', 'queue')) {
             // If already registered, just enqueue it
@@ -241,6 +221,22 @@ function wpcf7dtx_shortcode_handler($tag)
             wp_enqueue_script('wpcf7dtx');
         }
     }
+    
+        // Attributes
+        $atts['maxlength'] = $tag->get_maxlength_option();
+        $atts['minlength'] = $tag->get_minlength_option();
+        if ($atts['maxlength'] && $atts['minlength'] && $atts['maxlength'] < $atts['minlength']) {
+            unset($atts['maxlength'], $atts['minlength']);
+        }
+    if ($atts['type'] == 'hidden') {
+        // Always disable for hidden fields
+        $atts['autocomplete'] = 'off';
+    } else {
+        // Disable autocomplete for this field if a value has been specified
+        $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
+    }
+
+    
 
     // Wrap up class attribute
     $atts['class'] = $tag->get_class_option(implode(' ', array_unique(array_filter($atts['class']))));
