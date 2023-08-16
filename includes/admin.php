@@ -244,6 +244,112 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         );
     }
 
+    // Additional fields for select regarding placeholder options
+    if ($input_type == 'select') {
+
+        // Input field - Hide Blank Option
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            esc_attr($options['content'] . '-dtx_hide_blank'), // field id
+            esc_html__('Hide First Option', 'contact-form-7-dynamic-text-extension'), // field Label
+            wpcf7_format_atts(array(
+                'type' => 'checkbox',
+                'name' => 'dtx_hide_blank',
+                'id' => $options['content'] . '-dtx_hide_blank',
+                'class' => 'option'
+            )),
+            esc_html__('Hide the first blank option from being visible in the drop-down', 'contact-form-7-dynamic-text-extension'), // checkbox label
+            esc_html__('Optional. Only works if "First Option" is checked.', 'contact-form-7-dynamic-text-extension'), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View Dynamic Select documentation', 'contact-form-7-dynamic-text-extension') //Link label
+        );
+
+        // Input field - Disable Blank Option
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            esc_attr($options['content'] . '-dtx_disable_blank'), // field id
+            esc_html__('Disable First Option', 'contact-form-7-dynamic-text-extension'), // field Label
+            wpcf7_format_atts(array(
+                'type' => 'checkbox',
+                'name' => 'dtx_disable_blank',
+                'id' => $options['content'] . '-dtx_disable_blank',
+                'class' => 'option'
+            )),
+            esc_html__('Disable the first blank option from being selectable in the drop-down', 'contact-form-7-dynamic-text-extension'), // checkbox label
+            esc_html__('Optional. Only works if "First Option" is checked.', 'contact-form-7-dynamic-text-extension'), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View Dynamic Select documentation', 'contact-form-7-dynamic-text-extension') //Link label
+
+        );
+    } elseif (in_array($input_type, array('checkbox', 'radio'))) {
+        // Additional fields for checkboxes and radio buttons
+
+        // Input field - Checkbox Layout Reverse Option
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+            esc_attr($options['content'] . '-label_first'), // field id
+            esc_html__('Reverse', 'contact-form-7-dynamic-text-extension'), // field Label
+            wpcf7_format_atts(array(
+                'type' => 'checkbox',
+                'name' => 'label_first',
+                'id' => $options['content'] . '-label_first',
+                'class' => 'option'
+            )),
+            esc_html__('Put a label first, an input last', 'contact-form-7-dynamic-text-extension') // checkbox label
+        );
+
+        // Input field - Label UI
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+            esc_attr($options['content'] . '-use_label_element'), // field id
+            esc_html__('Label', 'contact-form-7-dynamic-text-extension'), // field Label
+            wpcf7_format_atts(array(
+                'type' => 'checkbox',
+                'name' => 'use_label_element',
+                'id' => $options['content'] . '-use_label_element',
+                'class' => 'option'
+            )),
+            esc_html__('Wrap each item with label element', 'contact-form-7-dynamic-text-extension') // checkbox label
+        );
+    }
+
+    // Input field - Dynamic default value (not available for some fields)
+    if (in_array($input_type, array('select', 'checkbox', 'radio'))) {
+        $default_input_type = '<input %s />';
+        $default_placeholder = '';
+        if ($input_type == 'checkbox') {
+            $default_input_type = '<textarea %s></textarea>';
+            $default_description =  __('Optionally define the default on/off status of the checkboxes by putting a 1 (checked) or 0 (not checked) on each line that corresponds with the options.', 'contact-form-7-dynamic-text-extension') . ' ';
+            $default_placeholder = '0' . PHP_EOL . '1';
+        } else {
+            $default_description =  __('Optionally define the option that is selected by default. This can be different than the first [blank] option. If options use key/value pairs, only define the key here.', 'contact-form-7-dynamic-text-extension') . ' ';
+        }
+        $default_description .= __('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $default_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-default/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            esc_attr($options['content'] . '-default'), // field id
+            esc_html__('Selected Default'), // field label
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'default',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'name' => 'dtx-default',
+                'id' => $options['content'] . '-default', // field id
+                'class' => 'oneline dtx-option',
+                'placeholder' => $default_placeholder,
+                'list' => 'dtx-shortcodes'
+            )),
+            esc_html($default_description), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View DTX selected default documentation', 'contact-form-7-dynamic-text-extension') //Link label
+        );
+    }
+
     //Input field - ID attribute
     printf(
         '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /></td></tr>',
