@@ -346,6 +346,25 @@ function wpcf7dtx_format_atts($atts)
 }
 
 /**
+ * Create Input Field HTML
+ *
+ * @since 3.6.0
+ *
+ * @param array $atts An associative array of input attributes.
+ *
+ * @return string HTML output of input field
+ */
+function wpcf7dtx_input_html($atts)
+{
+    // Default field attributes
+    $atts = array_merge(array(
+        'type' => 'text',
+        'value' => '',
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    return sprintf('<input %s />', wpcf7dtx_format_atts($atts));
+}
+
+/**
  * Array Key Exists and Has Value
  *
  * @since 3.1.0
