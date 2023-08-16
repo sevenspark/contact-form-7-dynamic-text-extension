@@ -241,14 +241,17 @@ function wpcf7dtx_shortcode_handler($tag)
     // Wrap up class attribute
     $atts['class'] = $tag->get_class_option(implode(' ', array_unique(array_filter($atts['class']))));
 
-    // Output the HTML
-    return sprintf(
-        '<span class="wpcf7-form-control-wrap %s" data-name="%s"><input %s />%s</span>',
-        sanitize_html_class($tag->name),
+    // Output the form field HTML
+    $wrapper = '<span class="wpcf7-form-control-wrap %1$s" data-name="%1$s">%2$s%3$s</span>';
+    $allowed_html = array('br' => array(), 'span' => array('class' => array(), 'data-name' => array(), 'aria-hidden' => array()));
+    return wp_kses(sprintf(
+        $wrapper,
         esc_attr($tag->name),
-        wpcf7_format_atts($atts), //This function already escapes attribute values
+        wpcf7dtx_input_html($atts, false),
         $validation_error
-    );
+    ), array_merge($allowed_html, array(
+        'input' => wpcf7dtx_get_allowed_field_properties($atts['type'])
+    )));
 }
 
 /**
