@@ -38,7 +38,7 @@ module.exports = function(grunt) {
                 options: {
                     // Documentation: https://github.com/stephenharris/grunt-wp-deploy
                     plugin_slug: 'contact-form-7-dynamic-text-extension',
-                    svn_user: 'tessawatkinsllc', // WordPress repository username
+                    //svn_user: 'tessawatkinsllc', // WordPress repository username
                     build_dir: './_build', // Relative path to build directory
                     assets_dir: 'wp-assets', // Relative path to assets directory (i.e. banners and screenshots)
                     tmp_dir: '../../_svn', // Location where SVN repository is checked out to (Note: Before the the repository is checked out `<tmp_dir>/<plugin_slug>` is deleted.)
