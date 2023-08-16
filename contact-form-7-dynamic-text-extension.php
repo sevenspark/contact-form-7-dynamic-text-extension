@@ -47,7 +47,7 @@ defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__);
  */
 function wpcf7dtx_init()
 {
-    add_action('wpcf7_init', 'wpcf7dtx_add_shortcode_dynamictext'); // Add custom form tags to CF7
+    add_action('wpcf7_init', 'wpcf7dtx_add_shortcodes'); // Add custom form tags to CF7
     add_filter('wpcf7_validate_dynamictext*', 'wpcf7dtx_dynamictext_validation_filter', 20, 2); // Validate custom form tags
 }
 add_action('plugins_loaded', 'wpcf7dtx_init', 20);
@@ -84,20 +84,26 @@ function wpcf7dtx_config()
  *
  * @return void
  */
-function wpcf7dtx_add_shortcode_dynamictext()
+function wpcf7dtx_add_shortcodes()
 {
-    //Add the dynamic text and hidden form fields
-    wpcf7_add_form_tag(
-        array(
-            'dynamictext', 'dynamictext*',
-            'dynamichidden', 'dynamichidden*' //Required hidden fields do nothing
-        ),
-        'wpcf7dtx_dynamictext_shortcode_handler', //Callback
-        array( //Features
-            'name-attr' => true,
-            'dtx_pageload' => true
-        )
-    );
+    //Add the dynamic form fields
+    foreach (wpcf7dtx_config() as $form_tag => $field) {
+        $input_type = str_replace('dynamic_', '', $form_tag);
+        $tag_types = array($form_tag, "$form_tag*");
+        $callback = 'wpcf7dtx_shortcode_handler';
+        $features = array('name-attr' => true, 'dtx_pageload' => true);
+        switch ($input_type) {
+            case 'text':
+            case 'hidden':
+                $dep_tag = str_replace('_', '', $form_tag);
+                $tag_types[] = $dep_tag;
+                $tag_types[] = "$dep_tag*";
+                break;
+            default:
+                break;
+        }
+        wpcf7_add_form_tag($tag_types, $callback, $features);
+    }
 }
 
 /**
