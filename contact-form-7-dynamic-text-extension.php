@@ -228,16 +228,16 @@ function wpcf7dtx_shortcode_handler($tag)
         if ($atts['maxlength'] && $atts['minlength'] && $atts['maxlength'] < $atts['minlength']) {
             unset($atts['maxlength'], $atts['minlength']);
         }
-    if ($atts['type'] == 'hidden') {
-        // Always disable for hidden fields
-        $atts['autocomplete'] = 'off';
-    } else {
-        // Disable autocomplete for this field if a value has been specified
-        $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
-    }
+
+        // Autocomplete attribute
+        if ($atts['type'] == 'hidden') {
+            $atts['autocomplete'] = 'off'; // Always disable for hidden fields
+        } else {
+            // Disable autocomplete for this field if a dynamic value has been specified
+            $atts['autocomplete'] = $atts['value'] ? 'off' : $tag->get_option('autocomplete', '[-0-9a-zA-Z]+', true);
+        }
 
     
-
     // Wrap up class attribute
     $atts['class'] = $tag->get_class_option(implode(' ', array_unique(array_filter($atts['class']))));
 
