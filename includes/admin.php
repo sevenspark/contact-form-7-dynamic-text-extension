@@ -49,23 +49,15 @@ function wpcf7dtx_add_tag_generator_dynamictext()
     if (!class_exists('WPCF7_TagGenerator')) {
         return;
     }
+
+    // Custom dynamic fields to add
+    global $wpcf7_dynamic_fields_config;
+
+    // Loop fields to add them
     $tag_generator = WPCF7_TagGenerator::get_instance();
-
-    //Dynamic Text Field
-    $tag_generator->add(
-        'dynamictext', //id
-        __('dynamic text', 'contact-form-7-dynamic-text-extension'), //title
-        'wpcf7dtx_tag_generator_dynamictext', //callback
-        array('placeholder', 'readonly', 'dtx_pageload') //options
-    );
-
-    //Dynamic Hidden Field
-    $tag_generator->add(
-        'dynamichidden', //id
-        __('dynamic hidden', 'contact-form-7-dynamic-text-extension'), //title
-        'wpcf7dtx_tag_generator_dynamictext', //callback
-        array('dtx_pageload') // options
-    );
+    foreach ($wpcf7_dynamic_fields_config as $id => $field) {
+        $tag_generator->add($id, $field['title'], 'wpcf7dtx_tag_generator_dynamictext', array_merge(array('name-attr', 'dtx_pageload'), $field['options']));
+    }
 }
 add_action('wpcf7_admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 100);
 
@@ -80,26 +72,33 @@ add_action('wpcf7_admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 100);
 function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
 {
     $options = wp_parse_args($options);
+    global $wpcf7_dynamic_fields_config;
     $type = $options['id'];
-    switch ($type) {
-        case 'dynamichidden': //hiden
-            $description = __('Generate a form-tag for a hidden input field, with a dynamically generated default value.', 'contact-form-7-dynamic-text-extension');
-            break;
-        default:
-            $description = __('Generate a form-tag for a single-line plain text input field, with a dynamically generated default value.', 'contact-form-7-dynamic-text-extension');
-            break;
-    }
+    $input_type = str_replace('dynamic_', '', $type);
     $utm_source = urlencode(home_url());
-    $description .= sprintf(
-        ' %s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" title="%s" target="_blank" rel="noopener">%s</a>.',
-        esc_html__('For more details, see', 'contact-form-7-dynamic-text-extension'),
-        esc_attr($utm_source), //UTM source
-        esc_attr($type), //UTM content
-        esc_attr__('Go to DTX Documentation website', 'contact-form-7-dynamic-text-extension'),
-        esc_html__('DTX knowledge base', 'contact-form-7-dynamic-text-extension')
+    $description = sprintf(
+        __('Generate a form-tag for a %s with a dynamic default value. For more details, see %s fields in the %s.', 'contact-form-7-dynamic-text-extension'),
+        esc_html($wpcf7_dynamic_fields_config[$type]['description']), // dynamic description
+        // Link to specific form-tag documentation
+        sprintf(
+            '<a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/%s?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" title="%s" target="_blank" rel="noopener">%s</a>',
+            esc_attr(str_replace('_', '-', $type)), // URL component
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_attr__('View this form-tag on the DTX Documentation website', 'contact-form-7-dynamic-text-extension'), // Link title
+            esc_html(ucwords(str_replace('_', ' ', $type))) // Link label
+        ),
+        // Link to general DTX documentation
+        sprintf(
+            '<a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" title="%s" target="_blank" rel="noopener">%s</a>',
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_attr__('Go to DTX Documentation website', 'contact-form-7-dynamic-text-extension'),
+            esc_html__('DTX knowledge base', 'contact-form-7-dynamic-text-extension')
+        )
     );
 
-    //Open Form-Tag Generator
+    // Open Form-Tag Generator
     printf(
         '<div class="control-box"><fieldset><legend>%s</legend><table class="form-table"><tbody>',
         wp_kses($description, array('a' => array('href' => array(), 'target' => array(), 'rel' => array(), 'title' => array()))) //Tag generator description
