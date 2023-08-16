@@ -100,7 +100,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
 
     // Open Form-Tag Generator
     printf(
-        '<div class="control-box"><fieldset><legend>%s</legend><table class="form-table"><tbody>',
+        '<div class="control-box dtx-taggen"><fieldset><legend>%s</legend><table class="form-table"><tbody>',
         wp_kses($description, array('a' => array('href' => array(), 'target' => array(), 'rel' => array(), 'title' => array()))) //Tag generator description
     );
 
