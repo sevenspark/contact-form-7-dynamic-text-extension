@@ -201,8 +201,8 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         ))
     );
 
-    //Input field - Readonly attribute (not available for hidden fields)
-    if ($type != 'dynamichidden') {
+    //Input field - Readonly attribute (not available for hidden, submit, or quiz fields)
+    if (!in_array($input_type, array('hidden', 'submit', 'quiz'))) {
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
             esc_attr($options['content'] . '-readonly'), // field id
