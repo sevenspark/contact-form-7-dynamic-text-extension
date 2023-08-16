@@ -222,6 +222,10 @@ function wpcf7dtx_shortcode_handler($tag)
         }
     }
 
+    /**
+     * Configuration for text-based fields
+     */
+
     // Attributes
     $atts['maxlength'] = $tag->get_maxlength_option();
     $atts['minlength'] = $tag->get_minlength_option();
