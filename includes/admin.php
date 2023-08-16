@@ -119,18 +119,21 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         );
     }
 
-    //Input field - Field Name
-    printf(
-        '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /></td></tr>',
-        esc_attr($options['content'] . '-name'), // field id
-        esc_html__('Name', 'contact-form-7-dynamic-text-extension'), // field label
-        wpcf7_format_atts(array(
-            'type' => 'text',
-            'name' => 'name',
-            'id' => $options['content'] . '-name',
-            'class' => 'tg-name oneline'
-        ))
-    );
+    // Input field - Field Name (not available for some fields)
+    if (!in_array($input_type, array('submit', 'reset'))) {
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /></td></tr>',
+            esc_attr($options['content'] . '-name'), // field id
+            esc_html__('Name', 'contact-form-7-dynamic-text-extension'), // field label
+            wpcf7_format_atts(array(
+                'type' => 'text',
+                'name' => 'name',
+                'id' => $options['content'] . '-name',
+                'class' => 'tg-name oneline',
+                'autocomplete' => 'off'
+            ))
+        );
+    }
 
     //Input field - Dynamic value
     printf(
