@@ -112,37 +112,6 @@ add_action('wp_enqueue_scripts', 'wpcf7dtx_enqueue_frontend_assets');
 include_once(WPCF7DTX_DIR . '/includes/utilities.php');
 
 /**
- * Get Dynamic Value
- *
- * @since 3.2.2
- *
- * @param string $value The form tag value.
- * @param WPCF7_FormTag|false $tag Optional. Use to look up default value.
- *
- * @return string The dynamic output or the original value, not escaped or sanitized.
- */
-function wpcf7dtx_get_dynamic($value, $tag = false)
-{
-    if ($tag !== false) {
-        $default = $tag->get_option('defaultvalue', '', true);
-        if (!$default) {
-            $default = $tag->get_default_option(strval(reset($tag->values)));
-        }
-        $value = wpcf7_get_hangover($tag->name, $default);
-    }
-    $value = apply_filters('wpcf7dtx_sanitize', $value);
-    if (is_string($value) && !empty($value)) {
-        // If a shortcode was passed as the options, evaluate it and use the result
-        $shortcode_tag = '[' . $value . ']';
-        $shortcode_output = do_shortcode($shortcode_tag); //Shortcode value
-        if (is_string($shortcode_output) && $shortcode_output != $shortcode_tag) {
-            return apply_filters('wpcf7dtx_sanitize', $shortcode_output);
-        }
-    }
-    return $value;
-}
-
-/**
  * Form Tag Handler
  *
  * @param WPCF7_FormTag $tag Current Contact Form 7 tag object

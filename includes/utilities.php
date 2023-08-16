@@ -182,6 +182,38 @@ function wpcf7dtx_get_post_id($post_id, $context = 'dtx')
 }
 
 /**
+ * Get Dynamic Value
+ *
+ * @since 3.2.2
+ *
+ * @param string $value The form tag value.
+ * @param WPCF7_FormTag|false $tag Optional. Use to look up default value.
+ * @param string $sanitize Optional. Specify type of sanitization. Default is `auto`.
+ *
+ * @return string The dynamic output or the original value, not escaped or sanitized.
+ */
+function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto')
+{
+    if ($tag !== false) {
+        $default = $tag->get_option('defaultvalue', '', true);
+        if (!$default) {
+            $default = $tag->get_default_option(strval(reset($tag->values)));
+        }
+        $value = wpcf7_get_hangover($tag->name, $default);
+    }
+    $value = apply_filters('wpcf7dtx_sanitize', $value, $sanitize);
+    if (is_string($value) && !empty($value)) {
+        // If a shortcode was passed as the value, evaluate it and use the result
+        $shortcode_tag = '[' . $value . ']';
+        $shortcode_output = do_shortcode($shortcode_tag); //Shortcode value
+        if (is_string($shortcode_output) && $shortcode_output != $shortcode_tag) {
+            return apply_filters('wpcf7dtx_sanitize', $shortcode_output, $sanitize);
+        }
+    }
+    return $value;
+}
+
+/**
  * Parse Content for Specified Shortcodes
  *
  * Parse a string of content for a specific shortcode to retrieve its attributes and content
