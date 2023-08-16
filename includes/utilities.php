@@ -218,6 +218,95 @@ function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto')
 }
 
 /**
+ * Get Allowed HTML for Form Field Properties
+ *
+ * @since 3.6.0
+ *
+ * @param string $type Optional. The type of input for unique properties. Default is `text`.
+ * @param array $extra Optional. A sequential array of properties to additionally include.
+ *
+ * @return array An associative array of allowed properties appropriate for use in `wp_kses()`
+ */
+function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
+{
+    if (in_array($type, array('option', 'optgroup'))) {
+        return array(
+            'optgroup' => array(
+                'label' => array(),
+                'disabled' => array(),
+                'hidden' => array()
+            ),
+            'option' => array(
+                'value' => array(),
+                'selected' => array(),
+                'disabled' => array(),
+                'hidden' => array()
+            )
+        );
+    }
+    $allowed_properties = array(
+        // Global properties
+        'type' => array(),
+        'id' => array(),
+        'name' => array(),
+        'value' => array(),
+        'required' => array(),
+        'class' => array(),
+        'disabled' => array(),
+        'readonly' => array(),
+        'tabindex' => array(),
+        'size' => array(),
+        'title' => array(),
+        'autofocus' => array(),
+        // ARIA properties
+        'aria-invalid' => array(),
+        'aria-describedby' => array(),
+        // DTX properties
+        'data-dtx-value' => array(),
+    );
+    if (in_array($type, array('checkbox', 'radio', 'acceptance'))) {
+        // Properties exclusive to checkboxes and radio buttons
+        $allowed_properties['checked'] = array();
+        $allowed_properties['dtx-default'] = array();
+    } elseif (in_array($type, array('number', 'range'))) {
+        // Properties exclusive to number inputs
+        $allowed_properties['step'] = array();
+    } elseif ($type == 'select') {
+        // Properties exclusive to select fields
+        $allowed_properties['multiple'] = array();
+        $allowed_properties['dtx-default'] = array();
+        unset($allowed_properties['type'], $allowed_properties['value'], $allowed_properties['placeholder'], $allowed_properties['size']); // Remove invalid select attributes
+    }
+    if (!in_array($type, array('checkbox', 'radio', 'select', 'acceptance'))) {
+        // Allowed properties for all text-based inputs
+        $allowed_properties['placeholder'] = array();
+        $allowed_properties['autocomplete'] = array();
+        $allowed_properties['minlength'] = array();
+        $allowed_properties['maxlength'] = array();
+        if (in_array($type, array('number', 'range', 'date', 'datetime-local', 'time'))) {
+            // Additional properties for number and date inputs
+            $allowed_properties['min'] = array();
+            $allowed_properties['max'] = array();
+        }
+        if ($type == 'textarea') {
+            // Additional properties exclusive to textarea fields
+            $allowed_properties['cols'] = array();
+            $allowed_properties['rows'] = array();
+            unset($allowed_properties['type'], $allowed_properties['value']); // Remove invalid textarea attributes
+        } elseif (in_array($type, array('text', 'date', 'url', 'tel', 'email', 'password'))) {
+            // Additional properties exclusive to specific text fields
+            $allowed_properties['pattern'] = array();
+        }
+    }
+    if (is_array($extra) && count($extra)) {
+        foreach ($extra as $property) {
+            $allowed_properties[sanitize_title($property)] = array();
+        }
+    }
+    return $allowed_properties;
+}
+
+/**
  * Array Key Exists and Has Value
  *
  * @since 3.1.0
