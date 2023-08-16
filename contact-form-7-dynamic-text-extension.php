@@ -193,7 +193,8 @@ function wpcf7dtx_shortcode_handler($tag)
     if ($tag->has_option('readonly')) {
         $atts['readonly'] = 'readonly';
     }
-    if ($tag->is_required() && $atts['type'] !== 'hidden') {
+    // Add required attribute to applicable input types
+    if ($tag->is_required() && !in_array($atts['type'], array('hidden', 'quiz'))) {
         $atts['aria-required'] = 'true';
         $atts['required'] = 'required';
     }
