@@ -307,6 +307,45 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
 }
 
 /**
+ * Returns a formatted string of HTML attributes
+ *
+ * @since 3.6.0
+ *
+ * @param array $atts Associative array of attribute name and value pairs
+ *
+ * @return string Formatted HTML attributes with keys and values both escaped
+ */
+function wpcf7dtx_format_atts($atts)
+{
+    if (is_array($atts) && count($atts)) {
+        $sanitized_atts = array();
+        static $boolean_attributes = array(
+            'checked', 'disabled', 'multiple', 'readonly', 'required', 'selected'
+        );
+        foreach ($atts as $key => $value) {
+            $key = sanitize_key(strval($key));
+            if ($key) {
+                if (in_array($key, $boolean_attributes) || is_bool($value)) {
+                    if ($value) {
+                        $sanitized_atts[$key] = $key;
+                    }
+                } elseif ($value && (is_string($value) || is_numeric($value))) {
+                    $sanitized_atts[$key] = $value;
+                }
+            }
+        }
+        if (count($sanitized_atts)) {
+            $output = array();
+            foreach ($sanitized_atts as $key => $value) {
+                $output[] = sprintf('%s="%s"', esc_attr($key), esc_attr($value));
+            }
+            return implode(' ', $output);
+        }
+    }
+    return '';
+}
+
+/**
  * Array Key Exists and Has Value
  *
  * @since 3.1.0
