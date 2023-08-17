@@ -430,6 +430,69 @@ function wpcf7dtx_textarea_html($atts)
 }
 
 /**
+ * Create Select Field HTML
+ *
+ * @since 3.6.0
+ *
+ * @param array $atts An associative array of select input attributes. Requires `name` key to
+ * have a value. Can also accept key/value pairs for `id` (recommended), `placeholder` (used
+ * as the first option in the select field with an empty value), `value` (if wanting to set
+ * the default selected value), and `required` (set to anything "truthy" to make it required).
+ * @param array|string $options Accepts an associative array of key/value pairs to use as the
+ * select option's value/label pairs. It also accepts an associative array of associative
+ * arrays with the keys being used as option group labels and the array values used as that
+ * group's options. It also accepts a string value of HTML already formatted as options or
+ * option groups. It also accepts a string value of a self-closing shortcode that is
+ * evaluated and its output is either options or option groups.
+ * @param bool $echo If true, will echo the HTML output before returning. Default is true.
+ *
+ * @return string HTML output of select field or empty string on failure.
+ */
+function wpcf7dtx_select_html($atts, $options)
+{
+    // Default field attributes
+    $atts = array_merge(array(
+        'placeholder' => '',
+        'value' => ''
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $atts['dtx-default'] = $atts['value'];
+    $options_html = ''; // Open options HTML
+
+    // If using a placeholder, use it as the text of the first option
+    if ($atts['placeholder']) {
+        $options_html .= sprintf(
+            '<option value=""%s>%s</option>',
+            empty($atts['value']) ? ' selected' : '',
+            apply_filters('wpcf7dtx_escape', $atts['placeholder'])
+        );
+    }
+    if (is_array($options) && count($options)) {
+        foreach ($options as $option_value => $option_label) {
+            $dynamic_option_value = wpcf7dtx_get_dynamic($option_value);
+            $options_html .= sprintf(
+                '<option value="%1$s"%3$s>%2$s</option>',
+                esc_attr(apply_filters('wpcf7dtx_escape', $dynamic_option_value)),
+                esc_html(apply_filters('wpcf7dtx_escape', wpcf7dtx_get_dynamic($option_label))),
+                $atts['value'] == $dynamic_option_value ? ' selected' : ''
+            );
+        }
+    } elseif (is_string($options) && !empty($options = trim($options))) {
+        $allowed_html = wpcf7dtx_get_allowed_field_properties('option');
+        // If options were passed as a string, go ahead and use them
+        if (strpos($options, '<option') === 0 || stripos($options, '<optgroup') === 0) {
+            $options_html .= wp_kses($options, $allowed_html);
+        } else {
+            // If a shortcode was passed as the options, evaluate it and use the result
+            $shortcode_output = wpcf7dtx_get_dynamic($options);
+            if (is_string($shortcode_output) && !empty($shortcode_output) && (strpos($shortcode_output, '<option') === 0) || strpos($shortcode_output, '<optgroup') === 0) {
+                $options_html .= wp_kses($shortcode_output, $allowed_html);
+            }
+        }
+    }
+    return sprintf('<select %s>%s</select>', wpcf7dtx_format_atts($atts), $options_html);
+}
+
+/**
  * Array Key Exists and Has Value
  *
  * @since 3.1.0
