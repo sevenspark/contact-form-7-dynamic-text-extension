@@ -361,6 +361,14 @@ function wpcf7dtx_input_html($atts)
         'type' => 'text',
         'value' => '',
     ), array_change_key_case((array)$atts, CASE_LOWER));
+    if ($atts['type'] == 'checkbox' || $atts['type'] == 'radio') {
+        if ($atts['value']) {
+            $atts['checked'] = 'checked'; // If truthy, always set to this value
+            $atts['dtx-default'] = 'on';
+        } else {
+            $atts['dtx-default'] = 'off';
+        }
+    }
     return sprintf('<input %s />', wpcf7dtx_format_atts($atts));
 }
 
