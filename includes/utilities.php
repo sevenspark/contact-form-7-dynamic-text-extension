@@ -373,6 +373,44 @@ function wpcf7dtx_input_html($atts)
 }
 
 /**
+ * Create Checkbox Field HTML
+ *
+ * @since 3.6.0
+ *
+ * @param array $atts An associative array of select input attributes.
+ * @param string $label_text The text to display next to the checkbox or radio button.
+ * @param bool $label_ui Optional. If true, will place input inside a `<label>` element. Default is true.
+ * @param bool $reverse Optional. If true, will reverse the order to display the text label first then the button. Default is false.
+ *
+ * @return string HTML output of the checkbox or radio button or empty string on failure.
+ */
+function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reverse = false)
+{
+    $input = wpcf7dtx_input_html($atts);
+    if ($label_text) {
+        $label_el = $label_ui ? 'span' : 'label'; // If not wrapping with a label element, display it next to it
+        $label_text = sprintf(
+            '<%1$s%2$s class="wpcf7-list-item-label">%3$ss</%1$s>',
+            $label_el,
+            // If not wrapping with a label element and the element has an ID attribute, add a `for` attribute
+            $label_ui ? '' : (wpcf7dtx_array_has_key('id', $atts) ? ' for="' . esc_attr($atts['id']) . '"' : ''),
+            apply_filters('wpcf7dtx_escape', $label_text)
+        );
+        if ($reverse) {
+            $html = $label_text . $input;
+        } else {
+            $html = $input . $label_text;
+        }
+    } else {
+        $html = $input;
+    }
+    if ($label_ui) {
+        $html = '<label>' . $html . '</label>';
+    }
+    return $html;
+}
+
+/**
  * Array Key Exists and Has Value
  *
  * @since 3.1.0
