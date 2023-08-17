@@ -411,6 +411,25 @@ function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reve
 }
 
 /**
+ * Create Textarea Field HTML
+ *
+ * @since 3.6.0
+ *
+ * @param array $atts An associative array of textarea field attributes.
+ *
+ * @return string HTML output of textarea field
+ */
+function wpcf7dtx_textarea_html($atts)
+{
+    $atts = array_merge(array('value' => ''), array_change_key_case((array)$atts, CASE_LOWER));
+    return sprintf(
+        '<textarea %s>%s</textarea>',
+        wpcf7dtx_format_atts($atts),
+        apply_filters('wpcf7dtx_escape', $atts['value'], false, 'textarea')
+    );
+}
+
+/**
  * Array Key Exists and Has Value
  *
  * @since 3.1.0
