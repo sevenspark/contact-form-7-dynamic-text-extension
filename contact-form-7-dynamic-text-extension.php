@@ -246,7 +246,7 @@ function wpcf7dtx_shortcode_handler($tag)
 
 
     // Wrap up class attribute
-    $atts['class'] = $tag->get_class_option(implode(' ', array_unique(array_filter($atts['class']))));
+    $atts['class'] = $tag->get_class_option($atts['class']);
 
     // Output the form field HTML
     $wrapper = '<span class="wpcf7-form-control-wrap %1$s" data-name="%1$s">%2$s%3$s</span>';
