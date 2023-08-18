@@ -48,7 +48,6 @@ defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__);
 function wpcf7dtx_init()
 {
     add_action('wpcf7_init', 'wpcf7dtx_add_shortcodes'); // Add custom form tags to CF7
-    add_filter('wpcf7_validate_dynamictext*', 'wpcf7dtx_dynamictext_validation_filter', 20, 2); // Validate custom form tags
 }
 add_action('plugins_loaded', 'wpcf7dtx_init', 20);
 
@@ -102,10 +101,12 @@ function wpcf7dtx_add_shortcodes()
                 $dep_tag = str_replace('_', '', $form_tag);
                 $tag_types[] = $dep_tag;
                 $tag_types[] = "$dep_tag*";
+                add_filter("wpcf7_validate_$dep_tag*", 'wpcf7dtx_validation_filter', 20, 2); // Validate required deprecated form tags
                 break;
             default:
                 break;
         }
+        add_filter("wpcf7_validate_$form_tag*", 'wpcf7dtx_validation_filter', 20, 2); // Validate required custom form tags
         wpcf7_add_form_tag($tag_types, $callback, $features);
     }
 }
@@ -146,6 +147,11 @@ add_action('wp_enqueue_scripts', 'wpcf7dtx_enqueue_frontend_assets');
  * Include Utility Functions
  */
 include_once(WPCF7DTX_DIR . '/includes/utilities.php');
+
+/**
+ * Include Validation Functions
+ */
+include_once(WPCF7DTX_DIR . '/includes/validation.php');
 
 /**
  * Form Tag Handler
@@ -260,43 +266,6 @@ function wpcf7dtx_shortcode_handler($tag)
     ), array_merge($allowed_html, array(
         'input' => wpcf7dtx_get_allowed_field_properties($atts['type'])
     )));
-}
-
-/**
- *  Validate Required Dynamic Text Field
- *
- * @param WPCF7_Validation $result the current validation result object
- * @param WPCF7_FormTag $tag the current form tag being filtered for validation
- *
- * @return WPCF7_Validation a possibly modified validation result object
- */
-function wpcf7dtx_dynamictext_validation_filter($result, $tag)
-{
-    //Sanitize value
-    $value = empty($_POST[$tag->name]) ? '' : sanitize_text_field(strval($_POST[$tag->name]));
-
-    //Validate
-    if ('dynamictext' == $tag->basetype) {
-        if ($tag->is_required() && '' == $value) {
-            $result->invalidate($tag, wpcf7_get_message('invalid_required'));
-        }
-    }
-    if (!empty($value)) {
-        $maxlength = $tag->get_maxlength_option();
-        $minlength = $tag->get_minlength_option();
-        if ($maxlength && $minlength && $maxlength < $minlength) {
-            $maxlength = $minlength = null;
-        }
-        $code_units = wpcf7_count_code_units($value);
-        if (false !== $code_units) {
-            if ($maxlength && $maxlength < $code_units) {
-                $result->invalidate($tag, wpcf7_get_message('invalid_too_long'));
-            } elseif ($minlength && $code_units < $minlength) {
-                $result->invalidate($tag, wpcf7_get_message('invalid_too_short'));
-            }
-        }
-    }
-    return $result;
 }
 
 /**
