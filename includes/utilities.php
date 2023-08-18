@@ -220,7 +220,7 @@ function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto')
 /**
  * Get Allowed HTML for Form Field Properties
  *
- * @since 3.6.0
+ * @since 4.0.0
  *
  * @param string $type Optional. The type of input for unique properties. Default is `text`.
  * @param array $extra Optional. A sequential array of properties to additionally include.
@@ -309,7 +309,7 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
 /**
  * Returns a formatted string of HTML attributes
  *
- * @since 3.6.0
+ * @since 4.0.0
  *
  * @param array $atts Associative array of attribute name and value pairs
  *
@@ -348,7 +348,7 @@ function wpcf7dtx_format_atts($atts)
 /**
  * Create Input Field HTML
  *
- * @since 3.6.0
+ * @since 4.0.0
  *
  * @param array $atts An associative array of input attributes.
  *
@@ -362,7 +362,7 @@ function wpcf7dtx_input_html($atts)
 /**
  * Create Checkbox Field HTML
  *
- * @since 3.6.0
+ * @since 4.0.0
  *
  * @param array $atts An associative array of select input attributes.
  * @param string $label_text Optional. The text to display next to the checkbox or radio button.
@@ -405,7 +405,7 @@ function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reve
 /**
  * Create Textarea Field HTML
  *
- * @since 3.6.0
+ * @since 4.0.0
  *
  * @param array $atts An associative array of textarea field attributes.
  *
@@ -425,7 +425,7 @@ function wpcf7dtx_textarea_html($atts)
 /**
  * Create Select Field HTML
  *
- * @since 3.6.0
+ * @since 4.0.0
  *
  * @param array $atts An associative array of select input attributes.
  * @param array|string $options Accepts an associative array of key/value pairs to use as the

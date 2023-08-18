@@ -16,13 +16,13 @@ function wpcf7dtx_enqueue_admin_assets($hook)
     // Only load on CF7 Form pages (both editing forms and creating new forms)
     if ($hook === 'toplevel_page_wpcf7' || $hook === 'contact_page_wpcf7-new') {
         $prefix = 'wpcf7dtx-';
-        $debug = defined('WP_DEBUG') && constant('WP_DEBUG');
+        $debug = defined('WP_DEBUG_SCRIPTS') && constant('WP_DEBUG_SCRIPTS');
         $url = plugin_dir_url(WPCF7DTX_FILE);
         $path = plugin_dir_path(WPCF7DTX_FILE);
 
         wp_enqueue_style(
             $prefix . 'admin', //Handle
-            $url . 'assets/styles/tag-generator.css', //Source
+            $url . 'assets/styles/tag-generator' . ($debug ? '' : '.min') . '.css', //Source
             array('contact-form-7-admin'), //Dependencies
             $debug ? @filemtime($path . 'assets/styles/tag-generator.css') : WPCF7DTX_VERSION //Version
         );
@@ -44,7 +44,7 @@ add_action('admin_enqueue_scripts', 'wpcf7dtx_enqueue_admin_assets'); //Enqueue 
  *
  * @return void
  */
-function wpcf7dtx_add_tag_generator_dynamictext()
+function wpcf7dtx_add_tag_generators()
 {
     if (!class_exists('WPCF7_TagGenerator')) {
         return;
@@ -56,10 +56,10 @@ function wpcf7dtx_add_tag_generator_dynamictext()
     // Loop fields to add them
     $tag_generator = WPCF7_TagGenerator::get_instance();
     foreach ($wpcf7_dynamic_fields_config as $id => $field) {
-        $tag_generator->add($id, $field['title'], 'wpcf7dtx_tag_generator_dynamictext', array_merge(array('name-attr', 'dtx_pageload'), $field['options']));
+        $tag_generator->add($id, $field['title'], 'wpcf7dtx_tag_generator', array_merge(array('name-attr', 'dtx_pageload'), $field['options']));
     }
 }
-add_action('wpcf7_admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 100);
+add_action('wpcf7_admin_init', 'wpcf7dtx_add_tag_generators', 100);
 
 /**
  * Echo HTML for Dynamic Tag Generator
@@ -69,7 +69,7 @@ add_action('wpcf7_admin_init', 'wpcf7dtx_add_tag_generator_dynamictext', 100);
  *
  * @return void
  */
-function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
+function wpcf7dtx_tag_generator($contact_form, $options = '')
 {
     $options = wp_parse_args($options);
     global $wpcf7_dynamic_fields_config;
@@ -328,7 +328,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         }
         $default_description .= __('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
         printf(
-            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $default_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-selected-default/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $default_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
             esc_attr($options['content'] . '-default'), // field id
             esc_html__('Selected Default'), // field label
             wpcf7_format_atts(array(
@@ -346,7 +346,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
             esc_html($default_description), // Small note below input
             esc_attr($utm_source), //UTM source
             esc_attr($type), //UTM content
-            esc_html__('View DTX selected default documentation', 'contact-form-7-dynamic-text-extension') //Link label
+            esc_html__('View Dynamic Select documentation', 'contact-form-7-dynamic-text-extension') //Link label
         );
     }
 

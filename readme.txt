@@ -3,9 +3,9 @@ Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, dynamic, GET, POST, title, slug, auto-fill, pre-populate
 Tested up to: 6.3
-Stable tag: 3.5.4
+Stable tag: VERSION_PLACEHOLDER
 
-This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text or hidden input fields using any shortcode.
+This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text-based input fields like text, hidden, and email, checkboxes, radio buttons, and drop-down selections using any shortcode.
 
 == Description ==
 
@@ -25,11 +25,25 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 * Getting custom theme modifications
 * Any value using custom shortcodes
 
+For over 10 years, DTX only handled `<input type="text" />` and `<input type="hidden" />` form fields, but version 4 finally introduces more:
+
+* email
+* URL
+* tel (for phone numbers)
+* number
+* range (slider)
+* textarea (multiline text)
+* drop-down menu (select field)
+* checkboxes
+* radio buttons
+* date
+* submit (yes, a submit button where you can have dynamic text!)
+
 The possibilities are endless!
 
 ## WHAT DOES IT DO? ##
 
-DTX comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
+DTX provides flexibility to WordPress users in creating dynamic forms in Contact Form 7. DTX comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
 
 Don't see the shortcode you need on the list? You can write a [custom one](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/custom-shortcodes/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)! Any shortcode that returns a string or numeric value can be used here. The included shortcodes just cover the most common scenarios, but DTX provides the flexibility for you to grab any value you have access to programmatically.
 
@@ -351,10 +365,31 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 == Upgrade Notice ==
 
-= 3.5.3 =
-Optimized JavaScript used in cache compatibility mode.
+= 4.0.0 =
+Major code changes and added the long-awaited dynamic form tags such as email, textarea, drop-down, and even a select button!
 
 == Changelog ==
+
+= 4.0.0 =
+
+* Major: modified function names
+* Major: deprecated `dynamictext` and `dynamichidden` form tags in favor of `dynamic_text` and `dynamic_hidden`. For more information, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_email` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-email/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_url` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-url/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_tel` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-tel/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_number` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-number/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_range` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-range/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_textarea` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-textarea/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_select` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_radio` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-radio/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_date` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-date/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_submit` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-submit/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dtx_hide_blank` form tag attribute for `dynamic_select`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dtx_disable_blank` form tag attribute for `dynamic_select`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: added mail validation for `dynamic_email` and `dynamic_hidden` for backend configuration. For more information, see the [FAQ](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/frequently-asked-questions/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: added the Akismet feature to DTX text, email, and URL form tags.
+* Update: adjusted how queued values were sent for cache compatibility mode to allow for multiline values in textareas
+* Removed unused utility functions
 
 = 3.5.4 =
 

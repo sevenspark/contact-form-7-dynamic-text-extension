@@ -1,5 +1,26 @@
 == Changelog ==
 
+= 4.0.0 =
+
+* Major: modified function names
+* Major: deprecated `dynamictext` and `dynamichidden` form tags in favor of `dynamic_text` and `dynamic_hidden`. For more information, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_email` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-email/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_url` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-url/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_tel` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-tel/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_number` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-number/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_range` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-range/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_textarea` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-textarea/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_select` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_radio` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-radio/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_date` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-date/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dynamic_submit` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-submit/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dtx_hide_blank` form tag attribute for `dynamic_select`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: introduced `dtx_disable_blank` form tag attribute for `dynamic_select`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: added mail validation for `dynamic_email` and `dynamic_hidden` for backend configuration. For more information, see the [FAQ](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/frequently-asked-questions/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: added the Akismet feature to DTX text, email, and URL form tags.
+* Update: adjusted how queued values were sent for cache compatibility mode to allow for multiline values in textareas
+* Removed unused utility functions
+
 = 3.5.4 =
 
 * Fix: Updated JavaScript to prevent cacheable fields from making unnecessary AJAX requests
