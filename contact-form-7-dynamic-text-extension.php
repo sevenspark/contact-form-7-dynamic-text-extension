@@ -167,7 +167,7 @@ function wpcf7dtx_shortcode_handler($tag)
     $atts = array();
     $atts['type'] = sanitize_key(str_replace(array('dynamic_', 'dynamic'), '', $tag->basetype));
     $atts['name'] = $tag->name;
-    $atts['id'] = $tag->get_id_option();
+    $atts['id'] = strval($tag->get_id_option());
     $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
     $atts['size'] = $tag->get_size_option('40');
     $atts['class'] = explode(' ', wpcf7_form_controls_class($atts['type']));
