@@ -26,6 +26,14 @@
     };
 
     $(function() {
-        $('form.tag-generator-panel input.dtx-option').on('change keyup', wpcf7dtx.taggen.updateOption);
+        $('form.tag-generator-panel .dtx-option').on('change keyup click', wpcf7dtx.taggen.updateOption);
+        $('.contact-form-editor-panel #tag-generator-list a.thickbox.button[href*="inlineId=tag-generator-panel-dynamic_"]').each(function() {
+            var $btn = $(this),
+                name = $btn.text();
+            $btn.addClass('dtx-form-tag');
+            if (name == 'dynamic drop-down menu' || name == 'dynamic checkboxes' || name == 'dynamic radio buttons') {
+                $btn.attr('href', $btn.attr('href').replace('height=500', 'height=750'));
+            }
+        });
     });
 })(jQuery);
