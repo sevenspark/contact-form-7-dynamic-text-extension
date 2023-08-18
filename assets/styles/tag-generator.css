@@ -1,7 +1,46 @@
+.tag-generator-panel[data-id^="dynamic_select"],
+.tag-generator-panel[data-id^="dynamic_checkbox"],
+.tag-generator-panel[data-id^="dynamic_select"] {
+    height: 740px;
+}
+
+#tag-generator-list a.button.dtx-form-tag {
+    border-color: #765cb9;
+    color: #765cb9;
+}
+
 .tag-generator-panel table.form-table th {
     width: 130px;
 }
 
-.tag-generator-panel .control-box input.oneline {
+.tag-generator-panel table.form-table td small {
+    display: block;
+    margin-top: 0.25em;
+}
+
+.tag-generator-panel .control-box input.oneline,
+.tag-generator-panel .control-box input.multiline,
+.tag-generator-panel .control-box textarea {
     width: 100%;
+}
+
+.tag-generator-panel .control-box input[list],
+.tag-generator-panel .control-box input.multiline,
+.tag-generator-panel .control-box textarea {
+    height: 30px;
+    min-height: 30px;
+}
+
+.tag-generator-panel .control-box input.multiline {
+    display: inline-block;
+    /* -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; */
+    resize: vertical;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.tag-generator-panel .control-box textarea {
+    height: 3.5em;
 }
