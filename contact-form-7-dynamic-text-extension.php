@@ -94,10 +94,11 @@ function wpcf7dtx_add_shortcodes()
         $input_type = str_replace('dynamic_', '', $form_tag);
         $tag_types = array($form_tag, "$form_tag*");
         $callback = 'wpcf7dtx_shortcode_handler';
-        $features = array('name-attr' => true, 'dtx_pageload' => true);
+        $features = array_merge(array('name-attr' => true), wpcf7dtx_array_has_key('features', $field, array()));
         switch ($input_type) {
             case 'text':
             case 'hidden':
+                // Add deprecated tags
                 $dep_tag = str_replace('_', '', $form_tag);
                 $tag_types[] = $dep_tag;
                 $tag_types[] = "$dep_tag*";
