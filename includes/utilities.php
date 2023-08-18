@@ -434,47 +434,61 @@ function wpcf7dtx_textarea_html($atts)
  *
  * @since 3.6.0
  *
- * @param array $atts An associative array of select input attributes. Requires `name` key to
- * have a value. Can also accept key/value pairs for `id` (recommended), `placeholder` (used
- * as the first option in the select field with an empty value), `value` (if wanting to set
- * the default selected value), and `required` (set to anything "truthy" to make it required).
+ * @param array $atts An associative array of select input attributes.
  * @param array|string $options Accepts an associative array of key/value pairs to use as the
  * select option's value/label pairs. It also accepts an associative array of associative
  * arrays with the keys being used as option group labels and the array values used as that
  * group's options. It also accepts a string value of HTML already formatted as options or
  * option groups. It also accepts a string value of a self-closing shortcode that is
  * evaluated and its output is either options or option groups.
- * @param bool $echo If true, will echo the HTML output before returning. Default is true.
+ * @param bool $hide_blank Optional. If true, the first blank placeholder option will have the `hidden` attribute added to it. Default is false.
+ * @param bool $disable_blank Optional. If true, the first blank placeholder option will have the `disabled` attribute added to it. Default is false.
  *
- * @return string HTML output of select field or empty string on failure.
+ * @return string HTML output of select field
  */
-function wpcf7dtx_select_html($atts, $options)
+function wpcf7dtx_select_html($atts, $options, $hide_blank = false, $disable_blank = false)
 {
-    // Default field attributes
-    $atts = array_merge(array(
-        'placeholder' => '',
-        'value' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER));
-    $atts['dtx-default'] = $atts['value'];
+    // Attributes specific to HTML creation
+    $atts = array_merge(array('placeholder' => '', 'dtx-default' => ''), array_change_key_case((array)$atts, CASE_LOWER));
     $options_html = ''; // Open options HTML
 
     // If using a placeholder, use it as the text of the first option
     if ($atts['placeholder']) {
         $options_html .= sprintf(
-            '<option value=""%s>%s</option>',
-            empty($atts['value']) ? ' selected' : '',
+            '<option value=""%s%s%s>%s</option>',
+            empty($atts['dtx-default']) ? ' selected' : '',
+            $hide_blank ? ' hidden' : '',
+            $disable_blank ? ' disabled' : '',
             apply_filters('wpcf7dtx_escape', $atts['placeholder'])
         );
     }
     if (is_array($options) && count($options)) {
-        foreach ($options as $option_value => $option_label) {
-            $dynamic_option_value = wpcf7dtx_get_dynamic($option_value);
-            $options_html .= sprintf(
-                '<option value="%1$s"%3$s>%2$s</option>',
-                esc_attr(apply_filters('wpcf7dtx_escape', $dynamic_option_value)),
-                esc_html(apply_filters('wpcf7dtx_escape', wpcf7dtx_get_dynamic($option_label))),
-                $atts['value'] == $dynamic_option_value ? ' selected' : ''
-            );
+        //Check if using option groups
+        if (is_array(array_values($options)[0])) {
+            foreach ($options as $group_name => $opt_group) {
+                $options_html .= sprintf('<optgroup label="%s">', esc_attr(apply_filters('wpcf7dtx_escape', wpcf7dtx_get_dynamic($group_name)))); // Open option group
+                foreach ($opt_group as $option_value => $option_label) {
+                    // Check if option values and groups are dynamic
+                    $dynamic_option_value = wpcf7dtx_get_dynamic($option_value);
+                    $options_html .= sprintf(
+                        '<option value="%1$s"%3$s>%2$s</option>',
+                        esc_attr(apply_filters('wpcf7dtx_escape', $dynamic_option_value)),
+                        esc_html(apply_filters('wpcf7dtx_escape', wpcf7dtx_get_dynamic($option_label))),
+                        $atts['dtx-default'] == $dynamic_option_value ? ' selected' : ''
+                    );
+                }
+                $options_html .= '</optgroup>'; // Close option group
+            }
+        } else {
+            foreach ($options as $option_value => $option_label) {
+                $dynamic_option_value = wpcf7dtx_get_dynamic($option_value);
+                $options_html .= sprintf(
+                    '<option value="%1$s"%3$s>%2$s</option>',
+                    esc_attr(apply_filters('wpcf7dtx_escape', $dynamic_option_value)),
+                    esc_html(apply_filters('wpcf7dtx_escape', wpcf7dtx_get_dynamic($option_label))),
+                    $atts['dtx-default'] == $dynamic_option_value ? ' selected' : ''
+                );
+            }
         }
     } elseif (is_string($options) && !empty($options = trim($options))) {
         $allowed_html = wpcf7dtx_get_allowed_field_properties('option');
