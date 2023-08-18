@@ -421,6 +421,7 @@ function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reve
  */
 function wpcf7dtx_textarea_html($atts)
 {
+    // Attributes specific to HTML creation
     $atts = array_merge(array('value' => ''), array_change_key_case((array)$atts, CASE_LOWER));
     return sprintf(
         '<textarea %s>%s</textarea>',
