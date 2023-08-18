@@ -55,7 +55,7 @@ var $ = jQuery.noConflict(),
                             default:
                                 if (tag) {
                                     // Queue the requests for an AJAX call at the end of init
-                                    dtx.queue.push(raw_value);
+                                    dtx.queue.push({ 'value': raw_value, 'multiline': $input.is('textarea') });
                                 }
                                 return; // Don't continue after queuing it for AJAX
                         }

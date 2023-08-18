@@ -311,16 +311,14 @@ function wpcf7dtx_dynamictext_validation_filter($result, $tag)
 function wpcf7dtx_js_handler()
 {
     $return = array();
-    $shortcodes = wpcf7dtx_array_has_key('shortcodes', $_POST);
-    if (is_array($shortcodes) && count($shortcodes)) {
-        foreach ($shortcodes as $raw_value) {
-            $value = sanitize_text_field(rawurldecode($raw_value));
-            if (!empty($value)) {
-                $value = wpcf7dtx_get_dynamic($value);
-            }
+    $queue = wpcf7dtx_array_has_key('shortcodes', $_POST);
+    if (is_array($queue) && count($queue)) {
+        foreach ($queue as $field) {
+            $multiline = wpcf7dtx_array_has_key('multiline', $field, false);
+            $raw_value = sanitize_text_field(rawurldecode(wpcf7dtx_array_has_key('value', $field)));
             $return[] = array(
                 'raw_value' => esc_attr($raw_value),
-                'value' => esc_attr($value)
+                'value' => esc_attr(wpcf7dtx_get_dynamic($raw_value, false, $multiline ? 'textarea' : 'auto'))
             );
         }
     }
