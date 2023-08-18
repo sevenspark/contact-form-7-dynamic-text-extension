@@ -250,7 +250,7 @@ function wpcf7dtx_shortcode_handler($tag)
 
     // Output the form field HTML
     $wrapper = '<span class="wpcf7-form-control-wrap %1$s" data-name="%1$s">%2$s%3$s</span>';
-    $allowed_html = array('br' => array(), 'span' => array('class' => array(), 'data-name' => array(), 'aria-hidden' => array()));
+    $allowed_html = array('br' => array(), 'span' => array('id' => array(), 'class' => array(), 'data-name' => array(), 'aria-hidden' => array()));
     return wp_kses(sprintf(
         $wrapper,
         esc_attr($tag->name),
