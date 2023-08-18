@@ -355,9 +355,20 @@ This method is the most involved as it requires you to be familiar with the proc
 
 == Screenshots ==
 
-1. Screenshot of the form tag buttons in the form editor of Contact Form 7. A red square highlights the addition of two new buttons for "dynamic text" and "dynamic hidden"
+1. Screenshot of the form tag buttons in the form editor of Contact Form 7. The dynamic buttons appear in purple instead of blue to visually set them apart.
 2. The form tag generator screen for the dynamic text form tag
 3. The form tag generator screen for the dynamic hidden form tag
+4. The form tag generator screen for the dynamic email form tag
+5. The form tag generator screen for the dynamic URL form tag
+6. The form tag generator screen for the dynamic phone number (tel) form tag
+7. The form tag generator screen for the dynamic number spinbox form tag
+8. The form tag generator screen for the dynamic sliding range form tag
+9. The form tag generator screen for the dynamic textarea form tag
+10. The form tag generator screen for the dynamic drop-down menu (select) form tag
+11. The form tag generator screen for the dynamic checkboxes form tag
+12. The form tag generator screen for the dynamic radio buttons form tag
+13. The form tag generator screen for the dynamic date form tag
+14. The form tag generator screen for the dynamic submit form tag
 
 == Frequently Asked Questions ==
 
