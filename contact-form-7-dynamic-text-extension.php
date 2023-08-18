@@ -72,7 +72,10 @@ function wpcf7dtx_config()
             'dynamic_hidden' => array(
                 'title' => __('dynamic hidden', 'contact-form-7-dynamic-text-extension'), //title
                 'options' => array('dtx_pageload'),
-                'description' => __('single-line plain text hidden input field', 'contact-form-7-dynamic-text-extension')
+                'description' => __('single-line plain text hidden input field', 'contact-form-7-dynamic-text-extension'),
+                'features' => array(
+                    'display-hidden' => true // Generates an HTML element that is not visible
+                )
             )
         );
     }
