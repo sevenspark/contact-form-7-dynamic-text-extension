@@ -356,19 +356,6 @@ function wpcf7dtx_format_atts($atts)
  */
 function wpcf7dtx_input_html($atts)
 {
-    // Default field attributes
-    $atts = array_merge(array(
-        'type' => 'text',
-        'value' => '',
-    ), array_change_key_case((array)$atts, CASE_LOWER));
-    if ($atts['type'] == 'checkbox' || $atts['type'] == 'radio') {
-        if ($atts['value']) {
-            $atts['checked'] = 'checked'; // If truthy, always set to this value
-            $atts['dtx-default'] = 'on';
-        } else {
-            $atts['dtx-default'] = 'off';
-        }
-    }
     return sprintf('<input %s />', wpcf7dtx_format_atts($atts));
 }
 
@@ -378,23 +365,28 @@ function wpcf7dtx_input_html($atts)
  * @since 3.6.0
  *
  * @param array $atts An associative array of select input attributes.
- * @param string $label_text The text to display next to the checkbox or radio button.
- * @param bool $label_ui Optional. If true, will place input inside a `<label>` element. Default is true.
- * @param bool $reverse Optional. If true, will reverse the order to display the text label first then the button. Default is false.
+ * @param string $label_text Optional. The text to display next to the checkbox or radio button.
+ * @param bool $label_ui Optional. If true, will place input and label text inside a `<label>` element. Default is true.
+ * @param bool $reverse Optional. If true, will reverse the order to display the text label first then the button. Has no effect if label text is empty. Default is false.
  *
  * @return string HTML output of the checkbox or radio button or empty string on failure.
  */
 function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reverse = false)
 {
+    // Default field attributes
+    $atts = array_merge(array('value' => '', 'dtx-default' => ''), array_change_key_case((array)$atts, CASE_LOWER));
+    if ($atts['value'] && $atts['dtx-default'] && $atts['value'] == $atts['dtx-default']) {
+        $atts['checked'] = 'checked';
+    }
     $input = wpcf7dtx_input_html($atts);
-    if ($label_text) {
+    if (!empty(trim($label_text))) {
         $label_el = $label_ui ? 'span' : 'label'; // If not wrapping with a label element, display it next to it
         $label_text = sprintf(
-            '<%1$s%2$s class="wpcf7-list-item-label">%3$ss</%1$s>',
+            '<%1$s%2$s class="wpcf7-list-item-label">%3$s</%1$s>',
             $label_el,
             // If not wrapping with a label element and the element has an ID attribute, add a `for` attribute
             $label_ui ? '' : (wpcf7dtx_array_has_key('id', $atts) ? ' for="' . esc_attr($atts['id']) . '"' : ''),
-            apply_filters('wpcf7dtx_escape', $label_text)
+            esc_html($label_text)
         );
         if ($reverse) {
             $html = $label_text . $input;
