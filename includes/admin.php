@@ -211,7 +211,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
     }
 
     // Input field - Dynamic placeholder (not available for some fields)
-    if (!in_array($input_type, array('hidden', 'quiz', 'submit', 'reset'))) {
+    if (!in_array($input_type, array('hidden', 'radio', 'checkbox', 'quiz', 'submit', 'reset'))) {
         $placeholder_description = '';
         if (in_array($input_type, array('select', 'checkbox', 'radio'))) {
             $placeholder_label = __('First Option Label', 'contact-form-7-dynamic-text-extension');
@@ -316,7 +316,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
     }
 
     // Input field - Dynamic default value (not available for some fields)
-    if (in_array($input_type, array('select', 'checkbox', 'radio'))) {
+    if (in_array($input_type, array('select'))) {
         $default_input_type = '<input %s />';
         $default_placeholder = '';
         if ($input_type == 'checkbox') {
@@ -328,7 +328,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
         }
         $default_description .= __('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
         printf(
-            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $default_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-default/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $default_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tag-attribute-selected-default/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
             esc_attr($options['content'] . '-default'), // field id
             esc_html__('Selected Default'), // field label
             wpcf7_format_atts(array(
@@ -440,7 +440,7 @@ function wpcf7dtx_tag_generator_dynamictext($contact_form, $options = '')
             esc_html($akismet_desc) // checkbox label
         );
     }
-    
+
     //Close Form-Tag Generator
     printf(
         '</tbody></table></fieldset></div><div class="insert-box"><input type="text" name="%s" class="tag code" readonly="readonly" onfocus="this.select()" /><div class="submitbox"><input type="button" class="button button-primary insert-tag" value="%s" /></div><br class="clear" /></div>',

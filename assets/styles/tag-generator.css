@@ -1,6 +1,6 @@
 .tag-generator-panel[data-id^="dynamic_select"],
 .tag-generator-panel[data-id^="dynamic_checkbox"],
-.tag-generator-panel[data-id^="dynamic_select"] {
+.tag-generator-panel[data-id^="dynamic_radio"] {
     height: 740px;
 }
 
