@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 4.0.1 =
+
+* Fix: addressed bug that prevented translation for cache compatibility description
+
 = 4.0.0 =
 
 * Major: modified function names
