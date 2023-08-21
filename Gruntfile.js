@@ -107,7 +107,7 @@ module.exports = function(grunt) {
                     plugin_slug: '<%= pkg.name %>', // Plugin's slug as indicated by its repository url in https://wordpress.org/plugins/
                     //svn_user: 'tessawatkinsllc', // WordPress repository username
                     build_dir: './_build', // Relative path to build directory
-                    assets_dir: 'wp-assets', // Relative path to assets directory (i.e. banners and screenshots)
+                    assets_dir: './_wp-assets', // Relative path to assets directory (i.e. banners and screenshots)
                     tmp_dir: '../../_svn', // Location where SVN repository is checked out to (Note: Before the the repository is checked out `<tmp_dir>/<plugin_slug>` is deleted.)
                     deploy_trunk: true, // Set to false to skip committing to the trunk directory (i.e. if only committing to assets)
                     deploy_tag: true // Set to false to skip creating a new tag (i.e. if only committing to trunk or assets)
