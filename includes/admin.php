@@ -77,7 +77,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
     $input_type = str_replace('dynamic_', '', $type);
     $utm_source = urlencode(home_url());
     $description = sprintf(
-        __('Generate a form-tag for a %s with a dynamic default value. For more details, see %s fields in the %s.', 'contact-form-7-dynamic-text-extension'),
+        __('Generate a form-tag for %s with a dynamic default value. For more details, see %s fields in the %s.', 'contact-form-7-dynamic-text-extension'),
         esc_html($wpcf7_dynamic_fields_config[$type]['description']), // dynamic description
         // Link to specific form-tag documentation
         sprintf(
@@ -404,7 +404,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
             'class' => 'option'
         )),
         esc_html__('Get the dynamic value after the page has loaded', 'contact-form-7-dynamic-text-extension'), // checkbox label
-        esc_html('May impact page performance.', 'contact-form-7-dynamic-text-extension'), // Small note below input
+        esc_html__('May impact page performance.', 'contact-form-7-dynamic-text-extension'), // Small note below input
         esc_attr($utm_source), //UTM source
         esc_attr($type), //UTM content
         esc_html__('View DTX page load documentation', 'contact-form-7-dynamic-text-extension') //Link label
