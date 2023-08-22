@@ -313,6 +313,22 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
             )),
             esc_html__('Wrap each item with label element', 'contact-form-7-dynamic-text-extension') // checkbox label
         );
+
+        // Input field - Exclusive Checkbox
+        if ($input_type == 'checkbox') {
+            printf(
+                '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+                esc_attr($options['content'] . '-exclusive'), // field id
+                esc_html__('Exclusive', 'contact-form-7-dynamic-text-extension'), // field Label
+                wpcf7_format_atts(array(
+                    'type' => 'checkbox',
+                    'name' => 'exclusive',
+                    'id' => $options['content'] . '-exclusive',
+                    'class' => 'option'
+                )),
+                esc_html__('Make checkboxes exclusive', 'contact-form-7-dynamic-text-extension') // checkbox label
+            );
+        }
     }
 
     // Input field - Dynamic default value (not available for some fields)
