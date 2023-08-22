@@ -50,6 +50,9 @@ add_filter('wpcf7dtx_allow_protocols', 'wpcf7dtx_allow_protocols', 10, 2);
  */
 function wpcf7dtx_sanitize($value = '', $type = 'auto', $protocols = false)
 {
+    if ($type == 'none') {
+        return $value;
+    }
     $value = is_string($value) ? $value : strval($value); // Force string value
     if (!empty($value)) {
         $type = $type == 'auto' ? wpcf7dtx_detect_value_type($value) : sanitize_text_field($type);
@@ -84,6 +87,9 @@ add_filter('wpcf7dtx_sanitize', 'wpcf7dtx_sanitize', 10, 3);
  */
 function wpcf7dtx_escape($value = '', $obfuscate = false, $type = 'auto', $protocols = false)
 {
+    if ($type == 'none') {
+        return $value;
+    }
     $value = apply_filters('wpcf7dtx_sanitize', $value, $type); // Sanitize value
     if (!empty($value)) {
         if ($obfuscate) {
