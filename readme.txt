@@ -377,9 +377,15 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Fixed bug that put all dynamic select options into a single option.
+Just some bug fixes!
 
 == Changelog ==
+
+= 4.0.3 =
+
+* Feature: Added `exclusive` option to checkbox tag generator
+* Fix: addressed bug that put all dynamic checkbox/radio options into one
+* Fix: addressed bug in frontend validator for multiple selected values
 
 = 4.0.2 =
 

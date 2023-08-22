@@ -1,5 +1,11 @@
 == Changelog ==
 
+= 4.0.3 =
+
+* Feature: Added `exclusive` option to checkbox tag generator
+* Fix: addressed bug that put all dynamic checkbox/radio options into one
+* Fix: addressed bug in frontend validator for multiple selected values
+
 = 4.0.2 =
 
 * Fix: addressed bug that put all dynamic select options into one, [see support thread](https://wordpress.org/support/topic/dynamic-select-get-option-values-from-shortcode/)
