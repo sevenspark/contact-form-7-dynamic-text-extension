@@ -377,9 +377,14 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Fixed bug that prevented translation for cache compatibility description
+Fixed bug that put all dynamic select options into a single option.
 
 == Changelog ==
+
+= 4.0.2 =
+
+* Fix: addressed bug that put all dynamic select options into one, [see support thread](https://wordpress.org/support/topic/dynamic-select-get-option-values-from-shortcode/)
+* Update: sanitizing and escaping filters now accept `none` as value for `$type` to bypass. Use with caution.
 
 = 4.0.1 =
 
