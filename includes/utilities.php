@@ -479,14 +479,32 @@ function wpcf7dtx_select_html($atts, $options, $hide_blank = false, $disable_bla
                 $options_html .= '</optgroup>'; // Close option group
             }
         } else {
+            $allowed_html = wpcf7dtx_get_allowed_field_properties('option');
             foreach ($options as $option_value => $option_label) {
-                $dynamic_option_value = wpcf7dtx_get_dynamic($option_value);
-                $options_html .= sprintf(
-                    '<option value="%1$s"%3$s>%2$s</option>',
-                    esc_attr(apply_filters('wpcf7dtx_escape', $dynamic_option_value)),
-                    esc_html(apply_filters('wpcf7dtx_escape', wpcf7dtx_get_dynamic($option_label))),
-                    $atts['dtx-default'] == $dynamic_option_value ? ' selected' : ''
-                );
+                if ($option_value === $option_label) {
+                    // These are identical, just handle it as one, could also be a raw shortcode
+                    $dynamic_option = trim(wpcf7dtx_get_dynamic($option_value, false, 'none')); // Do not sanitize yet, it may have HTML
+                    if (is_string($dynamic_option) && !empty($dynamic_option) && (strpos($dynamic_option, '<option') === 0 || stripos($dynamic_option, '<optgroup') === 0)) {
+                        $options_html .= wp_kses($dynamic_option, $allowed_html); // If it outputs HTML, escape and use them as-is
+                    } elseif ($dynamic_option) {
+                        // Just output the option
+                        $dynamic_option = apply_filters('wpcf7dtx_escape', $dynamic_option);
+                        $options_html .= sprintf(
+                            '<option value="%1$s"%3$s>%2$s</option>',
+                            esc_attr($dynamic_option),
+                            esc_html($dynamic_option),
+                            $atts['dtx-default'] == $dynamic_option ? ' selected' : ''
+                        );
+                    }
+                } else {
+                    $dynamic_option_value = wpcf7dtx_get_dynamic($option_value, false);
+                    $options_html .= sprintf(
+                        '<option value="%1$s"%3$s>%2$s</option>',
+                        esc_attr(apply_filters('wpcf7dtx_escape', $dynamic_option_value)),
+                        esc_html(apply_filters('wpcf7dtx_escape', wpcf7dtx_get_dynamic($option_label))),
+                        $atts['dtx-default'] == $dynamic_option_value ? ' selected' : ''
+                    );
+                }
             }
         }
     } elseif (is_string($options) && !empty($options = trim($options))) {
