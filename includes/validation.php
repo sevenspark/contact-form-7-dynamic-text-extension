@@ -67,9 +67,10 @@ function wpcf7dtx_validation_filter($result, $tag)
                 // Validate each selected choice
                 $result = wpcf7dtx_validate_value($result, sanitize_textarea_field(strval($selection)), $tag, $type);
                 if (!$result->is_valid($tag->name)) {
-                    return $result; // Return if any are invalid
+                    return $result; // Return early if any are invalid
                 }
             }
+            return $result;
         }
         $user_value = sanitize_text_field(strval(implode(' ', $user_value)));
     } elseif ($type == 'textarea') {
