@@ -377,52 +377,16 @@ function wpcf7dtx_shortcode_handler($tag)
     switch ($atts['type']) {
         case 'checkbox':
         case 'radio':
-            $atts['id'] = strval($tag->get_option('id', 'id', true));
-            $wrapper = str_replace('<span class=', '<span%4$s class=', $wrapper); // Insert a 4th parameter for wrapper
-            $group_html = '';
-            if ($count = count($options)) {
-                $reverse = in_array('label_first', $tag->options);
-                $label_ui = in_array('use_label_element', $tag->options);
-                $exclusive = in_array('exclusive', $tag->options);
-                // Loop all the options
-                $group_html = array();
-                $id_prefix = ($atts['id'] ? $atts['id'] : uniqid($atts['name'] . '_')) . '_';
-                $i = 1;
-                foreach ($options as $value => $label) {
-                    $class = array('wpcf7-list-item');
-                    $class[] = sanitize_html_class('wpcf7-list-item-' . $i);
-                    if ($i === 1) {
-                        $class[] = 'first';
-                    }
-                    if ($i === $count) {
-                        $class[] = 'last';
-                    }
-                    if ($exclusive) {
-                        $class[] = 'wpcf7-exclusive-checkbox';
-                    }
-                    $group_html[] = sprintf(
-                        '<span class="%s">%s</span>',
-                        esc_attr(implode(' ', $class)),
-                        wpcf7dtx_checkbox_html(
-                            // Overwrite name attribute
-                            array_merge($atts, array(
-                                'id' => sanitize_html_class($id_prefix . $i), // Always have unique IDs for group items
-                                'name' => $atts['type'] == 'radio' || $exclusive || $count === 1 ? $atts['name'] : $atts['name'] . '[]', // if there are multiple checkboxes and they aren't exclusive, names are an array
-                                //'value' => $atts['value'] && $value == $atts['value'] // Send true/false value
-                            )),
-                            $label,
-                            $label_ui,
-                            $reverse
-                        )
-                    );
-                    $i++;
-                }
-                $group_html = implode('', $group_html);
-            }
             return wp_kses(sprintf(
-                $wrapper,
+                str_replace('<span class=', '<span%4$s class=', $wrapper), // Insert a 4th parameter for wrapper
                 esc_attr($tag->name),
-                $group_html,
+                wpcf7dtx_checkbox_group_html(
+                    $atts,
+                    $options,
+                    in_array('use_label_element', $tag->options),
+                    in_array('label_first', $tag->options),
+                    in_array('exclusive', $tag->options)
+                ),
                 $validation_error,
                 $atts['id'] ? sprintf(' id="%s"', esc_attr($atts['id'])) : '',
             ), array_merge($allowed_html, array(

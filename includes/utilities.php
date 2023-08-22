@@ -409,6 +409,120 @@ function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reve
 }
 
 /**
+ * Create Checkbox Group HTML
+ *
+ * @since 4.0.3
+ *
+ * @param array $atts An associative array of select input attributes.
+ * @param array|string $options Accepts an associative array of key/value pairs to use as the
+ * select option's value/label pairs. It also accepts an associative array of associative
+ * arrays with the keys being used as option group labels and the array values used as that
+ * group's options. It also accepts a string value of HTML already formatted as options or
+ * option groups. It also accepts a string value of a self-closing shortcode that is
+ * evaluated and its output is either options or option groups.
+ * @param bool $label_ui Optional. If true, will place input and label text inside a `<label>` element. Default is true.
+ * @param bool $reverse Optional. If true, will reverse the order to display the text label first then the button. Has no effect if label text is empty. Default is false.
+ *
+ * @return string HTML output of the checkbox or radio button or empty string on failure.
+ */
+function wpcf7dtx_checkbox_group_html($atts, $options, $label_ui = false, $reverse = false, $exclusive = false)
+{
+    $group_html = '';
+    if ($count = count($options)) {
+        // Attributes specific to HTML creation
+        $atts = array_merge(array(
+            'type' => 'checkbox',
+            'id' => '',
+            'name' => '',
+            'value' => '',
+            'dtx-default' => ''
+        ), array_change_key_case((array)$atts, CASE_LOWER));
+
+        // Loop all the options
+        $group_html = array();
+        $id_prefix = ($atts['id'] ? $atts['id'] : uniqid($atts['name'] . '_')) . '_'; // Create prefix from passed ID or Name
+        $i = 1;
+        foreach ($options as $value => $label) {
+            $my_atts = array_merge($atts, array(
+                'id' => sanitize_html_class($id_prefix . $i) // Always have unique IDs for group items
+            ));
+            $dynamic_value = '';
+            $dynamic_label = $label;
+            if ($value && $label && $value === $label) {
+                // These are identical, just handle it as one, could also be a raw shortcode
+                $dynamic_option = trim(wpcf7dtx_get_dynamic($value, false, 'none')); // Do not sanitize yet, it may have HTML
+                if (is_string($dynamic_option) && !empty($dynamic_option) && strpos($dynamic_option, '{') === 0 && strpos($dynamic_option, '}') === strlen($dynamic_option) - 1) {
+                    // If it outputs JSON, try parsing it
+                    try {
+                        $dynamic_option = json_decode($dynamic_option, true);
+                        if (is_array($dynamic_option) && count($dynamic_option)) {
+                            $group_html[] = wpcf7dtx_checkbox_group_html(
+                                $my_atts,
+                                $dynamic_option,
+                                $label_ui,
+                                $reverse,
+                                $exclusive
+                            );
+                        }
+                    } catch (Exception $e) {
+                        // Fail quietly
+                        if (WP_DEBUG && WP_DEBUG_LOG) {
+                            error_log('[Contact Form 7 - Dynamic Text Extension] Error parsing JSON value');
+                            error_log($e->getMessage());
+                        }
+                    }
+                    $i++;
+                    continue; // Continue with next iteration
+                } elseif (is_string($dynamic_option) && !empty($dynamic_option) && esc_html($dynamic_option) != $dynamic_option) {
+                    $group_html[] = force_balance_tags($dynamic_option); // If it outputs HTML, escape and use them as-is
+                    $i++;
+                    continue; // Continue with next iteration
+                } else {
+                    $dynamic_value = $dynamic_option;
+                    $dynamic_label = $dynamic_option;
+                }
+            } else {
+                // These are different, could be raw shortcodes
+                $dynamic_value = wpcf7dtx_get_dynamic($value, false);
+                $dynamic_label = wpcf7dtx_get_dynamic($label, false);
+            }
+            // This could be a single??
+            $class = array('wpcf7-list-item');
+            $class[] = sanitize_html_class('wpcf7-list-item-' . $i);
+            if ($i === 1) {
+                $class[] = 'first';
+            }
+            if ($i === $count) {
+                $class[] = 'last';
+            }
+            if ($exclusive) {
+                $class[] = 'wpcf7-exclusive-checkbox';
+            }
+            if ($dynamic_value && $atts['dtx-default'] && $dynamic_value == $atts['dtx-default']) {
+                $my_atts['checked'] = 'checked';
+            }
+            $group_html[] = sprintf(
+                '<span class="%s">%s</span>',
+                esc_attr(implode(' ', $class)),
+                wpcf7dtx_checkbox_html(
+                    // Overwrite name attribute
+                    array_merge($my_atts, array(
+                        'name' => $atts['type'] == 'radio' || $exclusive || $count === 1 ? $atts['name'] : $atts['name'] . '[]', // if there are multiple checkboxes and they aren't exclusive, names are an array
+                        'value' => $dynamic_value
+                    )),
+                    $dynamic_label,
+                    $label_ui,
+                    $reverse
+                )
+            );
+            $i++;
+        }
+        $group_html = implode('', $group_html);
+    }
+    return $group_html;
+}
+
+/**
  * Create Textarea Field HTML
  *
  * @since 4.0.0
