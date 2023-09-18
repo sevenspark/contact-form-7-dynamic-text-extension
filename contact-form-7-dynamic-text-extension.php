@@ -525,6 +525,20 @@ if (is_admin()) {
 }
 
 /**
- * Included Shortcodes
+ * Built-in Shortcodes
  */
 include_once(WPCF7DTX_DIR . '/includes/shortcodes.php');
+
+/**
+ * Website's custom shortcodes, if they exist
+ */
+$user_files = array(
+    constant('WP_CONTENT_DIR') . '/dtx.php', // e.g. C:\path\to\website\wp-content\dtx.php
+    get_template_directory() . '/dtx.php', // e.g. C:\path\to\website\wp-content/themes/parent-theme/dtx.php
+    get_stylesheet_directory() . '/dtx.php' // e.g. C:\path\to\website\wp-content/themes/child-theme/dtx.php
+);
+foreach ($user_files as $user_file) {
+    if (file_exists($user_file)) {
+        include_once($user_file);
+    }
+}
