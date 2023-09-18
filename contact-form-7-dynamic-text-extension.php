@@ -388,7 +388,7 @@ function wpcf7dtx_shortcode_handler($tag)
                     in_array('exclusive', $tag->options)
                 ),
                 $validation_error,
-                $atts['id'] ? sprintf(' id="%s"', esc_attr($atts['id'])) : '',
+                $atts['id'] ? sprintf(' id="%s"', esc_attr($atts['id'])) : ''
             ), array_merge($allowed_html, array(
                 'label' => array('for' => array()),
                 'input' => wpcf7dtx_get_allowed_field_properties($atts['type'])
