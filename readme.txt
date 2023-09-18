@@ -377,9 +377,16 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Just some bug fixes!
+Extend functionality without losing your work!
 
 == Changelog ==
+
+= 4.1.0 =
+
+* Feature: Looks for a `dtx.php` file in the `wp_content` directory to maybe load custom shortcodes, [see support thread](https://wordpress.org/support/topic/how-to-avoid-custom-shortcodes-being-overwritten-on-updates/)
+* Feature: Looks for a `dtx.php` file in the current active theme's directory to maybe load custom shortcodes, [see support thread](https://wordpress.org/support/topic/how-to-avoid-custom-shortcodes-being-overwritten-on-updates/)
+* Feature: Looks for a `dtx.php` file in the current active theme's parent directory to maybe load custom shortcodes, [see support thread](https://wordpress.org/support/topic/how-to-avoid-custom-shortcodes-being-overwritten-on-updates/)
+* Fix: addressed user reported bug, [see support thread](https://wordpress.org/support/topic/fatal-error-v4-0-3/)
 
 = 4.0.3 =
 
