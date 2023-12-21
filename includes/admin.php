@@ -1,5 +1,8 @@
 <?php
 
+// Include the Settings Page
+include_once( 'admin/settings.php' );
+
 /**
  * Admin Scripts and Styles
  *

@@ -661,3 +661,115 @@ function wpcf7dtx_array_has_key($key, $array = array(), $default = '')
     }
     return $default;
 }
+
+
+/**
+ * Check if admin has allowed access to a specific post meta key
+ * 
+ * @since 4.2.0
+ * 
+ * @param string $meta_key The post meta key to test
+ * 
+ * @return bool True if this key can be accessed, false otherwise
+ */
+function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
+{
+
+    // Get the DTX Settings
+    $settings = get_option('cf7dtx_settings', []);
+
+    // Has access to all metadata been enabled?
+    if( isset($settings['post_meta_allow_all']) && $settings['post_meta_allow_all'] === 'enabled' ){
+        return true;
+    }
+
+    // If not, check the Allow List
+
+    $allowed_keys;
+
+    // No key list from settings
+    if( !isset($settings['post_meta_allow_keys'] ) || !is_string($settings['post_meta_allow_keys'])){
+        $allowed_keys = [];
+    }
+    // Extract allowed keys from setting text area
+    else{
+        $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['post_meta_allow_keys']);
+    }
+
+    // Allow custom filters
+    $allowed_keys = apply_filters( 'wpcf7dtx_post_meta_key_allow_list', $allowed_keys );
+
+    // Check if the key is in the allow list
+    if( in_array( $meta_key, $allowed_keys ) ){
+        return true; // The key is allowed
+    }
+
+    // dtxpretty( $allowed_keys );
+
+    // Everything is disallowed by default
+    return false;
+
+}
+
+/**
+ * Check if admin has allowed access to a specific user data
+ * 
+ * @since 4.2.0
+ * 
+ * @param string $key The user data key to test
+ * 
+ * @return bool True if this key can be accessed, false otherwise
+ */
+function wpcf7dtx_user_data_access_is_allowed( $key )
+{
+
+    // Get the DTX Settings
+    $settings = get_option('cf7dtx_settings', []);
+
+    // Has access to all metadata been enabled?
+    if( isset($settings['user_data_allow_all']) && $settings['user_data_allow_all'] === 'enabled' ){
+        return true;
+    }
+
+    // If not, check the Allow List
+
+    $allowed_keys;
+
+    // No key list from settings
+    if( !isset($settings['user_data_allow_keys'] ) || !is_string($settings['user_data_allow_keys'])){
+        $allowed_keys = [];
+    }
+    // Extract allowed keys from setting text area
+    else{
+        $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['user_data_allow_keys']);
+    }
+
+    // Allow custom filters
+    $allowed_keys = apply_filters( 'wpcf7dtx_user_data_key_allow_list', $allowed_keys );
+    // dtxpretty( $allowed_keys );
+
+    // Check if the key is in the allow list
+    if( in_array( $key, $allowed_keys ) ){
+        return true; // The key is allowed
+    }
+
+
+    // Everything is disallowed by default
+    return false;
+
+}
+
+function dtxpretty ($var, $print=true) {
+	$p = '<pre>'.gettype($var) . ' ' . json_encode(
+	  $var,
+	  JSON_UNESCAPED_SLASHES | 
+	  JSON_UNESCAPED_UNICODE | 
+	  JSON_PRETTY_PRINT | 
+	  JSON_PARTIAL_OUTPUT_ON_ERROR | 
+	  JSON_INVALID_UTF8_SUBSTITUTE 
+	).'</pre>';
+	if( $print ) {
+		echo $p;
+	}
+	return $p;
+}
