@@ -676,7 +676,7 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
 {
 
     // Get the DTX Settings
-    $settings = get_option('cf7dtx_settings', []);
+    $settings = wpcf7dtx_get_settings();get_option('cf7dtx_settings', []);
 
     // Has access to all metadata been enabled?
     if( isset($settings['post_meta_allow_all']) && $settings['post_meta_allow_all'] === 'enabled' ){
@@ -693,7 +693,8 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
     }
     // Extract allowed keys from setting text area
     else{
-        $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['post_meta_allow_keys']);
+        // $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['post_meta_allow_keys']);
+        $allowed_keys = wpcf7dtx_split_newlines( $settings['post_meta_allow_keys']);
     }
 
     // Allow custom filters
@@ -724,7 +725,7 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
 {
 
     // Get the DTX Settings
-    $settings = get_option('cf7dtx_settings', []);
+    $settings = wpcf7dtx_get_settings(); //get_option('cf7dtx_settings', []);
 
     // Has access to all metadata been enabled?
     if( isset($settings['user_data_allow_all']) && $settings['user_data_allow_all'] === 'enabled' ){
@@ -741,7 +742,8 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
     }
     // Extract allowed keys from setting text area
     else{
-        $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['user_data_allow_keys']);
+        // $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['user_data_allow_keys']);
+        $allowed_keys = wpcf7dtx_split_newlines($settings['user_data_allow_keys']);
     }
 
     // Allow custom filters
@@ -759,15 +761,34 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
 
 }
 
-function dtxpretty ($var, $print=true) {
-	$p = '<pre>'.gettype($var) . ' ' . json_encode(
-	  $var,
-	  JSON_UNESCAPED_SLASHES | 
-	  JSON_UNESCAPED_UNICODE | 
-	  JSON_PRETTY_PRINT | 
-	  JSON_PARTIAL_OUTPUT_ON_ERROR | 
-	  JSON_INVALID_UTF8_SUBSTITUTE 
-	).'</pre>';
+function wpcf7dtx_split_newlines( $str ){
+    return preg_split('/\r\n|\r|\n/', $str);
+}
+
+function wpcf7dtx_get_settings(){
+    return get_option('cf7dtx_settings', []);
+}
+function wpcf7dtx_update_settings($settings){
+    update_option( 'cf7dtx_settings', $settings );
+}
+
+function dtxpretty ($var, $print=true, $privobj=false) {
+
+    $type = gettype($var);
+
+    if( $privobj && $type === 'object' ){
+        $p = '<pre>'.print_r($var, true).'</pre>';
+    }
+    else {
+        $p = '<pre>'.$type . ' ' . json_encode(
+            $var,
+            JSON_UNESCAPED_SLASHES | 
+            JSON_UNESCAPED_UNICODE | 
+            JSON_PRETTY_PRINT | 
+            JSON_PARTIAL_OUTPUT_ON_ERROR | 
+            JSON_INVALID_UTF8_SUBSTITUTE 
+            ).'</pre>';
+    }
 	if( $print ) {
 		echo $p;
 	}
