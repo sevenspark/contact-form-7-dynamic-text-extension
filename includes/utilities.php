@@ -791,6 +791,44 @@ function wpcf7dtx_update_settings($settings){
     update_option( 'cf7dtx_settings', $settings );
 }
 
+
+/**
+ * Outputs a useful PHP Warning message to users on how to allow-list denied meta and user keys
+ * 
+ * @param string $key The post meta or user key to which access is currently denied
+ * @param string $type Either 'post_meta' or 'user_data', used to display an appropriate message to the user
+ */
+function wpcf7dtx_access_denied_alert( $key, $type ){
+
+    $shortcode = '';
+    $list_name = '';
+
+    switch( $type ){
+        case 'post_meta':
+            $shortcode = 'CF7_get_custom_field';
+            $list_name = __('Meta Key Allow List', 'contact-form-7-dynamic-text-extension');
+            break;
+        case 'user_data':
+            $shortcode = 'CF7_get_current_user';
+            $list_name = __('User Data Key Allow List', 'contact-form-7-dynamic-text-extension');
+            break;
+        default: 
+    }
+
+    $settings_page_url = admin_url('admin.php?page=cf7dtx_settings');
+
+    $msg = sprintf(
+        __('CF7 DTX: Access denied to key: "%1$s" in dynamic contact form shortcode: [%2$s].  Please add this key to the %3$s at %4$s','contact-form-7-dynamic-text-extension'),
+        $key,
+        $shortcode,
+        $list_name,
+        $settings_page_url
+    );
+
+    trigger_error( $msg, E_USER_WARNING );
+}
+
+
 /**
  * Helper function to output array and object data
  */

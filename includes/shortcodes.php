@@ -217,8 +217,8 @@ function wpcf7dtx_get_custom_field($atts = array())
 
     // If this key can't be accessed
     if( !wpcf7dtx_post_meta_key_access_is_allowed( $key ) ){
-        // echo $key . ' access disallowed';
-        // TODO notices
+        // Trigger a warning if a denied key is in use
+        wpcf7dtx_access_denied_alert( $key, 'post_meta' );
         return '';
     }
 
@@ -354,8 +354,8 @@ function wpcf7dtx_get_current_user($atts = array())
 
         // If this key can't be accessed
         if( !wpcf7dtx_user_data_access_is_allowed( $key ) ){
-            // echo $key . ' access disallowed';
-            // TODO notices
+            // Trigger a warning if a denied key is in use
+            wpcf7dtx_access_denied_alert( $key, 'user_data' );
             return '';
         }
 
