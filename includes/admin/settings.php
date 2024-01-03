@@ -390,9 +390,7 @@ class CF7DTX_Plugin_Settings {
                                     $atts = shortcode_parse_atts($val);
                                     if( $atts ){
                                         // Grab the meta key
-                                        $meta_key = $atts['meta_key'];
-    
-                                        // TODO check allowlist?
+                                        $meta_key = $atts['key'];
     
                                         // Add meta key to the list
                                         if( $meta_key ){
