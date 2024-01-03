@@ -561,6 +561,9 @@ class CF7DTX_Plugin_Settings {
 		// Update with new settings
 		wpcf7dtx_update_settings( $settings );
 
+		// Mark as intervention complete
+		wpcf7dtx_set_update_access_scan_check_status( 'intervention_completed' );
+
 		return [
 			'user' => $user_keys,
 			'meta' => $meta_keys,
