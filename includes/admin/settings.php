@@ -90,7 +90,16 @@ class CF7DTX_Plugin_Settings {
 			return;
 		}
 
-
+		if( isset( $_GET['dismiss-access-keys-notice'] )){
+			wpcf7dtx_set_update_access_scan_check_status('notice_dismissed');
+			?>
+			<div class="notice notice-success dtx-notice">
+				<p><?php _e('Notice Dismissed.  You can run the scan any time from the CF7 DTX settings page', 'contact-form-7-dynamic-text-extension'); ?></p>
+				<p><?php $this->render_back_to_settings_button(); ?></p>
+			</div>
+			<?php
+			return;
+		}
         if( isset( $_GET['scan-meta-keys'] )){
 
 			
@@ -107,7 +116,8 @@ class CF7DTX_Plugin_Settings {
 			}
 
 			else{
-				$results = $this->scan_forms();
+				$results = wpcf7dtx_scan_forms_for_access_keys(); 
+				//$this->scan_forms();
 				// dtxpretty($results);
 
 				?>
@@ -152,7 +162,7 @@ class CF7DTX_Plugin_Settings {
                     ?>
                 </form>
 
-                <a href="<?php echo admin_url('admin.php?page=cf7dtx_settings&scan-meta-keys') ?>">Scan Forms for Post Meta and User Data Keys</a>
+                <a href="<?php echo wpcf7dtx_get_admin_scan_screen_url(); ?>">Scan Forms for Post Meta and User Data Keys</a>
             </div>
             <?php
         }
@@ -350,82 +360,14 @@ class CF7DTX_Plugin_Settings {
 
 	}
 
-    function scan_forms(){
-        
-        $found = [];
-
-        if( function_exists('wpcf7_contact_form') ){
-            $forms = get_posts([
-                'post_type' => 'wpcf7_contact_form',
-            ]);
-            
-            // Loop through forms
-            foreach( $forms as $form ){
-    
-                // Search for the custom fields shortcode -- //TODO and user
-                if( str_contains($form->post_content, 'CF7_get_custom_field') || 
-					str_contains($form->post_content, 'CF7_get_current_user')
-                ){
-					$cf7 = wpcf7_contact_form( $form->ID );
-    
-                    $found[$form->ID] = [
-						'title' => $cf7->title(),
-						'meta_keys' => [],
-						'user_keys' => [],
-						'admin_url' => admin_url( "admin.php?page=wpcf7&post={$form->ID}&action=edit" ),
-					];
-                    
-					// dtxpretty($cf7, true, true);
-                    $tags = $cf7->scan_form_tags();
-                    
-                    // Check each tag
-                    foreach( $tags as $tag ){
-                        // Find dynamic tags
-                        if( str_starts_with( $tag->type, 'dynamic' ) ){
-                            // Check each value
-                            foreach( $tag->values as $val ){
-                                // Find CF7_get_custom_field
-                                if( str_starts_with( $val, 'CF7_get_custom_field' )){
-                                    // Parse out the shortcode atts
-                                    $atts = shortcode_parse_atts($val);
-                                    if( $atts ){
-                                        // Grab the meta key
-                                        $meta_key = $atts['key'];
-    
-                                        // Add meta key to the list
-                                        if( $meta_key ){
-											$found[$form->ID]['meta_keys'][] = $meta_key;
-										}
-                                    }
-                                }
-                                // Find CF7_get_current_user
-								if( str_starts_with( $val, 'CF7_get_current_user' )){
-									 // Parse out the shortcode atts
-									 $atts = shortcode_parse_atts($val);
-									 if( $atts ){
-										// dtxpretty($atts);
-										// Grab user data key
-										$key = $atts['key'];
-										if( $key ){
-											$found[$form->ID]['user_keys'][] = $key;
-										}
-									 }
-								}
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        // dtxpretty( $found );
-        return $found;
-
-    }
-
     function render_scan_results( $results ){
 
+		// No forms are using the shortcodes in question
 		if( !count($results) ){
-			echo '<p>'.__('Scan complete. No keys detected.', 'contact-form-7-dynamic-text-extension').'</p>';
+
+			wpcf7dtx_set_update_access_scan_check_status( 'intervention_not_required' );
+			
+			echo '<div class="notice notice-success dtx-notice"><p>'.__('Scan complete. No keys detected.', 'contact-form-7-dynamic-text-extension').'</p></div>';
 			$this->render_back_to_settings_button();
 			return;
 		}
@@ -434,11 +376,43 @@ class CF7DTX_Plugin_Settings {
 		$already_allowed_meta_keys = wpcf7dtx_split_newlines( $settings['post_meta_allow_keys'] );
 		$already_allowed_user_keys = wpcf7dtx_split_newlines( $settings['user_data_allow_keys'] );
 
+		// Check the results ahead of time to see if all of the keys are already in the allow list - if so, nothing to do
+		$forms = $results['forms'];
+		$all_keys_allowed = true;
+		foreach( $forms as $form_id => $r ){
+			if( count($r['meta_keys'])){
+				foreach( $r['meta_keys'] as $key ){
+					if( !in_array( $key, $already_allowed_meta_keys ) ){
+						$all_keys_allowed = false;
+						break;
+					}
+				}
+				if( $all_keys_allowed === false ) break;
+			}
+			if( count($r['user_keys'])){
+				foreach( $r['user_keys'] as $key ){
+					if( !in_array( $key, $already_allowed_user_keys ) ){
+						$all_keys_allowed = false;
+						break;
+					}
+				}
+				if( $all_keys_allowed === false ) break;
+			}
+		}
+
+		if( $all_keys_allowed ){
+			wpcf7dtx_set_update_access_scan_check_status( 'intervention_completed' );
+		}
+
+		
+
 
 		?>
 		<style>
-			.postbox{
+			.postbox,
+			.dtx-notice{
 				max-width:600px;
+				box-sizing:border-box;
 			}
 			.postbox-header{
 				padding:1em;
@@ -452,18 +426,25 @@ class CF7DTX_Plugin_Settings {
 			}
 		</style>
 		<div>
-			<p><?php _e('Shortcodes accessing Post Meta or User Data were detected in the following forms.', 'contact-form-7-dynamic-text-extension'); ?></p>
-			<p><?php _e('Select meta and/or user keys to add them to the relevant allow list.', 'contact-form-7-dynamic-text-extension'); ?></p>
-			<p><?php _e('Note that keys are already in the allow list are displayed but marked as already selected.', 'contact-form-7-dynamic-text-extension'); ?></p>
 
+			<?php if( $all_keys_allowed ): ?>
+				<div class="notice notice-success dtx-notice"><p><?php _e('Scan complete. All keys detected are already on allow list.  No action necessary.', 'contact-form-7-dynamic-text-extension'); ?></p></div>
+			<?php else: ?>
+				<div class="notice notice-error dtx-notice" style="width:600px; box-sizing:border-box;">
+					<p><strong><?php _e('Shortcodes accessing potentially sensitive Post Meta or User Data were detected in the forms listed below.', 'contact-form-7-dynamic-text-extension'); ?></strong></p>
+					<p><?php _e('Only keys on the allow list will return their value when accessed.  Attempting to access keys that are not on the allow list via DTX shortcodes will return an empty string and throw a warning message.', 'contact-form-7-dynamic-text-extension'); ?></p>
+					<p><?php _e('Review the keys below and confirm that you want to allow access, then select meta and/or user keys to add them to the relevant allow list.  Any keys for sensitive data should be removed by editing your contact form.', 'contact-form-7-dynamic-text-extension'); ?></p>
+					<p><?php _e('Note that keys which are already in the allow list are displayed but marked as already selected.', 'contact-form-7-dynamic-text-extension'); ?></p>
+				</div>
+			<?php endif; ?>
+			
 			<form action="admin.php?page=cf7dtx_settings&scan-meta-keys" method="post">
-                    
+				
 				<?php
 
-					settings_fields( 'cf7dtx_settings' );					
+					settings_fields( 'cf7dtx_settings' );
 
-					foreach( $results as $form_id => $r ){
-						// dtxpretty($r);
+					foreach( $results['forms'] as $form_id => $r ){
 						?>
 							<div class="postbox" >
 								<div class="postbox-header">
@@ -526,7 +507,7 @@ class CF7DTX_Plugin_Settings {
 					}
 				?>
 
-				<?php submit_button( __('Add Selected Keys to Allow Lists', 'contact-form-7-dynamic-text-extension'), 'primary', 'save-allows' ); ?>
+				<?php if( !$all_keys_allowed ) submit_button( __('Add Selected Keys to Allow Lists', 'contact-form-7-dynamic-text-extension'), 'primary', 'save-allows' ); ?>
 			</form>
 			<?php $this->render_back_to_settings_button(); ?>
 		</div>
@@ -606,7 +587,7 @@ class CF7DTX_Plugin_Settings {
 
 	function render_back_to_settings_button(){
 		?>
-		<a href="<?php echo admin_url('admin.php?page=cf7dtx_settings'); ?>">&laquo; <?php _e('Back to Settings', 'contact-form-7-dynamic-text-extension'); ?></a>
+		<a href="<?php echo wpcf7dtx_get_admin_settings_screen_url(); ?>">&laquo; <?php _e('Back to Settings', 'contact-form-7-dynamic-text-extension'); ?></a>
 		<?php
 	}
 
@@ -672,3 +653,93 @@ $fields = [
 
 new CF7DTX_Plugin_Settings($sections, $fields);
 
+
+function wpcf7dtx_get_admin_scan_screen_url(){
+	return admin_url('admin.php?page=cf7dtx_settings&scan-meta-keys');
+}
+function wpcf7dtx_get_admin_settings_screen_url(){
+	return admin_url('admin.php?page=cf7dtx_settings');
+}
+
+
+/**
+ * Search all CF7 forms for 
+ */
+function wpcf7dtx_scan_forms_for_access_keys(){
+        
+	$found = [
+		'forms' => [],
+	];
+	$forms = [];
+
+	if( function_exists('wpcf7_contact_form') ){
+		$cf7forms = get_posts([
+			'post_type' => 'wpcf7_contact_form',
+			'numberposts' => 20, // sanity check
+		]);
+
+		$found['forms_scanned'] = count($cf7forms);
+		
+		// Loop through forms
+		foreach( $cf7forms as $form ){
+
+			// Search for the custom fields shortcode -- //TODO and user
+			if( str_contains($form->post_content, 'CF7_get_custom_field') || 
+				str_contains($form->post_content, 'CF7_get_current_user')
+			){
+				$cf7 = wpcf7_contact_form( $form->ID );
+
+				$forms[$form->ID] = [
+					'title' => $cf7->title(),
+					'meta_keys' => [],
+					'user_keys' => [],
+					'admin_url' => admin_url( "admin.php?page=wpcf7&post={$form->ID}&action=edit" ),
+				];
+				
+				// dtxpretty($cf7, true, true);
+				$tags = $cf7->scan_form_tags();
+				
+				// Check each tag
+				foreach( $tags as $tag ){
+					// Find dynamic tags
+					if( str_starts_with( $tag->type, 'dynamic' ) ){
+						// Check each value
+						foreach( $tag->values as $val ){
+							// Find CF7_get_custom_field
+							if( str_starts_with( $val, 'CF7_get_custom_field' )){
+								// Parse out the shortcode atts
+								$atts = shortcode_parse_atts($val);
+								if( $atts ){
+									// Grab the meta key
+									$meta_key = $atts['key'];
+
+									// Add meta key to the list
+									if( $meta_key ){
+										$forms[$form->ID]['meta_keys'][] = $meta_key;
+									}
+								}
+							}
+							// Find CF7_get_current_user
+							if( str_starts_with( $val, 'CF7_get_current_user' )){
+								 // Parse out the shortcode atts
+								 $atts = shortcode_parse_atts($val);
+								 if( $atts ){
+									// dtxpretty($atts);
+									// Grab user data key
+									$key = $atts['key'];
+									if( $key ){
+										$forms[$form->ID]['user_keys'][] = $key;
+									}
+								 }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	$found['forms'] = $forms;
+	// dtxpretty( $found );
+	return $found;
+
+}
