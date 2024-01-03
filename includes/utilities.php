@@ -761,17 +761,39 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
 
 }
 
+/** 
+ * Used to parse strings stored in the database that are from text areas with one element per line into an array of strings
+ * 
+ * @param string $str The multi-line string to be parsed into an array
+ * 
+ * @return array Array of parsed strings
+ */
 function wpcf7dtx_split_newlines( $str ){
     return preg_split('/\r\n|\r|\n/', $str);
 }
 
+/**
+ * Gets the CF7 DTX settings field from the WP options table.  Returns an empty array if option has not previously been set
+ * 
+ * @return array The settings array
+ */
 function wpcf7dtx_get_settings(){
     return get_option('cf7dtx_settings', []);
 }
+
+/**
+ * Updates the CF7 DTX settings in the WP options table
+ * 
+ * @param array $settings The settings array
+ * 
+ */
 function wpcf7dtx_update_settings($settings){
     update_option( 'cf7dtx_settings', $settings );
 }
 
+/**
+ * Helper function to output array and object data
+ */
 function dtxpretty ($var, $print=true, $privobj=false) {
 
     $type = gettype($var);
