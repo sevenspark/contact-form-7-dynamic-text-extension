@@ -247,3 +247,93 @@ function wpcf7dtx_validate($validator)
     }
 }
 add_action('wpcf7_config_validator_validate', 'wpcf7dtx_validate');
+
+/**
+ * Validate Field Value for Sensitive Data
+ *
+ * @since 5.0.0
+ *
+ * @see https://developer.wordpress.org/reference/functions/get_bloginfo/#description
+ *
+ * @param string $content The string to validate.
+ *
+ * @return array An associative array with keys `status` (bool), `shortcode` (string), and `key` (string).
+ * The value of `status` is true if the content is a shortcode that is attempting to access sensitive data. False
+ * otherwise. The value of `shortcode` is the the shortcode that is making the attempt if `status` is true. The
+ * value of `key` is the shortcode's `key` attribute of the attempt being made if `status` is true.
+ */
+function wpcf7dtx_validate_sensitive_value($content)
+{
+    $return = array(
+        'status' => false,
+        'shortcode' => '',
+        'key' => ''
+    );
+    // Get the `key` attribute
+    if (!empty($key = sanitize_text_field(wpcf7dtx_array_has_key('key', shortcode_parse_atts($content))))) {
+        $return['key'] = $key;
+        $content = trim($content);
+        $return['shortcode'] = sanitize_title(substr($content, 0, strpos($content, ' ')));
+
+        // Check if key is supposed to be public or hidden
+        if (str_starts_with($key, '_')) {
+            // This is supposed to be hidden, flag it as sensitive
+            $return['status'] = true;
+            return $return;
+        }
+
+        // Check output variable type
+        $output = do_shortcode('[' . $content . ']');
+        if (is_array($output) || is_object($output)) {
+            // The return value is an array or object, flag it as sensitive
+            $return['status'] = true;
+            return $return;
+        }
+
+        // TO-DO: make function to retrieve this configuration?
+        $dtx_shortcodes = array(
+            'CF7_bloginfo' => array(
+                'allow' => array(), // TO-DO: get my allow list
+                'disallow' => array(
+                    // TO-DO: get my disallow list
+                    'admin_email' // Disallow to prevent revealing site admin
+                )
+            ),
+            'CF7_get_current_var' => array(
+                'allow' => array(), // TO-DO: get allowlist (same as CF7_get_custom_field)
+                'disallow' => array() // TO-DO: get disallow list (same as CF7_get_custom_field)
+            ),
+            'CF7_get_custom_field' => array(
+                'allow' => array(), // TO-DO: get my allow list
+                'disallow' => array() // TO-DO: get my disallow list
+            ),
+            'CF7_get_current_user' => array(
+                'allow' => array(), // TO-DO: get my allow list
+                'disallow' => array(
+                    // TO-DO: get my disallow list
+                    'user_login', // Disallow to prevent revealing login info
+                    'user_pass', // Disallow to prevent revealing login info
+                    'user_email', // Disallow to prevent revealing login info
+                    'user_activation_key', // Disallow to prevent revealing login info
+                    'user_level', // Disallow to prevent revealing admin/editor status
+                    'cap_key', // Disallow to prevent revealing user capabilities
+                )
+            )
+        );
+
+        // Check against allow/disallow lists
+        foreach ($dtx_shortcodes as $shortcode => $lists) {
+            if (str_starts_with($content, $shortcode)) {
+                if (in_array($key, $lists['disallow'])) {
+                    // If this key is disallowed and not explicity allowed, flag it as sensitive
+                    if (!in_array($key, $lists['allow'])) {
+                        $return['status'] = true;
+                        $return['shortcode'] = $shortcode;
+                        return $return;
+                    }
+                }
+            }
+        }
+    }
+    return $return;
+}
