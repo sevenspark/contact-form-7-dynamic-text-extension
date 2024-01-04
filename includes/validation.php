@@ -183,6 +183,67 @@ function wpcf7dtx_validate_value($result, $value, $tag, $type = '')
  */
 function wpcf7dtx_validate($validator)
 {
+    // Check for sensitive form tags
+    $manager = WPCF7_FormTagsManager::get_instance();
+    $contact_form = $validator->contact_form();
+    $form = $contact_form->prop('form');
+    if (wpcf7_autop_or_not()) {
+        $form = $manager->replace_with_placeholders($form);
+        $form = wpcf7_autop($form);
+        $form = $manager->restore_from_placeholders($form);
+    }
+    $form = $manager->replace_all($form);
+    $tags = $manager->get_scanned_tags();
+    foreach ($tags as $tag) {
+        /** @var WPCF7_FormTag $tag */
+
+        // Only validate DTX formtags
+        if (in_array($tag->basetype, array_merge(
+            array('dynamictext', 'dynamichidden'), // Deprecated DTX form tags
+            array_keys(wpcf7dtx_config()) // DTX form tags
+        ))) {
+            // Check value for sensitive data
+            $default = $tag->get_option('defaultvalue', '', true);
+            if (!$default) {
+                $default = $tag->get_default_option(strval(reset($tag->values)));
+            }
+            if (
+                !empty($value = trim(wpcf7_get_hangover($tag->name, $default))) && // Has value
+                ($result = wpcf7dtx_validate_sensitive_value($value))['status'] // Has sensitive data
+            ) {
+                $validator->add_error('form.body', 'dtx_disallowed', array(
+                    'message' => sprintf(
+                        __('The %s formtag named "%s" is attempting to reveal potentially sensitive data in the default value. If this is correct, please add "%s" to the %s allowlist in the settings.', 'contact-form-7-dynamic-text-extension'),
+                        esc_html($tag->basetype),
+                        esc_html($tag->name),
+                        esc_html($result['key']),
+                        esc_html($result['key'] == 'CF7_get_current_user' ? __('User Data', 'contact-form-7-dynamic-text-extension') : __('Meta Key', 'contact-form-7-dynamic-text-extension'))
+                    ),
+                    'link' => esc_url(admin_url('admin.php?page=cf7dtx_settings'))
+                ));
+            }
+
+            // Check placeholder for sensitive data
+            if (
+                ($tag->has_option('placeholder') || $tag->has_option('watermark')) && // Using placeholder
+                !empty($placeholder = trim(html_entity_decode(urldecode($tag->get_option('placeholder', '', true)), ENT_QUOTES))) && // Has value
+                ($result = wpcf7dtx_validate_sensitive_value($value))['status'] // Has sensitive data
+            ) {
+                $validator->add_error('form.body', 'dtx_disallowed', array(
+                    'message' => sprintf(
+                        __('The %s formtag named "%s" is attempting to reveal potentially sensitive data in the default value. If this is correct, please add "%s" to the %s allowlist in the settings.', 'contact-form-7-dynamic-text-extension'),
+                        esc_html($tag->basetype),
+                        esc_html($tag->name),
+                        esc_html($result['key']),
+                        esc_html($result['key'] == 'CF7_get_current_user' ? __('User Data', 'contact-form-7-dynamic-text-extension') : __('Meta Key', 'contact-form-7-dynamic-text-extension'))
+                    ),
+                    'link' => esc_url(admin_url('admin.php?page=cf7dtx_settings'))
+                ));
+            }
+        }
+    }
+
+    // Validate email address
     if (!$validator->is_valid()) {
         $contact_form = null;
         $form_tags = null;
