@@ -373,8 +373,8 @@ class CF7DTX_Plugin_Settings {
 		}
 
 		$settings = wpcf7dtx_get_settings();
-		$already_allowed_meta_keys = wpcf7dtx_split_newlines( $settings['post_meta_allow_keys'] );
-		$already_allowed_user_keys = wpcf7dtx_split_newlines( $settings['user_data_allow_keys'] );
+		$already_allowed_meta_keys = wpcf7dtx_split_newlines(wpcf7dtx_array_has_key('post_meta_allow_keys', $settings));
+		$already_allowed_user_keys = wpcf7dtx_split_newlines(wpcf7dtx_array_has_key('user_data_allow_keys', $settings));
 
 		// Check the results ahead of time to see if all of the keys are already in the allow list - if so, nothing to do
 		$forms = $results['forms'];
