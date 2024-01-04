@@ -227,11 +227,11 @@ function wpcf7dtx_validate($validator)
             if (
                 ($tag->has_option('placeholder') || $tag->has_option('watermark')) && // Using placeholder
                 !empty($placeholder = trim(html_entity_decode(urldecode($tag->get_option('placeholder', '', true)), ENT_QUOTES))) && // Has value
-                ($result = wpcf7dtx_validate_sensitive_value($value))['status'] // Has sensitive data
+                ($result = wpcf7dtx_validate_sensitive_value($placeholder))['status'] // Has sensitive data
             ) {
                 $validator->add_error('form.body', 'dtx_disallowed', array(
                     'message' => sprintf(
-                        __('The %s formtag named "%s" is attempting to reveal potentially sensitive data in the default value. If this is correct, please add "%s" to the %s allowlist in the settings.', 'contact-form-7-dynamic-text-extension'),
+                        __('The %s formtag named "%s" is attempting to reveal potentially sensitive data in the placeholder value. If this is correct, please add "%s" to the %s allowlist in the settings.', 'contact-form-7-dynamic-text-extension'),
                         esc_html($tag->basetype),
                         esc_html($tag->name),
                         esc_html($result['key']),
