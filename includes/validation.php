@@ -33,6 +33,22 @@ function wpcf7dtx_messages($messages)
 add_filter('wpcf7_messages', 'wpcf7dtx_messages');
 
 /**
+ * Add DTX Error Code to Config Validator
+ *
+ * @since 5.0.0
+ *
+ * @param array $error_codes A sequential array of available error codes in Contact Form 7.
+ *
+ * @return array A modified sequential array of available error codes in Contact Form 7.
+ */
+function wpcf7dtx_config_validator_available_error_codes($error_codes)
+{
+    $dtx_errors = array('dtx_disallowed');
+    return array_merge($error_codes, $dtx_errors);
+}
+add_filter('wpcf7_config_validator_available_error_codes', 'wpcf7dtx_config_validator_available_error_codes');
+
+/**
  * Validate DTX Form Fields
  *
  * Frontend validation for DTX form tags
