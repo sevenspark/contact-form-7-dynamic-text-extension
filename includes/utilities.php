@@ -694,7 +694,7 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
     // Extract allowed keys from setting text area
     else{
         // $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['post_meta_allow_keys']);
-        $allowed_keys = wpcf7dtx_split_newlines( $settings['post_meta_allow_keys']);
+        $allowed_keys = wpcf7dtx_parse_allowed_keys( $settings['post_meta_allow_keys'] );
     }
 
     // Allow custom filters
@@ -711,6 +711,7 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
     return false;
 
 }
+
 
 /**
  * Check if admin has allowed access to a specific user data
@@ -743,7 +744,7 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
     // Extract allowed keys from setting text area
     else{
         // $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['user_data_allow_keys']);
-        $allowed_keys = wpcf7dtx_split_newlines($settings['user_data_allow_keys']);
+        $allowed_keys = wpcf7dtx_parse_allowed_keys($settings['user_data_allow_keys']);
     }
 
     // Allow custom filters
@@ -759,6 +760,23 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
     // Everything is disallowed by default
     return false;
 
+}
+
+
+/**
+ * Take the string saved in the options array from the allow list textarea and parse it into an array by newlines.
+ * Also strip whitespace
+ * 
+ * @param string $allowlist The string of allowed keys stored in the DB
+ * 
+ * @return array Array of allowed keys
+ */
+function wpcf7dtx_parse_allowed_keys( $allowlist ){
+    // Split by newlines
+    $keys = wpcf7dtx_split_newlines( $allowlist );
+    // Trim whitespace
+    $keys = array_map( 'trim' , $keys );
+    return $keys;
 }
 
 /** 

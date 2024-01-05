@@ -393,8 +393,8 @@ class CF7DTX_Plugin_Settings {
 		}
 
 		$settings = wpcf7dtx_get_settings();
-		$already_allowed_meta_keys = wpcf7dtx_split_newlines(wpcf7dtx_array_has_key('post_meta_allow_keys', $settings));
-		$already_allowed_user_keys = wpcf7dtx_split_newlines(wpcf7dtx_array_has_key('user_data_allow_keys', $settings));
+		$already_allowed_meta_keys = wpcf7dtx_parse_allowed_keys(wpcf7dtx_array_has_key('post_meta_allow_keys', $settings));
+		$already_allowed_user_keys = wpcf7dtx_parse_allowed_keys(wpcf7dtx_array_has_key('user_data_allow_keys', $settings));
 
 		// Check the results ahead of time to see if all of the keys are already in the allow list - if so, nothing to do
 		$forms = $results['forms'];
@@ -487,7 +487,7 @@ class CF7DTX_Plugin_Settings {
 													$name = "dtx_meta_key/$key";
 													?>
 													<div>
-														<label for="<?php echo $name; ?>" <?php if( $already_allowed ) echo 'class="key-disabled" title="Already in Allow List"'; ?>>
+														<label <?php if( $already_allowed ) echo 'class="key-disabled" title="Already in Allow List"'; ?>>
 															<input 
 																name="<?php echo $name;?>" 
 																id="<?php echo $name;?>" 
@@ -512,7 +512,7 @@ class CF7DTX_Plugin_Settings {
 												$already_allowed = in_array( $key, $already_allowed_user_keys );
 												?>
 												<div>
-													<label for="<?php echo $name; ?>" <?php if( $already_allowed ) echo 'class="key-disabled" title="Already in Allow List"'; ?>>
+													<label <?php if( $already_allowed ) echo 'class="key-disabled" title="Already in Allow List"'; ?>>
 														<input 
 															name="<?php echo $name; ?>" 
 															id="<?php echo $name; ?>" 
@@ -568,7 +568,7 @@ class CF7DTX_Plugin_Settings {
 		// Meta Data
 		if( count( $meta_keys ) ){
 			// Get already saved values
-			$post_meta_allow_keys = isset( $settings['post_meta_allow_keys'] ) ? wpcf7dtx_split_newlines($settings['post_meta_allow_keys']) : [];
+			$post_meta_allow_keys = isset( $settings['post_meta_allow_keys'] ) ? wpcf7dtx_parse_allowed_keys($settings['post_meta_allow_keys']) : [];
 			// Merge with new values
 			$new = array_unique( array_merge( $post_meta_allow_keys, $meta_keys ));
 			$settings['post_meta_allow_keys'] = implode( PHP_EOL, $new );
@@ -578,7 +578,7 @@ class CF7DTX_Plugin_Settings {
 		// User Data
 		if( count( $user_keys ) ){
 			// Get already saved values
-			$user_data_allow_keys = isset( $settings['user_data_allow_keys'] ) ? wpcf7dtx_split_newlines($settings['user_data_allow_keys']) : [];
+			$user_data_allow_keys = isset( $settings['user_data_allow_keys'] ) ? wpcf7dtx_parse_allowed_keys($settings['user_data_allow_keys']) : [];
 			// Merge with new values
 			$new = array_unique( array_merge( $user_data_allow_keys, $user_keys ));
 			$settings['user_data_allow_keys'] = implode( PHP_EOL, $new );
