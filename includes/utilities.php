@@ -800,6 +800,9 @@ function wpcf7dtx_update_settings($settings){
  */
 function wpcf7dtx_access_denied_alert( $key, $type ){
 
+    // Only check on the front end
+    if( is_admin() || wp_doing_ajax() || wp_is_json_request() ) return;
+
     $shortcode = '';
     $list_name = '';
 
