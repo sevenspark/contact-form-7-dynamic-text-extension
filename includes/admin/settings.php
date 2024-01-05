@@ -601,11 +601,11 @@ class CF7DTX_Plugin_Settings {
 $sections = [
     'post_meta_access' => [
         'title' => __('Post Meta Access', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Control which post metadata the CF7 DTX shortcodes (CF7_get_custom_field) can access.  By default, all metadata is protected, so you can open up access through these settings.'),
+        'description' => __('Control which post metadata the CF7 DTX shortcodes (CF7_get_custom_field) can access.  By default, all metadata is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.'),
     ],
     'user_data_access' => [
         'title' => __('User Data Access', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Control which user data the CF7 DTX shortcodes (CF7_get_current_user) can access.  By default, all user data is protected, so you can open up access through these settings.'),
+        'description' => __('Control which user data the CF7 DTX shortcodes (CF7_get_current_user) can access.  By default, all user data is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.'),
     ],
 ];
 
@@ -686,7 +686,7 @@ function wpcf7dtx_scan_forms_for_access_keys(){
 		// Loop through forms
 		foreach( $cf7forms as $form ){
 
-			// Search for the custom fields shortcode -- //TODO and user
+			// Search for the custom fields shortcode
 			if( str_contains($form->post_content, 'CF7_get_custom_field') || 
 				str_contains($form->post_content, 'CF7_get_current_user')
 			){
