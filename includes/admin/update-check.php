@@ -34,12 +34,13 @@ function wpcf7dtx_v4_2_0_access_scan_check(){
     // If we've never checked before
     if( $status === '' ){
         // Run a scan
-        $r = wpcf7dtx_scan_forms_for_access_keys();
+        $num_to_scan = 20;
+        $r = wpcf7dtx_scan_forms_for_access_keys( $num_to_scan );
         $found = count($r['forms']);
         $scanned = $r['forms_scanned'];
 
-        // If keys were found
-        if( $found || $scanned === 20 ){
+        // If keys were found, or if we scanned the max number (so there are likely more to be scanned)
+        if( $found || $scanned === $num_to_scan ){
             // We'll show a notice to the user
             $status = 'intervention_required';
         }

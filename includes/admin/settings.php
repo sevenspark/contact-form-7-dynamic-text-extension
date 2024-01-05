@@ -16,6 +16,8 @@ class CF7DTX_Plugin_Settings {
     private $sections;
     private $fields;
 
+	private $num_forms_to_scan = 20;
+
 	/**
 	 * The Plugin Settings constructor.
 	 */
@@ -116,9 +118,8 @@ class CF7DTX_Plugin_Settings {
 			}
 
 			else{
-				$results = wpcf7dtx_scan_forms_for_access_keys(); 
-				//$this->scan_forms();
-				// dtxpretty($results);
+				$offset = isset( $_GET['offset'] ) ? $_GET['offset'] : 0;
+				$results = wpcf7dtx_scan_forms_for_access_keys( $this->num_forms_to_scan, $offset ); 
 
 				?>
 				<div class="wrap">
@@ -362,14 +363,33 @@ class CF7DTX_Plugin_Settings {
 
     function render_scan_results( $results ){
 
+		// dtxpretty( $results );
+
 		// No forms are using the shortcodes in question
-		if( !count($results) ){
+		if( !count($results['forms']) ){
 
 			wpcf7dtx_set_update_access_scan_check_status( 'intervention_not_required' );
 			
 			echo '<div class="notice notice-success dtx-notice"><p>'.__('Scan complete. No keys detected.', 'contact-form-7-dynamic-text-extension').'</p></div>';
 			$this->render_back_to_settings_button();
 			return;
+		}
+
+		// Check if we need to scan another batch
+		if( $results['forms_scanned'] === $this->num_forms_to_scan ){
+			$offset = isset( $_GET['offset'] ) ? $_GET['offset'] : 0;
+			$next_offset = $offset + $this->num_forms_to_scan;
+			echo '<div class="notice notice-warning dtx-notice"><p>';
+			echo sprintf(
+				__( '%1$s forms scanned.  There may be more forms to scan.', 'contact-form-7-dynamic-text-extension' ),
+				$results['forms_scanned'],
+			);
+			echo ' ';
+			echo '<a href="'.wpcf7dtx_get_admin_scan_screen_url($next_offset).'">'.sprintf(
+				__( 'Scan %1$s more forms', 'contact-form-7-dynamic-text-extension' ),
+				$this->num_forms_to_scan
+			).'</a>';
+			echo '</p></div>';
 		}
 
 		$settings = wpcf7dtx_get_settings();
@@ -428,7 +448,13 @@ class CF7DTX_Plugin_Settings {
 		<div>
 
 			<?php if( $all_keys_allowed ): ?>
-				<div class="notice notice-success dtx-notice"><p><?php _e('Scan complete. All keys detected are already on allow list.  No action necessary.', 'contact-form-7-dynamic-text-extension'); ?></p></div>
+				<div class="notice notice-success dtx-notice">
+					<p><?php 
+						echo sprintf( 
+							__('Scan of %1$s forms complete. All keys detected are already on allow list.  No action necessary for these forms.', 'contact-form-7-dynamic-text-extension'),
+							$results['forms_scanned'],
+						); ?></p>
+				</div>
 			<?php else: ?>
 				<div class="notice notice-error dtx-notice" style="width:600px; box-sizing:border-box;">
 					<p><strong><?php _e('Shortcodes accessing potentially sensitive Post Meta or User Data were detected in the forms listed below.', 'contact-form-7-dynamic-text-extension'); ?></strong></p>
@@ -657,8 +683,12 @@ $fields = [
 new CF7DTX_Plugin_Settings($sections, $fields);
 
 
-function wpcf7dtx_get_admin_scan_screen_url(){
-	return admin_url('admin.php?page=cf7dtx_settings&scan-meta-keys');
+function wpcf7dtx_get_admin_scan_screen_url($offset=0){
+	$path = 'admin.php?page=cf7dtx_settings&scan-meta-keys';
+	if( $offset ){
+		$path.= '&offset='.$offset;
+	}
+	return admin_url($path);
 }
 function wpcf7dtx_get_admin_settings_screen_url(){
 	return admin_url('admin.php?page=cf7dtx_settings');
@@ -668,7 +698,7 @@ function wpcf7dtx_get_admin_settings_screen_url(){
 /**
  * Search all CF7 forms for 
  */
-function wpcf7dtx_scan_forms_for_access_keys(){
+function wpcf7dtx_scan_forms_for_access_keys( $num, $offset=0){
         
 	$found = [
 		'forms' => [],
@@ -676,9 +706,12 @@ function wpcf7dtx_scan_forms_for_access_keys(){
 	$forms = [];
 
 	if( function_exists('wpcf7_contact_form') ){
+
 		$cf7forms = get_posts([
 			'post_type' => 'wpcf7_contact_form',
-			'numberposts' => 20, // sanity check
+			// 'numberposts' => $numposts, // sanity check
+			'posts_per_page' => $num,
+			'offset' => $offset,
 		]);
 
 		$found['forms_scanned'] = count($cf7forms);
