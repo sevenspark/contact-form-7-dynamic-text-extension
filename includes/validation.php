@@ -213,13 +213,14 @@ function wpcf7dtx_validate($validator)
             ) {
                 $validator->add_error('form.body', 'dtx_disallowed', array(
                     'message' => sprintf(
-                        __('The %s formtag named "%s" is attempting to reveal potentially sensitive data in the default value. If this is correct, please add "%s" to the %s allowlist in the settings.', 'contact-form-7-dynamic-text-extension'),
+                        __('[%1$s %2$s]: Access to key "%3$s" in shortcode "%4$s" is disallowed by default. To allow access, add "%3$s" to the %5$s Allow List.', 'contact-form-7-dynamic-text-extension'),
                         esc_html($tag->basetype),
                         esc_html($tag->name),
                         esc_html($result['key']),
-                        esc_html($result['key'] == 'CF7_get_current_user' ? __('User Data', 'contact-form-7-dynamic-text-extension') : __('Meta Key', 'contact-form-7-dynamic-text-extension'))
+                        esc_html($result['shortcode']),
+                        esc_html($result['shortcode'] == 'CF7_get_current_user' ? __('User Data Key', 'contact-form-7-dynamic-text-extension') : __('Meta Key', 'contact-form-7-dynamic-text-extension'))
                     ),
-                    'link' => esc_url(admin_url('admin.php?page=cf7dtx_settings'))
+                    'link' => wpcf7dtx_get_admin_settings_screen_url()
                 ));
             }
 
@@ -231,13 +232,14 @@ function wpcf7dtx_validate($validator)
             ) {
                 $validator->add_error('form.body', 'dtx_disallowed', array(
                     'message' => sprintf(
-                        __('The %s formtag named "%s" is attempting to reveal potentially sensitive data in the placeholder value. If this is correct, please add "%s" to the %s allowlist in the settings.', 'contact-form-7-dynamic-text-extension'),
+                        __('[%1$s %2$s]: Access to key "%3$s" in shortcode "%4$s" is disallowed by default. To allow access, add "%3$s" to the %5$s Allow List.', 'contact-form-7-dynamic-text-extension'),
                         esc_html($tag->basetype),
                         esc_html($tag->name),
                         esc_html($result['key']),
-                        esc_html($result['key'] == 'CF7_get_current_user' ? __('User Data', 'contact-form-7-dynamic-text-extension') : __('Meta Key', 'contact-form-7-dynamic-text-extension'))
+                        esc_html($result['shortcode']),
+                        esc_html($result['shortcode'] == 'CF7_get_current_user' ? __('User Data Key', 'contact-form-7-dynamic-text-extension') : __('Meta Key', 'contact-form-7-dynamic-text-extension'))
                     ),
-                    'link' => esc_url(admin_url('admin.php?page=cf7dtx_settings'))
+                    'link' => wpcf7dtx_get_admin_settings_screen_url()
                 ));
             }
         }
@@ -325,76 +327,43 @@ add_action('wpcf7_config_validator_validate', 'wpcf7dtx_validate');
  */
 function wpcf7dtx_validate_sensitive_value($content)
 {
-    $return = array(
+    $r = array(
         'status' => false,
         'shortcode' => '',
         'key' => ''
     );
-    // Get the `key` attribute
-    if (!empty($key = sanitize_text_field(wpcf7dtx_array_has_key('key', shortcode_parse_atts($content))))) {
-        $return['key'] = $key;
-        $content = trim($content);
-        $return['shortcode'] = sanitize_title(substr($content, 0, strpos($content, ' ')));
 
-        // Check if key is supposed to be public or hidden
-        if (str_starts_with($key, '_')) {
-            // This is supposed to be hidden, flag it as sensitive
-            $return['status'] = true;
-            return $return;
-        }
+    // Parse the attributes.  [0] is the shortcode name. ['key'] is the key attribute
+    $atts = shortcode_parse_atts($content);
+    
+    // If we can't extract the atts, or the shortcode or `key` is not an att, don't validate
+    if( !is_array($atts) || !array_key_exists('key', $atts) || !array_key_exists('0', $atts) ) return $r;
+    
+    // Find the key and shortcode in question
+    $key = sanitize_text_field($atts['key']);
+    $shortcode = sanitize_text_field($atts['0']);
 
-        // Check output variable type
-        $output = do_shortcode('[' . $content . ']');
-        if (is_array($output) || is_object($output)) {
-            // The return value is an array or object, flag it as sensitive
-            $return['status'] = true;
-            return $return;
-        }
+    // If the shortcode or key value does not exist, don't validate
+    if( empty($shortcode) || empty($key) ) return $r;
 
-        // TO-DO: make function to retrieve this configuration?
-        $dtx_shortcodes = array(
-            'CF7_bloginfo' => array(
-                'allow' => array(), // TO-DO: get my allow list
-                'disallow' => array(
-                    // TO-DO: get my disallow list
-                    'admin_email' // Disallow to prevent revealing site admin
-                )
-            ),
-            'CF7_get_current_var' => array(
-                'allow' => array(), // TO-DO: get allowlist (same as CF7_get_custom_field)
-                'disallow' => array() // TO-DO: get disallow list (same as CF7_get_custom_field)
-            ),
-            'CF7_get_custom_field' => array(
-                'allow' => array(), // TO-DO: get my allow list
-                'disallow' => array() // TO-DO: get my disallow list
-            ),
-            'CF7_get_current_user' => array(
-                'allow' => array(), // TO-DO: get my allow list
-                'disallow' => array(
-                    // TO-DO: get my disallow list
-                    'user_login', // Disallow to prevent revealing login info
-                    'user_pass', // Disallow to prevent revealing login info
-                    'user_email', // Disallow to prevent revealing login info
-                    'user_activation_key', // Disallow to prevent revealing login info
-                    'user_level', // Disallow to prevent revealing admin/editor status
-                    'cap_key', // Disallow to prevent revealing user capabilities
-                )
-            )
-        );
+    $allowed = true;
+    switch( $shortcode ){
+        case 'CF7_get_custom_field':
+            $allowed = wpcf7dtx_post_meta_key_access_is_allowed( $key );
+            break;
+        case 'CF7_get_current_user':
+            $allowed = wpcf7dtx_user_data_access_is_allowed( $key );
+            break;
+        default:
 
-        // Check against allow/disallow lists
-        foreach ($dtx_shortcodes as $shortcode => $lists) {
-            if (str_starts_with($content, $shortcode)) {
-                if (in_array($key, $lists['disallow'])) {
-                    // If this key is disallowed and not explicity allowed, flag it as sensitive
-                    if (!in_array($key, $lists['allow'])) {
-                        $return['status'] = true;
-                        $return['shortcode'] = $shortcode;
-                        return $return;
-                    }
-                }
-            }
-        }
     }
-    return $return;
+
+    if( !$allowed ){
+        $r['status'] = true;
+        $r['shortcode'] = $shortcode;
+        $r['key'] = $key;
+    }
+
+    return $r;
+
 }
