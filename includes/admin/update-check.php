@@ -64,9 +64,8 @@ function wpcf7dtx_access_keys_notice(){
     // Don't show this notice on the Scan Results screen to avoid confusion
     if( isset($_GET['page']) && $_GET['page'] === 'cf7dtx_settings' && ( isset( $_GET['scan-meta-keys']) || isset($_GET['dismiss-access-keys-notice']))) return;
 
-    // If this user is not an administrator, don't do anything.  Only admins should see this.
-    $user = wp_get_current_user();
-    if ( !in_array( 'administrator', (array) $user->roles ) ) return;
+    // If this user cannot edit settings, don't do anything.
+    if (!current_user_can('manage_options')) return;
 
     // If the status doesn't require intervention, don't do anything
     $status = get_option( 'cf7dtx_v4_2_0_access_scan_check_status', '' );
