@@ -17,6 +17,8 @@ function wpcf7dtx_update(){
     // v4.2.0 will scan for meta and user keys that should be allow-listed and display an admin alert
     wpcf7dtx_v4_2_0_access_scan_check();
 
+    // Future update processes would go here
+
 }
 
 

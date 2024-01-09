@@ -352,18 +352,12 @@ class CF7DTX_Plugin_Settings {
 	 * }
 	 */
 	function render_section( array $args ) : void {
-        // return;
-        // echo '<pre>';print_r($args);echo '</pre>';
-
         ?>
 		<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php echo $this->sections[$args['id']]['description']; ?></p>
 		<?php
-
 	}
 
     function render_scan_results( $results ){
-
-		// dtxpretty( $results );
 
 		// No forms are using the shortcodes in question
 		if( !count($results['forms']) ){
@@ -542,7 +536,6 @@ class CF7DTX_Plugin_Settings {
     }
 
 	function handle_save_allows(){
-		// dtxpretty($_POST);
 		$user_keys = [];
 		$meta_keys = [];
 
@@ -551,7 +544,6 @@ class CF7DTX_Plugin_Settings {
 		foreach( $_POST as $key => $val ){
 			if( str_starts_with( $key, 'dtx_meta_key' ) ){
 				$parts = explode( '/', $key);
-				// dtxpretty($parts);
 				$meta_keys[] = $parts[1];
 			}
 			else if( str_starts_with( $key, 'dtx_user_key' )){
@@ -559,9 +551,6 @@ class CF7DTX_Plugin_Settings {
 				$user_keys[] = $parts[1];
 			}
 		}
-
-		// dtxpretty($meta_keys);
-		// dtxpretty($user_keys);
 
 		// Add those keys in options
 		$settings = wpcf7dtx_get_settings();
@@ -735,7 +724,6 @@ function wpcf7dtx_scan_forms_for_access_keys( $num, $offset=0){
 					'admin_url' => admin_url( "admin.php?page=wpcf7&post={$form->ID}&action=edit" ),
 				];
 				
-				// dtxpretty($cf7, true, true);
 				$tags = $cf7->scan_form_tags();
 				
 				// Check each tag
@@ -763,7 +751,6 @@ function wpcf7dtx_scan_forms_for_access_keys( $num, $offset=0){
 								 // Parse out the shortcode atts
 								 $atts = shortcode_parse_atts($val);
 								 if( $atts ){
-									// dtxpretty($atts);
 									// Grab user data key
 									$key = $atts['key'];
 									if( $key ){
@@ -778,7 +765,6 @@ function wpcf7dtx_scan_forms_for_access_keys( $num, $offset=0){
 		}
 	}
 	$found['forms'] = $forms;
-	// dtxpretty( $found );
 	return $found;
 
 }

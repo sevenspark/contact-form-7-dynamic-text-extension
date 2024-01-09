@@ -705,8 +705,6 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
         return true; // The key is allowed
     }
 
-    // dtxpretty( $allowed_keys );
-
     // Everything is disallowed by default
     return false;
 
@@ -749,7 +747,6 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
 
     // Allow custom filters
     $allowed_keys = apply_filters( 'wpcf7dtx_user_data_key_allow_list', $allowed_keys );
-    // dtxpretty( $allowed_keys );
 
     // Check if the key is in the allow list
     if( in_array( $key, $allowed_keys ) ){
@@ -853,6 +850,7 @@ function wpcf7dtx_access_denied_alert( $key, $type ){
 /**
  * Helper function to output array and object data
  */
+/*
 function dtxpretty ($var, $print=true, $privobj=false) {
 
     $type = gettype($var);
@@ -875,3 +873,4 @@ function dtxpretty ($var, $print=true, $privobj=false) {
 	}
 	return $p;
 }
+*/
