@@ -90,5 +90,5 @@ function wpcf7dtx_access_keys_notice(){
 
 }
 function wpcf7dtx_set_update_access_scan_check_status( $status ){
-    update_option( 'cf7dtx_v4_2_0_access_scan_check_status', $status );
+    update_option( 'cf7dtx_v4_2_0_access_scan_check_status', sanitize_title($status) );
 }
