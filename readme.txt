@@ -2,7 +2,7 @@
 Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, dynamic, GET, POST, title, slug, auto-fill, pre-populate
-Tested up to: 6.3
+Tested up to: 6.4.2
 Stable tag: VERSION_PLACEHOLDER
 
 This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text-based input fields like text, hidden, and email, checkboxes, radio buttons, and drop-down selections using any shortcode.
@@ -198,6 +198,8 @@ Learn more and see examples from [the DTX Knowledge base](https://aurisecreative
 
 Retrieve custom fields from the current post/page. Just set the custom field as the key in the shortcode.
 
+Note: You must add any meta keys that you want to allow access to to the allow list in your admin panel > Contact > Dynamic Text Extension > Meta Key Allow List.  [More Information](https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access)
+
 The dynamic value input becomes: `CF7_get_custom_field key='my_custom_field'`
 
 And the tag looks like this: `[dynamictext dynamicname "CF7_get_custom_field key='my_custom_field'"]`
@@ -237,6 +239,8 @@ Get data about the current logged-in user.
 
 Dynamic value: `CF7_get_current_user key='user_displayname'`
 CF7 Tag: `[dynamictext dynamicname "CF7_get_current_user"]`
+
+Note: You must add any user keys that you want to allow access to to the allow list in your admin panel > Contact > Dynamic Text Extension > User Data Key Allow List.  [More Information](https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access)
 
 Valid values for `key` include:
 
@@ -380,6 +384,10 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 Extend functionality without losing your work!
 
 == Changelog ==
+
+= 4.2.0 =
+
+* Security Update: ** Please be sure to review this doc, as you may need to adjust the settings: https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access **
 
 = 4.1.0 =
 
