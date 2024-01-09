@@ -14,8 +14,8 @@
  */
 
 /*
-    Copyright 2010-2023 Chris Mavricos, SevenSpark <https://sevenspark.com>
-    Copyright 2022-2023 Tessa Watkins, AuRise Creative <https://aurisecreative.com>
+    Copyright 2010-2024 Chris Mavricos, SevenSpark <https://sevenspark.com>
+    Copyright 2022-2024 Tessa Watkins, AuRise Creative <https://aurisecreative.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -39,6 +39,8 @@ defined('WPCF7DTX_DIR') || define('WPCF7DTX_DIR', __DIR__);
 
 // Define root file
 defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__);
+
+define( 'WPCF7DTX_DATA_ACCESS_KB_URL', 'https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access' );
 
 /**
  * Initialise Plugin
