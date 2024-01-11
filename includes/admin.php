@@ -350,7 +350,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $default_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
             esc_attr($options['content'] . '-default'), // field id
-            esc_html__('Selected Default'), // field label
+            esc_html__('Selected Default', 'contact-form-7-dynamic-text-extension'), // field label
             wpcf7_format_atts(array(
                 'type' => 'hidden',
                 'name' => 'default',
