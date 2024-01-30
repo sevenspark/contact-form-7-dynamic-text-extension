@@ -216,9 +216,9 @@ function wpcf7dtx_get_custom_field($atts = array())
     ), array_change_key_case((array)$atts, CASE_LOWER)));
 
     // If this key can't be accessed
-    if( !wpcf7dtx_post_meta_key_access_is_allowed( $key ) ){
+    if (!wpcf7dtx_post_meta_key_access_is_allowed($key)) {
         // Trigger a warning if a denied key is in use
-        wpcf7dtx_access_denied_alert( $key, 'post_meta' );
+        wpcf7dtx_access_denied_alert($key, 'post_meta');
         return '';
     }
 
@@ -353,9 +353,9 @@ function wpcf7dtx_get_current_user($atts = array())
     if (is_user_logged_in()) {
 
         // If this key can't be accessed
-        if( !wpcf7dtx_user_data_access_is_allowed( $key ) ){
+        if (!wpcf7dtx_user_data_access_is_allowed($key)) {
             // Trigger a warning if a denied key is in use
-            wpcf7dtx_access_denied_alert( $key, 'user_data' );
+            wpcf7dtx_access_denied_alert($key, 'user_data');
             return '';
         }
 
