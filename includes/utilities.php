@@ -256,20 +256,22 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
         'id' => array(),
         'name' => array(),
         'value' => array(),
-        'required' => array(),
         'class' => array(),
         'disabled' => array(),
-        'readonly' => array(),
         'tabindex' => array(),
         'size' => array(),
         'title' => array(),
-        'autofocus' => array(),
         // ARIA properties
         'aria-invalid' => array(),
         'aria-describedby' => array(),
         // DTX properties
         'data-dtx-value' => array(),
     );
+    if ($type != 'hidden') {
+        $allowed_properties['autofocus'] = array();
+        $allowed_properties['readonly'] = array();
+        $allowed_properties['required'] = array();
+    }
     if (in_array($type, array('checkbox', 'radio', 'acceptance'))) {
         // Properties exclusive to checkboxes and radio buttons
         $allowed_properties['checked'] = array();
