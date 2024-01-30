@@ -685,7 +685,7 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
 {
 
     // Get the DTX Settings
-    $settings = wpcf7dtx_get_settings();get_option('cf7dtx_settings', []);
+    $settings = wpcf7dtx_get_settings();
 
     // Has access to all metadata been enabled?
     if (isset($settings['post_meta_allow_all']) && $settings['post_meta_allow_all'] === 'enabled') {
@@ -693,15 +693,11 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
     }
 
     // If not, check the Allow List
-    $allowed_keys;
+    $allowed_keys = array();
 
     // No key list from settings
-    if( !isset($settings['post_meta_allow_keys'] ) || !is_string($settings['post_meta_allow_keys'])){
-        $allowed_keys = [];
-    }
-    // Extract allowed keys from setting text area
-    else{
-        // $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['post_meta_allow_keys']);
+    if (isset($settings['post_meta_allow_keys']) && is_string($settings['post_meta_allow_keys'])) {
+        // Extract allowed keys from setting text area
         $allowed_keys = wpcf7dtx_parse_allowed_keys($settings['post_meta_allow_keys']);
     }
 
@@ -738,15 +734,11 @@ function wpcf7dtx_user_data_access_is_allowed($key)
     }
 
     // If not, check the Allow List
-    $allowed_keys;
+    $allowed_keys = array();
 
     // No key list from settings
-    if( !isset($settings['user_data_allow_keys'] ) || !is_string($settings['user_data_allow_keys'])){
-        $allowed_keys = [];
-    }
-    // Extract allowed keys from setting text area
-    else{
-        // $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['user_data_allow_keys']);
+    if (isset($settings['user_data_allow_keys']) && is_string($settings['user_data_allow_keys'])) {
+        // Extract allowed keys from setting text area
         $allowed_keys = wpcf7dtx_parse_allowed_keys($settings['user_data_allow_keys']);
     }
 
@@ -838,9 +830,6 @@ function wpcf7dtx_access_denied_alert($key, $type)
     // Only check on the front end
     if (is_admin() || wp_doing_ajax() || wp_is_json_request()) return;
 
-    $shortcode = '';
-    $list_name = '';
-
     switch ($type) {
         case 'post_meta':
             $shortcode = 'CF7_get_custom_field';
@@ -851,6 +840,9 @@ function wpcf7dtx_access_denied_alert($key, $type)
             $list_name = __('User Data Key Allow List', 'contact-form-7-dynamic-text-extension');
             break;
         default:
+            $shortcode = '';
+            $list_name = '';
+            break;
     }
 
     $settings_page_url = admin_url('admin.php?page=cf7dtx_settings');
@@ -865,32 +857,3 @@ function wpcf7dtx_access_denied_alert($key, $type)
 
     trigger_error($msg, E_USER_WARNING);
 }
-
-
-/**
- * Helper function to output array and object data
- */
-/*
-function dtxpretty ($var, $print=true, $privobj=false) {
-
-    $type = gettype($var);
-
-    if( $privobj && $type === 'object' ){
-        $p = '<pre>'.print_r($var, true).'</pre>';
-    }
-    else {
-        $p = '<pre>'.$type . ' ' . json_encode(
-            $var,
-            JSON_UNESCAPED_SLASHES | 
-            JSON_UNESCAPED_UNICODE | 
-            JSON_PRETTY_PRINT | 
-            JSON_PARTIAL_OUTPUT_ON_ERROR | 
-            JSON_INVALID_UTF8_SUBSTITUTE 
-            ).'</pre>';
-    }
-	if( $print ) {
-		echo $p;
-	}
-	return $p;
-}
-*/
