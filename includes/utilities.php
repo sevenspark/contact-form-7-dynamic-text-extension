@@ -559,8 +559,10 @@ function wpcf7dtx_textarea_html($atts)
  * group's options. It also accepts a string value of HTML already formatted as options or
  * option groups. It also accepts a string value of a self-closing shortcode that is
  * evaluated and its output is either options or option groups.
- * @param bool $hide_blank Optional. If true, the first blank placeholder option will have the `hidden` attribute added to it. Default is false.
- * @param bool $disable_blank Optional. If true, the first blank placeholder option will have the `disabled` attribute added to it. Default is false.
+ * @param bool $hide_blank Optional. If true, the first blank placeholder option will have the
+ * `hidden` attribute added to it. Default is false.
+ * @param bool $disable_blank Optional. If true, the first blank placeholder option will have
+ * the `disabled` attribute added to it. Default is false.
  *
  * @return string HTML output of select field
  */
@@ -649,9 +651,11 @@ function wpcf7dtx_select_html($atts, $options, $hide_blank = false, $disable_bla
  *
  * @param string|int $key The key to search for in the array.
  * @param array $array The array to search.
- * @param mixed $default The default value to return if not found or is empty. Default is an empty string.
+ * @param mixed $default The default value to return if not found or is empty. Default is
+ * an empty string.
  *
- * @return mixed The value of the key found in the array if it exists or the value of `$default` if not found or is empty.
+ * @return mixed The value of the key found in the array if it exists or the value of
+ * `$default` if not found or is empty.
  */
 function wpcf7dtx_array_has_key($key, $array = array(), $default = '')
 {
@@ -670,11 +674,11 @@ function wpcf7dtx_array_has_key($key, $array = array(), $default = '')
 
 /**
  * Check if admin has allowed access to a specific post meta key
- * 
+ *
  * @since 4.2.0
- * 
+ *
  * @param string $meta_key The post meta key to test
- * 
+ *
  * @return bool True if this key can be accessed, false otherwise
  */
 function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
@@ -684,12 +688,11 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
     $settings = wpcf7dtx_get_settings();get_option('cf7dtx_settings', []);
 
     // Has access to all metadata been enabled?
-    if( isset($settings['post_meta_allow_all']) && $settings['post_meta_allow_all'] === 'enabled' ){
+    if (isset($settings['post_meta_allow_all']) && $settings['post_meta_allow_all'] === 'enabled') {
         return true;
     }
 
     // If not, check the Allow List
-
     $allowed_keys;
 
     // No key list from settings
@@ -699,45 +702,42 @@ function wpcf7dtx_post_meta_key_access_is_allowed($meta_key)
     // Extract allowed keys from setting text area
     else{
         // $allowed_keys = preg_split('/\r\n|\r|\n/', $settings['post_meta_allow_keys']);
-        $allowed_keys = wpcf7dtx_parse_allowed_keys( $settings['post_meta_allow_keys'] );
+        $allowed_keys = wpcf7dtx_parse_allowed_keys($settings['post_meta_allow_keys']);
     }
 
     // Allow custom filters
-    $allowed_keys = apply_filters( 'wpcf7dtx_post_meta_key_allow_list', $allowed_keys );
+    $allowed_keys = apply_filters('wpcf7dtx_post_meta_key_allow_list', $allowed_keys);
 
     // Check if the key is in the allow list
-    if( in_array( $meta_key, $allowed_keys ) ){
+    if (in_array($meta_key, $allowed_keys)) {
         return true; // The key is allowed
     }
 
     // Everything is disallowed by default
     return false;
-
 }
-
 
 /**
  * Check if admin has allowed access to a specific user data
- * 
+ *
  * @since 4.2.0
- * 
+ *
  * @param string $key The user data key to test
- * 
+ *
  * @return bool True if this key can be accessed, false otherwise
  */
-function wpcf7dtx_user_data_access_is_allowed( $key )
+function wpcf7dtx_user_data_access_is_allowed($key)
 {
 
     // Get the DTX Settings
     $settings = wpcf7dtx_get_settings(); //get_option('cf7dtx_settings', []);
 
     // Has access to all metadata been enabled?
-    if( isset($settings['user_data_allow_all']) && $settings['user_data_allow_all'] === 'enabled' ){
+    if (isset($settings['user_data_allow_all']) && $settings['user_data_allow_all'] === 'enabled') {
         return true;
     }
 
     // If not, check the Allow List
-
     $allowed_keys;
 
     // No key list from settings
@@ -751,82 +751,97 @@ function wpcf7dtx_user_data_access_is_allowed( $key )
     }
 
     // Allow custom filters
-    $allowed_keys = apply_filters( 'wpcf7dtx_user_data_key_allow_list', $allowed_keys );
+    $allowed_keys = apply_filters('wpcf7dtx_user_data_key_allow_list', $allowed_keys);
 
     // Check if the key is in the allow list
-    if( in_array( $key, $allowed_keys ) ){
+    if (in_array($key, $allowed_keys)) {
         return true; // The key is allowed
     }
 
-
     // Everything is disallowed by default
     return false;
-
 }
-
 
 /**
  * Take the string saved in the options array from the allow list textarea and parse it into an array by newlines.
  * Also strip whitespace
- * 
+ *
+ * @since 4.2.0
+ *
  * @param string $allowlist The string of allowed keys stored in the DB
- * 
+ *
  * @return array Array of allowed keys
  */
-function wpcf7dtx_parse_allowed_keys( $allowlist ){
+function wpcf7dtx_parse_allowed_keys($allowlist)
+{
     // Split by newlines
-    $keys = wpcf7dtx_split_newlines( $allowlist );
+    $keys = wpcf7dtx_split_newlines($allowlist);
     // Trim whitespace
-    $keys = array_map( 'trim' , $keys );
+    $keys = array_map('trim', $keys);
     return $keys;
 }
 
-/** 
+/**
  * Used to parse strings stored in the database that are from text areas with one element per line into an array of strings
- * 
+ *
+ * @since 4.2.0
+ *
  * @param string $str The multi-line string to be parsed into an array
- * 
+ *
  * @return array Array of parsed strings
  */
-function wpcf7dtx_split_newlines( $str ){
+function wpcf7dtx_split_newlines($str)
+{
     return preg_split('/\r\n|\r|\n/', $str);
 }
 
 /**
  * Gets the CF7 DTX settings field from the WP options table.  Returns an empty array if option has not previously been set
- * 
+ *
+ * @since 4.2.0
+ *
  * @return array The settings array
  */
-function wpcf7dtx_get_settings(){
-    return get_option('cf7dtx_settings', []);
+function wpcf7dtx_get_settings()
+{
+    return get_option('cf7dtx_settings', array());
 }
 
 /**
  * Updates the CF7 DTX settings in the WP options table
- * 
+ *
+ * @since 4.2.0
+ *
  * @param array $settings The settings array
- * 
+ *
+ * @return void
+ *
  */
-function wpcf7dtx_update_settings($settings){
-    update_option( 'cf7dtx_settings', $settings );
+function wpcf7dtx_update_settings($settings)
+{
+    update_option('cf7dtx_settings', $settings);
 }
 
 
 /**
  * Outputs a useful PHP Warning message to users on how to allow-list denied meta and user keys
- * 
+ *
+ * @since 4.2.0
+ *
  * @param string $key The post meta or user key to which access is currently denied
  * @param string $type Either 'post_meta' or 'user_data', used to display an appropriate message to the user
+ *
+ * @return void
  */
-function wpcf7dtx_access_denied_alert( $key, $type ){
-
+function wpcf7dtx_access_denied_alert($key, $type)
+{
     // Only check on the front end
-    if( is_admin() || wp_doing_ajax() || wp_is_json_request() ) return;
+    if (is_admin() || wp_doing_ajax() || wp_is_json_request()) return;
 
     $shortcode = '';
     $list_name = '';
 
-    switch( $type ){
+    switch ($type) {
         case 'post_meta':
             $shortcode = 'CF7_get_custom_field';
             $list_name = __('Meta Key Allow List', 'contact-form-7-dynamic-text-extension');
@@ -835,20 +850,20 @@ function wpcf7dtx_access_denied_alert( $key, $type ){
             $shortcode = 'CF7_get_current_user';
             $list_name = __('User Data Key Allow List', 'contact-form-7-dynamic-text-extension');
             break;
-        default: 
+        default:
     }
 
     $settings_page_url = admin_url('admin.php?page=cf7dtx_settings');
 
     $msg = sprintf(
-        __('CF7 DTX: Access denied to key: "%1$s" in dynamic contact form shortcode: [%2$s].  Please add this key to the %3$s at %4$s','contact-form-7-dynamic-text-extension'),
+        __('CF7 DTX: Access denied to key: "%1$s" in dynamic contact form shortcode: [%2$s].  Please add this key to the %3$s at %4$s', 'contact-form-7-dynamic-text-extension'),
         $key,
         $shortcode,
         $list_name,
         $settings_page_url
     );
 
-    trigger_error( $msg, E_USER_WARNING );
+    trigger_error($msg, E_USER_WARNING);
 }
 
 
