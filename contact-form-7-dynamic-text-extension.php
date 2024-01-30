@@ -40,7 +40,7 @@ defined('WPCF7DTX_DIR') || define('WPCF7DTX_DIR', __DIR__);
 // Define root file
 defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__);
 
-define( 'WPCF7DTX_DATA_ACCESS_KB_URL', 'https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access' );
+define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access');
 
 /**
  * Initialise Plugin
