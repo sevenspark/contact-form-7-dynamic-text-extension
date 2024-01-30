@@ -67,12 +67,12 @@ function wpcf7dtx_config()
         $wpcf7_dynamic_fields_config = array(
             'dynamic_text' => array(
                 'title' => __('dynamic text', 'contact-form-7-dynamic-text-extension'), //title
-                'options' => array('placeholder', 'readonly', 'dtx_pageload'),
+                'options' => array('placeholder', 'readonly'),
                 'description' => __('a single-line plain text', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_hidden' => array(
                 'title' => __('dynamic hidden', 'contact-form-7-dynamic-text-extension'), //title
-                'options' => array('dtx_pageload'),
+                'options' => array(),
                 'description' => __('a single-line plain text hidden input field', 'contact-form-7-dynamic-text-extension'),
                 'features' => array(
                     'display-hidden' => true // Generates an HTML element that is not visible
@@ -80,12 +80,12 @@ function wpcf7dtx_config()
             ),
             'dynamic_email' => array(
                 'title' => __('dynamic email', 'contact-form-7-dynamic-text-extension'), //title
-                'options' => array('placeholder', 'readonly', 'dtx_pageload'),
+                'options' => array('placeholder', 'readonly'),
                 'description' => __('a single-line email address input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_url' => array(
                 'title' => __('dynamic URL', 'contact-form-7-dynamic-text-extension'), //title
-                'options' => array('placeholder', 'readonly', 'dtx_pageload'),
+                'options' => array('placeholder', 'readonly'),
                 'description' => __('a single-line URL input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_tel' => array(
@@ -105,7 +105,7 @@ function wpcf7dtx_config()
             ),
             'dynamic_textarea' => array(
                 'title' => __('dynamic textarea', 'contact-form-7-dynamic-text-extension'), //title
-                'options' => array('placeholder', 'readonly', 'dtx_pageload'),
+                'options' => array('placeholder', 'readonly'),
                 'description' => __('a multi-line plain text input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_select' => array(
@@ -141,7 +141,7 @@ function wpcf7dtx_config()
             ),
             'dynamic_submit' => array(
                 'title' => __('dynamic submit', 'contact-form-7-dynamic-text-extension'), //title
-                'options' => array('dtx_pageload'),
+                'options' => array(),
                 'description' =>  __('a submit button', 'contact-form-7-dynamic-text-extension')
             )
         );
