@@ -250,6 +250,7 @@ function wpcf7dtx_shortcode_handler($tag)
     $atts['id'] = strval($tag->get_id_option());
     $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
     $atts['size'] = $tag->get_size_option('40');
+    $atts['disabled'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('disabled', '', true)), ENT_QUOTES));
     $atts['class'] = explode(' ', wpcf7_form_controls_class($atts['type']));
     $atts['class'][] = 'wpcf7dtx';
     $atts['class'][] = sanitize_html_class('wpcf7dtx-' . $atts['type']);
@@ -333,8 +334,14 @@ function wpcf7dtx_shortcode_handler($tag)
         /**
          * Configuration for text-based fields
          */
-
-        // Attributes
+        $atts['list'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('list', '', true)), ENT_QUOTES));
+        $atts['autocapitalize'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('autocapitalize', '', true)), ENT_QUOTES));
+        $atts['pattern'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('pattern', '', true)), ENT_QUOTES));
+        $atts['min'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('min', '', true)), ENT_QUOTES));
+        $atts['max'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('max', '', true)), ENT_QUOTES));
+        $atts['step'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('step', '', true)), ENT_QUOTES));
+	
+        // Min and Max length attributes
         $atts['maxlength'] = $tag->get_maxlength_option();
         $atts['minlength'] = $tag->get_minlength_option();
         if ($atts['maxlength'] && $atts['minlength'] && $atts['maxlength'] < $atts['minlength']) {
