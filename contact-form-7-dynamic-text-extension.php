@@ -136,7 +136,7 @@ function wpcf7dtx_config()
             ),
             'dynamic_date' => array(
                 'title' => __('dynamic date', 'contact-form-7-dynamic-text-extension'), //title
-                'options' => array('placeholder', 'readonly', 'min', 'max'),
+                'options' => array('placeholder', 'readonly', 'min', 'max', 'step'),
                 'description' =>  __('a date input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_submit' => array(
