@@ -31,16 +31,17 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// Define current version
-define('WPCF7DTX_VERSION', 'VERSION_PLACEHOLDER');
-
-// Define root directory
-defined('WPCF7DTX_DIR') || define('WPCF7DTX_DIR', __DIR__);
-
-// Define root file
-defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__);
+define('WPCF7DTX_VERSION', 'VERSION_PLACEHOLDER'); // Define current version of DTX
+define('WPCF7DTX_MINVERSION', '5.7'); // The minimum version of CF7 required to use all features
+defined('WPCF7DTX_DIR') || define('WPCF7DTX_DIR', __DIR__); // Define root directory
+defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__); // Define root file
 
 define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access');
+
+function wpcf7dtx_dependencies()
+{
+    return defined('WPCF7_VERSION') && version_compare(constant('WPCF7_VERSION'), WPCF7DTX_MINVERSION, '>=');
+}
 
 /**
  * Initialise Plugin
@@ -49,6 +50,18 @@ define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://sevenspark.com/docs/contact-form-
  */
 function wpcf7dtx_init()
 {
+    if (!wpcf7dtx_dependencies()) {
+        add_action('admin_notices', function () {
+            echo (wp_kses_post(sprintf(
+                '<div class="notice notice-error is-dismissible"><p><strong>%s</strong> %s</p></div>',
+                __('Form validation for dynamic fields created with <em>Contact Form 7 - Dynamic Text Extension</em> is not available!', 'contact-form-7-dynamic-text-extension'),
+                sprintf(
+                    __('<em>Contact Form 7</em> version %s or higher is required.', 'contact-form-7-dynamic-text-extension'),
+                    esc_html(WPCF7DTX_MINVERSION)
+                )
+            )));
+        });
+    }
     add_action('wpcf7_init', 'wpcf7dtx_add_shortcodes'); // Add custom form tags to CF7
 }
 add_action('plugins_loaded', 'wpcf7dtx_init', 20);
