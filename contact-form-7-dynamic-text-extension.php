@@ -250,7 +250,6 @@ function wpcf7dtx_shortcode_handler($tag)
     $atts['id'] = strval($tag->get_id_option());
     $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
     $atts['size'] = $tag->get_size_option('40');
-    $atts['disabled'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('disabled', '', true)), ENT_QUOTES));
     $atts['class'] = explode(' ', wpcf7_form_controls_class($atts['type']));
     $atts['class'][] = 'wpcf7dtx';
     $atts['class'][] = sanitize_html_class('wpcf7dtx-' . $atts['type']);
@@ -261,10 +260,22 @@ function wpcf7dtx_shortcode_handler($tag)
     } else {
         $atts['aria-invalid'] = 'false';
     }
-
     if ($tag->has_option('readonly')) {
         $atts['readonly'] = 'readonly';
     }
+
+    // Dynamically determine disabled attribute, remove if invalid
+    $atts['disabled'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('disabled', '', true)), ENT_QUOTES));
+    if ($atts['disabled'] != 'disabled') {
+        unset($atts['disabled']);
+    }
+
+    // Dynamically determine autofocus attribute, remove if invalid
+    $atts['autofocus'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('autofocus', '', true)), ENT_QUOTES));
+    if ($atts['autofocus'] != 'autofocus') {
+        unset($atts['autofocus']);
+    }
+
     // Add required attribute to applicable input types
     if ($tag->is_required() && !in_array($atts['type'], array('hidden', 'quiz'))) {
         $atts['aria-required'] = 'true';
@@ -340,7 +351,7 @@ function wpcf7dtx_shortcode_handler($tag)
         $atts['min'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('min', '', true)), ENT_QUOTES));
         $atts['max'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('max', '', true)), ENT_QUOTES));
         $atts['step'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('step', '', true)), ENT_QUOTES));
-	
+
         // Min and Max length attributes
         $atts['maxlength'] = $tag->get_maxlength_option();
         $atts['minlength'] = $tag->get_minlength_option();
@@ -373,6 +384,10 @@ function wpcf7dtx_shortcode_handler($tag)
                 // Attributes unique to textareas
                 $atts['cols'] = $tag->get_cols_option('40');
                 $atts['rows'] = $tag->get_rows_option('10');
+                $atts['wrap'] = $tag->get_option('wrap', '', true);
+                if (!in_array($atts['wrap'], array('hard', 'soft'))) {
+                    unset($atts['wrap']);
+                }
                 break;
         }
     }

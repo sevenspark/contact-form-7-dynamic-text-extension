@@ -226,6 +226,12 @@ function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto')
 /**
  * Get Allowed HTML for Form Field Properties
  *
+ * @see https://www.w3schools.com/tags/tag_input.asp
+ * @see https://www.w3schools.com/tags/tag_optgroup.asp
+ * @see https://www.w3schools.com/tags/tag_option.asp
+ * @see https://www.w3schools.com/tags/tag_select.asp
+ * @see https://www.w3schools.com/tags/tag_textarea.asp
+ *
  * @since 4.0.0
  *
  * @param string $type Optional. The type of input for unique properties. Default is `text`.
@@ -277,6 +283,7 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
         $allowed_properties['dtx-default'] = array();
     } elseif ($type == 'select') {
         // Properties exclusive to select fields
+        $allowed_properties['size'] = array();
         $allowed_properties['multiple'] = array();
         $allowed_properties['dtx-default'] = array();
         unset($allowed_properties['type'], $allowed_properties['value']); // Remove invalid select attributes
@@ -295,6 +302,9 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
             // Additional properties exclusive to textarea fields
             $allowed_properties['cols'] = array();
             $allowed_properties['rows'] = array();
+            $allowed_properties['minlength'] = array();
+            $allowed_properties['maxlength'] = array();
+            $allowed_properties['wrap'] = array();
             unset($allowed_properties['type'], $allowed_properties['value']); // Remove invalid textarea attributes
         } elseif (in_array($type, array('text', 'search', 'url', 'tel', 'email', 'password'))) {
             // Additional properties exclusive to these text-based fields

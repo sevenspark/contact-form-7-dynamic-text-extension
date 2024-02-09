@@ -381,13 +381,18 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `max`, and `step` attributes.
+Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `max`, and `step` attributes and added other allowable field attributes.
 
 == Changelog ==
 
 = 4.2.1 =
 
 * Fix: Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `max`, and `step` attributes, [see support thread](https://wordpress.org/support/topic/dynamic_date-min-max-step-options-ignored/).
+* Feature: Allows text-based fields to use `autofocus` attribute
+* Feature: Allows text-based fields to use `list` attribute
+* Feature: Allows text-based fields to use `autocapitalize` attribute
+* Feature: Allows text-based fields to use `pattern` attribute
+* Feature: Allows textareas to use `wrap` attribute
 
 = 4.2.0 =
 
