@@ -387,12 +387,14 @@ Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `
 
 = 4.2.1 =
 
-* Fix: Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `max`, and `step` attributes, [see support thread](https://wordpress.org/support/topic/dynamic_date-min-max-step-options-ignored/).
+* Feature: Allows text-based fields to use `autocapitalize` attribute
 * Feature: Allows text-based fields to use `autofocus` attribute
 * Feature: Allows text-based fields to use `list` attribute
-* Feature: Allows text-based fields to use `autocapitalize` attribute
 * Feature: Allows text-based fields to use `pattern` attribute
 * Feature: Allows textareas to use `wrap` attribute
+* Fix: Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `max`, and `step` attributes, [see support thread](https://wordpress.org/support/topic/dynamic_date-min-max-step-options-ignored/).
+* Fix: Added minimum version check for Contact Form 7, [see support thread](https://wordpress.org/support/topic/str_contains-is-php-8-0-only-broken-compatibility/).
+* Fix: Resolved an issue that used a function introduced in PHP 8 while plugin compatibility setting is currently still set to 7.4+, [see support thread](https://wordpress.org/support/topic/str_contains-is-php-8-0-only-broken-compatibility/).
 
 = 4.2.0 =
 
