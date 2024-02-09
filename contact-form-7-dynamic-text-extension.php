@@ -357,17 +357,17 @@ function wpcf7dtx_shortcode_handler($tag)
         }
 
         switch ($atts['type']) {
-            case 'email':
-            case 'url':
-            case 'tel':
-            case 'number':
-            case 'date':
-                // Client-side validation by type
-                $atts['class'][] =  sanitize_html_class('wpcf7-validates-as-' . $atts['type']);
-                break;
             case 'range':
                 // Client-side validation by type
                 $atts['class'][] =  'wpcf7-validates-as-number';
+                break;
+            case 'date':
+            case 'number':
+            case 'email':
+            case 'url':
+            case 'tel':
+                // Client-side validation by type
+                $atts['class'][] =  sanitize_html_class('wpcf7-validates-as-' . $atts['type']);
                 break;
             case 'textarea':
                 // Attributes unique to textareas
