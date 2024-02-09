@@ -706,8 +706,8 @@ function wpcf7dtx_scan_forms_for_access_keys($num, $offset = 0)
 
             // Search for the custom fields shortcode
             if (
-                str_contains($form->post_content, 'CF7_get_custom_field') ||
-                str_contains($form->post_content, 'CF7_get_current_user')
+                strpos($form->post_content, 'CF7_get_custom_field') !== false ||
+                strpos($form->post_content, 'CF7_get_current_user') !== false
             ) {
                 $cf7 = wpcf7_contact_form($form->ID);
 
