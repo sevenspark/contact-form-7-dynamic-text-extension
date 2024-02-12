@@ -381,9 +381,13 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `max`, and `step` attributes and added other allowable field attributes.
+Cache compatibility JavaScript triggers the custom `dtx_init` event on enabled input fields.
 
 == Changelog ==
+
+= 4.2.2 =
+
+* Feature: Cache compatibility JavaScript triggers the custom `dtx_init` event on enabled input fields, [see support thread](https://wordpress.org/support/topic/dynamic_text-cf7_url-dont-fire-onchange-event/).
 
 = 4.2.1 =
 

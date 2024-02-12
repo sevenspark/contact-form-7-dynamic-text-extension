@@ -38,6 +38,13 @@ defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__); // Define root fi
 
 define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access');
 
+/**
+ * Determine Dependencies are Met
+ *
+ * @since 4.2.1
+ *
+ * @return bool True if minimum version of Contact Form 7 is met. False otherwise.
+ */
 function wpcf7dtx_dependencies()
 {
     return defined('WPCF7_VERSION') && version_compare(constant('WPCF7_VERSION'), WPCF7DTX_MINVERSION, '>=');

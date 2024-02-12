@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 4.2.2 =
+
+* Feature: Cache compatibility JavaScript triggers the custom `dtx_init` event on enabled input fields, [see support thread](https://wordpress.org/support/topic/dynamic_text-cf7_url-dont-fire-onchange-event/).
+
 = 4.2.1 =
 
 * Feature: Allows text-based fields to use `autocapitalize` attribute
