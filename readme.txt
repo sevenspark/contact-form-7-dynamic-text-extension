@@ -381,9 +381,13 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Cache compatibility JavaScript triggers the custom `dtx_init` event on enabled input fields.
+Resolved a bug where the `dynamic_select` displayed with a default size of 40 instead of 1.
 
 == Changelog ==
+
+= 4.2.3 =
+
+* Fix: Resolved a bug where the `dynamic_select` displayed with a default size of 40 instead of 1.
 
 = 4.2.2 =
 

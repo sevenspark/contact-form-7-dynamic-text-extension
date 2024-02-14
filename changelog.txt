@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 4.2.3 =
+
+* Fix: Resolved a bug where the `dynamic_select` displayed with a default size of 40 instead of 1.
+
 = 4.2.2 =
 
 * Feature: Cache compatibility JavaScript triggers the custom `dtx_init` event on enabled input fields, [see support thread](https://wordpress.org/support/topic/dynamic_text-cf7_url-dont-fire-onchange-event/).
