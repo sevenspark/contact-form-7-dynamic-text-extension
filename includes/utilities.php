@@ -350,7 +350,7 @@ function wpcf7dtx_format_atts($atts)
                     if ($value) {
                         $sanitized_atts[$key] = $key;
                     }
-                } elseif ($value && (is_string($value) || is_numeric($value))) {
+                } elseif (is_numeric($value) || (is_string($value) || !empty($value))) {
                     $sanitized_atts[$key] = $value;
                 }
             }
@@ -463,7 +463,7 @@ function wpcf7dtx_checkbox_group_html($atts, $options, $label_ui = false, $rever
             ));
             $dynamic_value = '';
             $dynamic_label = $label;
-            if ($value && $label && $value === $label) {
+            if (is_string($value) && !empty($value) && $value === $label) {
                 // These are identical, just handle it as one, could also be a raw shortcode
                 $dynamic_option = trim(wpcf7dtx_get_dynamic($value, false, 'none')); // Do not sanitize yet, it may have HTML
                 if (is_string($dynamic_option) && !empty($dynamic_option) && strpos($dynamic_option, '{') === 0 && strpos($dynamic_option, '}') === strlen($dynamic_option) - 1) {
@@ -513,7 +513,8 @@ function wpcf7dtx_checkbox_group_html($atts, $options, $label_ui = false, $rever
             if ($exclusive) {
                 $class[] = 'wpcf7-exclusive-checkbox';
             }
-            if ($dynamic_value && $atts['dtx-default'] && $dynamic_value == $atts['dtx-default']) {
+            $valid_default = is_numeric($atts['dtx-default']) || (is_string($atts['dtx-default']) && !empty($atts['dtx-default']));
+            if ($valid_default && $dynamic_value == $atts['dtx-default']) {
                 $my_atts['checked'] = 'checked';
             }
             $group_html[] = sprintf(

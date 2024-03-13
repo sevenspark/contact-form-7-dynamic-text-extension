@@ -352,7 +352,9 @@ function wpcf7dtx_shortcode_handler($tag)
             foreach ($pipes as $pipe) {
                 $key = trim(strval($pipe[0]));
                 $value = trim(strval($pipe[1]));
-                if ($key && $value) {
+                $valid_key = is_numeric($key) || (is_string($key) && !empty($key)); // Allow falsey numbers but not booleans or strings
+                $valid_value = is_numeric($value) || (is_string($value) && !empty($value)); // Allow falsey numbers but not booleans or strings
+                if ($valid_key && $valid_value) {
                     $options[$key] = $value;
                 }
             }
