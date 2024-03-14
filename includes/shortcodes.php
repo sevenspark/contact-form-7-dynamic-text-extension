@@ -50,11 +50,15 @@ function wpcf7dtx_get($atts = array())
         'default' => '',
         'obfuscate' => ''
     ), array_change_key_case((array)$atts, CASE_LOWER));
-    $value = wpcf7dtx_array_has_key($atts['key'], $_GET, $atts['default']);
+    $raw = wpcf7dtx_array_has_key($atts['key'], $_GET, $atts['default']);
     return apply_filters(
         'wpcf7dtx_shortcode', // DTX built-in shortcode hook
-        apply_filters('wpcf7dtx_escape', apply_filters('wpcf7dtx_sanitize', $value), $atts['obfuscate']), // Sanitized & escaped value to output
-        $value, // Raw value
+        apply_filters(
+            'wpcf7dtx_escape',
+            apply_filters('wpcf7dtx_sanitize', $raw),
+            $atts['obfuscate']
+        ), // Sanitized & escaped value to output
+        $raw, // Raw value
         'GET', // Shortcode tag
         $atts // Shortcode attributes
     );
@@ -71,13 +75,22 @@ function wpcf7dtx_get($atts = array())
  */
 function wpcf7dtx_post($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => '',
         'default' => '',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $value = apply_filters('wpcf7dtx_sanitize', wpcf7dtx_array_has_key($key, $_POST, $default));
-    return apply_filters('wpcf7dtx_escape', $value, $obfuscate);
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $raw = wpcf7dtx_array_has_key($atts['key'], $_POST, $atts['default']);
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', apply_filters(
+            'wpcf7dtx_sanitize',
+            apply_filters('wpcf7dtx_sanitize', $raw)
+        ), $atts['obfuscate']), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'POST', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -91,12 +104,13 @@ function wpcf7dtx_post($atts = array())
  */
 function wpcf7dtx_url($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'allowed_protocols' => '',
         'part' => '',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $allowed_protocols = explode(',', sanitize_text_field($allowed_protocols));
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $atts['allowed_protocols'] = explode(',', sanitize_text_field($atts['allowed_protocols']));
+    extract($atts);
 
     // Get the absolute URL
     if (is_multisite() && !is_subdomain_install()) {
@@ -116,12 +130,29 @@ function wpcf7dtx_url($atts = array())
         ];
         $value = '';
         if (array_key_exists($part, $part_constant_map)) {
-            $value = apply_filters('wpcf7dtx_sanitize', strval(wp_parse_url($url, $part_constant_map[$part])), 'text');
+            $value = strval(wp_parse_url($url, $part_constant_map[$part]));
         }
-        return apply_filters('wpcf7dtx_escape', $value, $obfuscate, 'text');
+        return apply_filters(
+            'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+            apply_filters(
+                'wpcf7dtx_escape',
+                apply_filters('wpcf7dtx_sanitize', $value, 'text'),
+                $obfuscate,
+                'text'
+            ), // Sanitized & escaped value to output
+            $value, // Raw value
+            'URL', // Shortcode tag
+            $atts // Shortcode attributes
+        );
     }
     // No part requested, return the absolute URL
-    return apply_filters('wpcf7dtx_escape', $url, $obfuscate, 'url', $allowed_protocols);
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $url, $obfuscate, 'url', $allowed_protocols), // Sanitized & escaped value to output
+        $url, // Raw value
+        'URL', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -135,15 +166,23 @@ function wpcf7dtx_url($atts = array())
  */
 function wpcf7dtx_referrer($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'allowed_protocols' => '',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    if ($value = wpcf7dtx_array_has_key('HTTP_REFERER', $_SERVER)) {
-        $value = apply_filters('wpcf7dtx_sanitize', $value, 'url', $allowed_protocols);
-        return apply_filters('wpcf7dtx_escape', $value, $obfuscate, 'url');
-    }
-    return '';
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $url = wpcf7dtx_array_has_key('HTTP_REFERER', $_SERVER);
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', apply_filters(
+            'wpcf7dtx_sanitize',
+            $url,
+            'url',
+            $atts['allowed_protocols']
+        ), $atts['obfuscate'], 'url'), // Sanitized & escaped value to output
+        $url, // Raw value
+        'referrer', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -157,13 +196,21 @@ function wpcf7dtx_referrer($atts = array())
  */
 function wpcf7dtx_bloginfo($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'show' => 'name', //Backwards compatibility
         'key' => 'name',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    extract($atts);
     $key = $show != $key && $show != 'name' ? $show : $key; // Use old value of "show" if not set to default value
-    return apply_filters('wpcf7dtx_escape', get_bloginfo($key), $obfuscate);
+    $raw = get_bloginfo($key);
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $raw, $obfuscate), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'bloginfo', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -177,12 +224,12 @@ function wpcf7dtx_bloginfo($atts = array())
  */
 function wpcf7dtx_get_post_var($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => 'post_title',
         'post_id' => '',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $key = strtolower(apply_filters('wpcf7dtx_sanitize', $key));
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $key = strtolower(apply_filters('wpcf7dtx_sanitize', $atts['key']));
     switch ($key) {
         case 'acf_id': // If requesting the handle for ACF, return the post ID
         case 'id':
@@ -197,11 +244,15 @@ function wpcf7dtx_get_post_var($atts = array())
         default:
             break;
     }
-    $post_id = wpcf7dtx_get_post_id($post_id);
-    if ($post_id) {
-        return apply_filters('wpcf7dtx_escape', get_post_field($key, $post_id), $obfuscate);
-    }
-    return '';
+    $atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id']);
+    $raw = $atts['post_id'] ? get_post_field($key, $atts['post_id']) : '';
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate']), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_post_var', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -215,25 +266,29 @@ function wpcf7dtx_get_post_var($atts = array())
  */
 function wpcf7dtx_get_custom_field($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => '',
         'post_id' => '',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    ), array_change_key_case((array)$atts, CASE_LOWER));
 
     // If this key can't be accessed
-    if (!wpcf7dtx_post_meta_key_access_is_allowed($key)) {
+    if (!wpcf7dtx_post_meta_key_access_is_allowed($atts['key'])) {
         // Trigger a warning if a denied key is in use
-        wpcf7dtx_access_denied_alert($key, 'post_meta');
+        wpcf7dtx_access_denied_alert($atts['key'], 'post_meta');
         return '';
     }
 
-    $post_id = wpcf7dtx_get_post_id($post_id);
-    $key = apply_filters('wpcf7dtx_sanitize', $key, 'text');
-    if ($post_id && $key) {
-        return apply_filters('wpcf7dtx_escape', get_post_meta($post_id, $key, true), $obfuscate);
-    }
-    return '';
+    $key = apply_filters('wpcf7dtx_sanitize', $atts['key'], 'text');
+    $atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id']);
+    $raw = $atts['post_id'] && $key ? get_post_meta($atts['post_id'], $key, true) : '';
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate']), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_custom_field', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -249,12 +304,15 @@ function wpcf7dtx_get_custom_field($atts = array())
  */
 function wpcf7dtx_get_current_var($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => 'title',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    extract($atts);
     $key = apply_filters('wpcf7dtx_sanitize', $key);
     $temp_key = str_replace('-', '_', sanitize_key($key));
+    $raw = '';
+    $value = '';
     if ($temp_key === 'url') {
         return wpcf7dtx_url($atts); // Getting the current URL is the same for all WordPress pages
     } elseif (!empty($key)) {
@@ -278,16 +336,26 @@ function wpcf7dtx_get_current_var($atts = array())
             case 'user': // This is an author page
                 switch ($temp_key) {
                     case 'acf_id': // Get handle for Advanced Custom Fields
-                        return apply_filters('wpcf7dtx_escape', 'user_' . $obj->ID, $obfuscate);
+                        $raw = 'user_' . $obj->ID;
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                     case 'image':
                     case 'featured_image': // Get the profile picture of the user being displayed on the page
-                        return apply_filters('wpcf7dtx_escape', get_avatar_url($obj->ID), $obfuscate, 'url');
+                        $raw = get_avatar_url($obj->ID);
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate, 'url');
+                        break;
                     case 'title': // Get author's display name
-                        return apply_filters('wpcf7dtx_escape', $obj->display_name, $obfuscate);
+                        $raw = $obj->display_name;
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                     case 'slug': // Not all author pages use the `user_login` variable for security reasons, so get what is currently displayed as slug
-                        return apply_filters('wpcf7dtx_escape', basename(wpcf7dtx_url(array('part' => 'path'))), $obfuscate);
+                        $raw = basename(wpcf7dtx_url(array('part' => 'path')));
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                     default: // Get user value by key should it exist
-                        return apply_filters('wpcf7dtx_escape', $obj->get($key), $obfuscate);
+                        $raw = $obj->get($key);
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                 }
             case 'post': // This is a post object
                 switch ($temp_key) {
@@ -308,35 +376,53 @@ function wpcf7dtx_get_current_var($atts = array())
             case 'term': // This is a taxonomy with a term ID
                 switch ($key) {
                     case 'id': // Get term ID
-                        return apply_filters('wpcf7dtx_escape', $obj->term_id, $obfuscate);
+                        $raw = $obj->term_id;
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                     case 'acf_id': // Get handle for Advanced Custom Fields
-                        return apply_filters('wpcf7dtx_escape', $obj->taxonomy . '_' . $obj->term_id, $obfuscate);
+                        $raw = $obj->taxonomy . '_' . $obj->term_id;
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                     case 'title': // Get term name
-                        return apply_filters('wpcf7dtx_escape', $obj->name, $obfuscate);
+                        $raw = $obj->name;
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                     default:
                         if (property_exists($obj, $key)) {
                             // Get any property if it exists
-                            return apply_filters('wpcf7dtx_escape', $obj->{$key}, $obfuscate);
+                            $raw = $obj->{$key};
+                        } else {
+                            // Otherwise, try meta data if the property doesn't exist
+                            $raw = get_metadata('term', $obj->ID, $key, true);
                         }
-                        // Otherwise, try meta data if the property doesn't exist
-                        return apply_filters('wpcf7dtx_escape', get_metadata('term', $obj->ID, $key, true), $obfuscate);
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                 }
             case 'archive': // Possibly a date or formats archive
                 switch ($temp_key) {
                     case 'title': // Get archive title
-                        return apply_filters('wpcf7dtx_escape', get_the_archive_title(), $obfuscate);
+                        $raw = get_the_archive_title();
+                        $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
+                        break;
                     default:
                         break;
                 }
             default: // Possibly a search or 404 page at this point
                 if ($temp_key == 'slug') {
                     // no idea what else to get except the slug maybe
-                    return apply_filters('wpcf7dtx_escape', basename(wpcf7dtx_url(array('part' => 'path'))), $obfuscate);
+                    $raw = basename(wpcf7dtx_url(array('part' => 'path')));
+                    $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
                 }
                 break;
         }
     }
-    return '';
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        $value, // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_current_var', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -352,23 +438,29 @@ function wpcf7dtx_get_current_var($atts = array())
  */
 function wpcf7dtx_get_current_user($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => 'user_login',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $raw = '';
     if (is_user_logged_in()) {
 
         // If this key can't be accessed
-        if (!wpcf7dtx_user_data_access_is_allowed($key)) {
+        if (!wpcf7dtx_user_data_access_is_allowed($atts['key'])) {
             // Trigger a warning if a denied key is in use
-            wpcf7dtx_access_denied_alert($key, 'user_data');
+            wpcf7dtx_access_denied_alert($atts['key'], 'user_data');
             return '';
         }
 
-        $user = wp_get_current_user();
-        return apply_filters('wpcf7dtx_escape', $user->get($key), $obfuscate);
+        $raw = wp_get_current_user()->get($atts['key']);
     }
-    return '';
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate']), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_current_user', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -386,34 +478,43 @@ function wpcf7dtx_get_current_user($atts = array())
  */
 function wpcf7dtx_get_attachment($atts = array())
 {
-    extract(shortcode_atts(array(
-        'id' => '', //Get attachment by ID
-        'size' => 'full', //Define attachment size
-        'post_id' => '', //If attachment ID is empty but post ID is not, get the featured image
-        'return' => 'url', //Options are `id` or `url`
+    $atts = shortcode_atts(array(
+        'id' => '', // Get attachment by ID
+        'size' => 'full', // Define attachment size
+        'post_id' => '', // If attachment ID is empty but post ID is not, get the featured image
+        'return' => 'url', // Options are `id` or `url`
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
+    ), array_change_key_case((array)$atts, CASE_LOWER));
 
-    //No attachment ID was provided, check for post ID to get it's featured image
-    if (empty($id)) {
-        if ($post_id = wpcf7dtx_get_post_id($post_id)) {
+    // No attachment ID was provided, check for post ID to get it's featured image
+    if (empty($atts['id'])) {
+        if ($atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id'])) {
             //If a post ID was provided, get it's featured image
-            $id = get_post_thumbnail_id($post_id);
+            $atts['id'] = get_post_thumbnail_id($atts['post_id']);
         }
     }
 
     //Get the value
-    if ($id) {
-        $id = intval(sanitize_text_field(strval($id)));
-        switch ($return) {
+    if ($atts['id']) {
+        $atts['id'] = intval(sanitize_text_field(strval($atts['id'])));
+        switch ($atts['return']) {
             case 'id': //Return the attachment ID
-                return apply_filters('wpcf7dtx_escape', $id, $obfuscate);
+                $raw = $atts['id'];
+                $value = apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate']);
+                break;
             default: //Return attachment URL
-                $url = wp_get_attachment_image_url(intval($id), sanitize_text_field(strval($size)));
-                return apply_filters('wpcf7dtx_escape', $url, $obfuscate, 'url');
+                $raw = wp_get_attachment_image_url(intval($atts['id']), sanitize_text_field(strval($atts['size'])));
+                $value = apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate'], 'url');
+                break;
         }
     }
-    return '';
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        $value, // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_attachment', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -431,14 +532,19 @@ function wpcf7dtx_get_attachment($atts = array())
  */
 function wpcf7dtx_get_cookie($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => '',
         'default' => '',
         'obfuscate' => '' // Optionally obfuscate returned value
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $key = apply_filters('wpcf7dtx_sanitize', $key);
-    $value = wpcf7dtx_array_has_key($key, $_COOKIE, $default);
-    return apply_filters('wpcf7dtx_escape', $value, $obfuscate);
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $raw = wpcf7dtx_array_has_key(apply_filters('wpcf7dtx_sanitize', $atts['key']), $_COOKIE, $atts['default']);
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate']), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_cookie', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -457,25 +563,34 @@ function wpcf7dtx_get_cookie($atts = array())
  */
 function wpcf7dtx_get_taxonomy($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'post_id' => '',
         'taxonomy' => 'category', // Default taxonomy is `category`
         'fields' => 'names', // Return an array of term names
         'obfuscate' => '' // Optionally obfuscate returned value
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $post_id = wpcf7dtx_get_post_id($post_id);
-    $fields = apply_filters('wpcf7dtx_sanitize', $fields, 'key');
-    if ($post_id && in_array($fields, array('names', 'slugs', 'ids'))) {
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id']);
+    $fields = apply_filters('wpcf7dtx_sanitize', $atts['fields'], 'key');
+    $raw = '';
+    $value = '';
+    if ($atts['post_id'] && in_array($fields, array('names', 'slugs', 'ids'))) {
         $terms = wp_get_object_terms(
-            $post_id, // Get only the ones assigned to this post
-            apply_filters('wpcf7dtx_sanitize', $taxonomy, 'slug'),
+            $atts['post_id'], // Get only the ones assigned to this post
+            apply_filters('wpcf7dtx_sanitize', $atts['taxonomy'], 'slug'),
             array('fields' => $fields)
         );
-        if (is_array($terms) && count($values = array_values($terms)) && (is_string($values[0]) || is_numeric($values[0]))) {
-            return apply_filters('wpcf7dtx_escape', implode(', ', $values), $obfuscate, 'text');
+        if (is_array($terms) && count($raw = array_values($terms)) && (is_string($raw[0]) || is_numeric($raw[0]))) {
+            //return apply_filters('wpcf7dtx_escape', implode(', ', $values), $obfuscate, 'text');
+            $value = implode(', ', $raw);
         }
     }
-    return '';
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $value, $atts['obfuscate'], 'text'), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_taxonomy', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -494,16 +609,23 @@ function wpcf7dtx_get_taxonomy($atts = array())
  */
 function wpcf7dtx_get_theme_option($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => '',
         'default' => '', // Optional default value
         'obfuscate' => '' // Optionally obfuscate returned value
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    if ($key = apply_filters('wpcf7dtx_sanitize', $key, 'text')) {
-        $default = apply_filters('wpcf7dtx_sanitize', $default);
-        return apply_filters('wpcf7dtx_escape', get_theme_mod($key, $default), $obfuscate);
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $default = apply_filters('wpcf7dtx_sanitize', $atts['default']);
+    $raw = $default;
+    if ($key = apply_filters('wpcf7dtx_sanitize', $atts['key'], 'text')) {
+        $raw = get_theme_mod($key, $default);
     }
-    return '';
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate']), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'get_theme_option', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
@@ -519,8 +641,16 @@ function wpcf7dtx_get_theme_option($atts = array())
  */
 function wpcf7dtx_guid()
 {
-    if (function_exists('com_create_guid') === true) {
-        return esc_attr(trim(com_create_guid(), '{}'));
+    if (function_exists('com_create_guid')) {
+        $raw = trim(com_create_guid(), '{}');
+    } else {
+        $raw = sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
     }
-    return esc_attr(sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535)));
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        esc_attr($raw), // Sanitized & escaped value to output
+        $raw, // Raw value
+        'guid', // Shortcode tag
+        array() // Shortcode attributes
+    );
 }
