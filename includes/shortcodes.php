@@ -45,13 +45,19 @@ add_action('init', 'wpcf7dtx_init_shortcodes'); //Add init hook to add shortcode
  */
 function wpcf7dtx_get($atts = array())
 {
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
         'key' => 0,
         'default' => '',
         'obfuscate' => ''
-    ), array_change_key_case((array)$atts, CASE_LOWER)));
-    $value = apply_filters('wpcf7dtx_sanitize', wpcf7dtx_array_has_key($key, $_GET, $default));
-    return apply_filters('wpcf7dtx_escape', $value, $obfuscate);
+    ), array_change_key_case((array)$atts, CASE_LOWER));
+    $value = wpcf7dtx_array_has_key($atts['key'], $_GET, $atts['default']);
+    return apply_filters(
+        'wpcf7dtx_shortcode', // DTX built-in shortcode hook
+        apply_filters('wpcf7dtx_escape', apply_filters('wpcf7dtx_sanitize', $value), $atts['obfuscate']), // Sanitized & escaped value to output
+        $value, // Raw value
+        'GET', // Shortcode tag
+        $atts // Shortcode attributes
+    );
 }
 
 /**
