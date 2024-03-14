@@ -1,5 +1,10 @@
 == Changelog ==
 
+= 4.3.0 =
+
+* Feature: Added the `wpcf7dtx_shortcode` filter to all built-in shortcodes as requested. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/filter-modify-built-in-shortcode-responses/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+* Fix: Resolved a bug that prevented using the number zero as the value for select fields, checkboxes, and radio buttons, [see support thread](https://wordpress.org/support/topic/error-with-option-value-0-for-a-dynamic-radio-button/).
+
 = 4.2.3 =
 
 * Fix: Resolved a bug where the `dynamic_select` displayed with a default size of 40 instead of 1.
@@ -21,7 +26,7 @@
 
 = 4.2.0 =
 
-* Security Update: ** Please be sure to review this doc, as you may need to adjust the settings: https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access **
+* Security Update: ** Please be sure to review this doc, as you may need to adjust the settings: [Documentation by SevenSpark](https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access), [Documentation by AuRise Creative](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/security/) **
 * Feature: Added Settings Screen with Allow Lists
 * Feature: Added Form Scanner
 * Feature: Added Allow List key validation in CF7 Form Validator

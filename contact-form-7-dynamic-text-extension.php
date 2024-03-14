@@ -2,41 +2,40 @@
 
 /**
  * Plugin Name: Contact Form 7 - Dynamic Text Extension
- * Plugin URI: https://sevenspark.com/goods/contact-form-7-dynamic-text-extension
- * Description: This plugin extends Contact Form 7 by adding dynamic form fields that accept any shortcode to generate default values and placeholder text. Requires Contact Form 7.
+ * Description: Extends Contact Form 7 by adding dynamic form fields that accepts shortcodes to prepopulate form fields with default values and dynamic placeholders.
  * Version: VERSION_PLACEHOLDER
- * Author: SevenSpark, AuRise Creative
- * Author URI: https://sevenspark.com
- * License: GPL2
+ * Author: AuRise Creative, SevenSpark
+ * Author URI: https://aurisecreative.com
+ * Plugin URI: https://aurisecreative.com/products/wordpress-plugin/contact-form-7-dynamic-text-extension/
+ * License: GPL v3
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  * Requires at least: 5.5
  * Requires PHP: 7.4
  * Text Domain: contact-form-7-dynamic-text-extension
+ *
+ * @copyright Copyright (c) 2010-2024 Chris Mavricos, SevenSpark <https://sevenspark.com>
+ * @copyright Copyright (c) 2022-2024 Tessa Watkins, AuRise Creative <https://aurisecreative.com>
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-    Copyright 2010-2024 Chris Mavricos, SevenSpark <https://sevenspark.com>
-    Copyright 2022-2024 Tessa Watkins, AuRise Creative <https://aurisecreative.com>
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as
-    published by the Free Software Foundation.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-
 define('WPCF7DTX_VERSION', 'VERSION_PLACEHOLDER'); // Define current version of DTX
-define('WPCF7DTX_MINVERSION', '5.7'); // The minimum version of CF7 required to use all features
+define('WPCF7DTX_MINVERSION', '5.7'); // The minimum version of CF7 required to use mail validator
 defined('WPCF7DTX_DIR') || define('WPCF7DTX_DIR', __DIR__); // Define root directory
 defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__); // Define root file
-
-define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access');
+define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/security/');
 
 /**
  * Determine Dependencies are Met

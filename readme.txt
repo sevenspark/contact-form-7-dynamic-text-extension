@@ -1,11 +1,11 @@
 === Contact Form 7 - Dynamic Text Extension ===
 Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
-Tags: Contact Form 7, autofill, prepopulate, input, form field, contact form, text, hidden, input, dynamic, GET, POST, title, slug, auto-fill, pre-populate
-Tested up to: 6.4.2
+Tags: Contact Form 7, autofill, prepopulate, dynamic form, form field
+Tested up to: 6.4
 Stable tag: VERSION_PLACEHOLDER
 
-This plugin provides additional form tags for the Contact Form 7 plugin. It allows dynamic generation of content for text-based input fields like text, hidden, and email, checkboxes, radio buttons, and drop-down selections using any shortcode.
+Extends Contact Form 7 by adding dynamic form fields that accepts shortcodes to prepopulate form fields with default values and dynamic placeholders.
 
 == Description ==
 
@@ -381,13 +381,14 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Resolved a bug where the `dynamic_select` displayed with a default size of 40 instead of 1.
+Added the `wpcf7dtx_shortcode` filter to all built-in shortcodes and fixed a few bugs. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
 
-= 4.2.3 =
+= 4.3.0 =
 
-* Fix: Resolved a bug where the `dynamic_select` displayed with a default size of 40 instead of 1.
+* Feature: Added the `wpcf7dtx_shortcode` filter to all built-in shortcodes as requested. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/filter-modify-built-in-shortcode-responses/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
+* Fix: Resolved a bug that prevented using the number zero as the value for select fields, checkboxes, and radio buttons, [see support thread](https://wordpress.org/support/topic/error-with-option-value-0-for-a-dynamic-radio-button/).
 
 = 4.2.2 =
 
@@ -406,7 +407,7 @@ Resolved a bug where the `dynamic_select` displayed with a default size of 40 in
 
 = 4.2.0 =
 
-* Security Update: ** Please be sure to review this doc, as you may need to adjust the settings: https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access **
+* Security Update: ** Please be sure to review this doc, as you may need to adjust the settings: [Documentation by SevenSpark](https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access), [Documentation by AuRise Creative](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/security/) **
 * Feature: Added Settings Screen with Allow Lists
 * Feature: Added Form Scanner
 * Feature: Added Allow List key validation in CF7 Form Validator
