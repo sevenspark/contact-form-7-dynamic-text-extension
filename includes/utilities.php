@@ -396,7 +396,14 @@ function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reve
 {
     // Default field attributes
     $atts = array_merge(array('value' => '', 'dtx-default' => ''), array_change_key_case((array)$atts, CASE_LOWER));
-    if ($atts['value'] && $atts['dtx-default'] && $atts['value'] == $atts['dtx-default']) {
+
+    // Checkboxes can have multiple values checked, check mine if it's listed as a default value
+    if ($atts['type'] == 'checkbox' && is_string($atts['dtx-default']) && strpos($atts['dtx-default'], '_') !== false) {
+        $default = array_unique(explode('_', $atts['dtx-default']));
+        if (in_array($atts['value'], $default)) {
+            $atts['checked'] = 'checked';
+        }
+    } elseif ((is_numeric($atts['dtx-default']) || $atts['dtx-default']) && $atts['value'] == $atts['dtx-default']) {
         $atts['checked'] = 'checked';
     }
     $input = wpcf7dtx_input_html($atts);
