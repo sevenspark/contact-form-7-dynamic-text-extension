@@ -495,6 +495,8 @@ function wpcf7dtx_get_attachment($atts = array())
     }
 
     //Get the value
+    $value = '';
+    $raw = '';
     if ($atts['id']) {
         $atts['id'] = intval(sanitize_text_field(strval($atts['id'])));
         switch ($atts['return']) {
