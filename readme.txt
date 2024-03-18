@@ -2,7 +2,7 @@
 Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, dynamic form, form field
-Tested up to: 6.4
+Tested up to: 6.5
 Stable tag: VERSION_PLACEHOLDER
 
 Extends Contact Form 7 by adding dynamic form fields that accepts shortcodes to prepopulate form fields with default values and dynamic placeholders.
@@ -381,9 +381,15 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Added the `wpcf7dtx_shortcode` filter to all built-in shortcodes and fixed a few bugs. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Fixed user-reported bugs regarding `dynamic_checkbox` accepting multiple default values, mail template validator, and some PHP warnings. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
+
+= 4.3.1 =
+
+* Fix: Resolved the PHP warning regarding `Undefined array key "value" in /.../contact-form-7-dynamic-text-extension/contact-form-7-dynamic-text-extension.php on line 391`, [see support thread](https://wordpress.org/support/topic/undefined-array-key-value-2/).
+* Fix: Resolved a bug introduced in version 4.2.1 that prevented the mail template validator from recognizing DTX form tags, [see support thread](https://wordpress.org/support/topic/email-field-validation-4/).
+* Fix: The `default` attribute for `dynamic_checkbox` can now accept multiple values that are delimited by an underscore (_), making it consistent with [Contact Form 7](https://contactform7.com/checkboxes-radio-buttons-and-menus/#checkbox-radio), [see support thread](https://wordpress.org/support/topic/help-dynamic_checkbox-and-default-values/).
 
 = 4.3.0 =
 
