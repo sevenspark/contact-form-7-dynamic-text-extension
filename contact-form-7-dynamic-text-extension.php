@@ -309,13 +309,14 @@ function wpcf7dtx_shortcode_handler($tag)
         //Reverse engineer what JS did (converted quotes to HTML entities --> URL encode) then sanitize
         $placeholder = html_entity_decode(urldecode($tag->get_option('placeholder', '', true)), ENT_QUOTES);
         if ($placeholder) {
-            //If a different placeholder text has been specified, set both attributes
+            // If a different placeholder text has been specified, set both attributes
             $placeholder = wpcf7dtx_get_dynamic($placeholder, false, $sanitize_type);
             $atts['placeholder'] = $placeholder;
             $atts['value'] = $value;
         } else {
-            //Default behavior of using the value as the placeholder
+            // Default behavior of using the value as the placeholder
             $atts['placeholder'] = $value;
+            $atts['value'] = '';
         }
     } else {
         $atts['value'] = $value;
