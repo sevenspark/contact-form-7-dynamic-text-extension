@@ -199,24 +199,32 @@ function wpcf7dtx_get_post_id($post_id, $context = 'dtx')
  * @param string $value The form tag value.
  * @param WPCF7_FormTag|false $tag Optional. Use to look up default value.
  * @param string $sanitize Optional. Specify type of sanitization. Default is `auto`.
+ * @param string $option_name Optional. Specify an option from the $tag to retrieve and decode. Default is `value`.
+ * @param string $option_pattern Optional. A regular expression pattern or one of the keys of preset patterns. If specified, only options whose value part matches this pattern will be returned.
  *
  * @return string The dynamic output or the original value, not escaped or sanitized.
  */
-function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto')
+function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto', $option_name = 'value', $option_pattern = '')
 {
-    if ($tag !== false) {
-        $default = $tag->get_option('defaultvalue', '', true);
-        if (!$default) {
-            $default = $tag->get_default_option(strval(reset($tag->values)));
+    if (is_object($tag)) {
+        if ($option_name != 'value') {
+            $value = html_entity_decode(urldecode(strval($tag->get_option($option_name, $option_pattern, true))), ENT_QUOTES);
+        } else {
+            $default = $tag->get_option('defaultvalue', '', true);
+            if (!$default) {
+                $default = $tag->get_default_option(strval(reset($tag->values)));
+            }
+            $value = wpcf7_get_hangover($tag->name, $default);
         }
-        $value = wpcf7_get_hangover($tag->name, $default);
     }
     $value = apply_filters('wpcf7dtx_sanitize', $value, $sanitize);
     if (is_string($value) && !empty($value)) {
-        // If a shortcode was passed as the value, evaluate it and use the result
+        // If a shortcode was passed as the value, attempt to evaluate itevaluate it and use the result
         $shortcode_tag = '[' . $value . ']';
+        //var_dump('Shortcode tag?', $shortcode_tag);
         $shortcode_output = do_shortcode($shortcode_tag); //Shortcode value
-        if (is_string($shortcode_output) && $shortcode_output != $shortcode_tag) {
+        //var_dump('Shortcode value?', $shortcode_output);
+        if ($shortcode_output != $shortcode_tag) {
             return apply_filters('wpcf7dtx_sanitize', $shortcode_output, $sanitize);
         }
     }
@@ -300,7 +308,7 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
         );
     } else {
         // Properties exclusive to text-based inputs
-$allowed_properties['autocapitalize'] = array();
+        $allowed_properties['autocapitalize'] = array();
         $allowed_properties['autocomplete'] = array();
         $allowed_properties['list'] = array();
 
@@ -575,6 +583,33 @@ function wpcf7dtx_textarea_html($atts)
         wpcf7dtx_format_atts($atts),
         apply_filters('wpcf7dtx_escape', $atts['value'], false, 'textarea')
     );
+}
+
+/**
+ * Create Options HTML
+ *
+ * @since 4.4.0
+ *
+ * @param array $options Accepts an associative array of key/value pairs to use as the
+ * select option's value/label pairs.
+ * @param bool $selected_value Optional. The value that should be selected by default.
+ *
+ * @return string HTML output of options
+ */
+function wpcf7dtx_options_html($options, $selected_value = '')
+{
+    $html = '';
+    foreach ($options as $value => $label) {
+        $dynamic_value = wpcf7dtx_get_dynamic($value);
+        $dynamic_label = wpcf7dtx_get_dynamic($label);
+        $html .= sprintf(
+            '<option value="%1$s"%3$s>%2$s</option>',
+            esc_attr(apply_filters('wpcf7dtx_escape', $dynamic_value)),
+            esc_html(apply_filters('wpcf7dtx_escape', $dynamic_label)),
+            $selected_value == $dynamic_label ? ' selected' : ''
+        );
+    }
+    return $html;
 }
 
 /**
