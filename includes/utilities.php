@@ -287,6 +287,17 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
         $allowed_properties['multiple'] = array();
         $allowed_properties['dtx-default'] = array();
         unset($allowed_properties['type'], $allowed_properties['value']); // Remove invalid select attributes
+    } elseif ($type == 'label') {
+        // Properties exclusive to label elements
+        $allowed_properties['for'] = array();
+        // Remove invalid label attributes
+        unset(
+            $allowed_properties['type'],
+            $allowed_properties['name'],
+            $allowed_properties['value'],
+            $allowed_properties['disabled'],
+            $allowed_properties['aria-invalid']
+        );
     } else {
         // Properties exclusive to text-based inputs
         $allowed_properties['autocomplete'] = array();
