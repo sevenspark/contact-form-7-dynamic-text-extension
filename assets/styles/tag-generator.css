@@ -1,7 +1,6 @@
-.tag-generator-panel[data-id^="dynamic_select"],
-.tag-generator-panel[data-id^="dynamic_checkbox"],
-.tag-generator-panel[data-id^="dynamic_radio"] {
-    height: 740px;
+.tag-generator-panel[data-id^="dynamic_"]:not([data-id*="hidden"]):not([data-id*="label"]):not([data-id*="submit"]) {
+    /* Set size of tag generator to be larger for dynamic fields, except for these because they don't have a lot of options */
+    height: 775px;
 }
 
 #tag-generator-list a.button.dtx-form-tag {
@@ -43,4 +42,26 @@
 
 .tag-generator-panel .control-box textarea {
     height: 3.5em;
+}
+
+.tag-generator-panel table.form-table td .wpcf7dtx-mini-att,
+.tag-generator-panel table.form-table td .wpcf7dtx-mini-att label,
+.tag-generator-panel table.form-table td .wpcf7dtx-mini-att input[type="text"] {
+    vertical-align: middle;
+}
+
+.tag-generator-panel .insert-box textarea.tag {
+    border-radius: 4px;
+    border: 1px solid #8c8f94;
+    color: #2c3338;
+    /* padding: 0 8px; */
+    /* line-height: 2; */
+    min-height: 30px;
+    width: 500px;
+    float: left;
+    background-color: transparent;
+    box-shadow: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
