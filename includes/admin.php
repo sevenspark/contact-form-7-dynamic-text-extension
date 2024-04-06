@@ -109,7 +109,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
     );
 
     // Input field - Required checkbox (not available for some fields)
-    if (!in_array($input_type, array('hidden', 'quiz', 'submit', 'reset'))) {
+    if (!in_array($input_type, array('hidden', 'quiz', 'submit', 'reset', 'label'))) {
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
             esc_attr($options['content'] . '-required'), // field id
@@ -124,7 +124,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
     }
 
     // Input field - Field Name (not available for some fields)
-    if (!in_array($input_type, array('submit', 'reset'))) {
+    if (!in_array($input_type, array('submit', 'reset', 'label'))) {
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /></td></tr>',
             esc_attr($options['content'] . '-name'), // field id
@@ -184,7 +184,29 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         esc_html__('View DTX shortcode syntax documentation', 'contact-form-7-dynamic-text-extension') // Link label
     );
 
-    if ($input_type == 'select') {
+    if ($input_type == 'label') {
+        $placeholder_description = __('The id attribute of the element this label is for.', 'contact-form-7-dynamic-text-extension');
+        $placeholder_description .= __('Can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /><input %s /><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            esc_attr($options['content'] . '-for'), // field id
+            esc_html__('For attribute'), // field label
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'for',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'name' => 'dtx-for',
+                'id' => $options['content'] . '-for', // field id
+                'class' => 'multiline dtx-option'
+            )),
+            esc_html($placeholder_description), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View documentation for Dynamic Attributes', 'contact-form-7-dynamic-text-extension') //Link label
+        );
+    } elseif ($input_type == 'select') {
         // Input field - Multiple selections checkbox
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
@@ -215,7 +237,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
     }
 
     // Input field - Dynamic placeholder (not available for some fields)
-    if (!in_array($input_type, array('hidden', 'radio', 'checkbox', 'quiz', 'submit', 'reset'))) {
+    if (!in_array($input_type, array('hidden', 'radio', 'checkbox', 'range', 'quiz', 'submit', 'reset', 'label'))) {
         $placeholder_description = '';
         if (in_array($input_type, array('select', 'checkbox', 'radio'))) {
             $placeholder_label = __('First Option Label', 'contact-form-7-dynamic-text-extension');
@@ -335,14 +357,14 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         }
     }
 
-    // Input field - Dynamic default value (not available for some fields)
-    if (in_array($input_type, array('select'))) {
+    // Input field - Dynamic default value (only available for selection-based fields)
+    if (in_array($input_type, array('select', 'checkbox', 'radio'))) {
         $default_input_type = '<input %s />';
         $default_placeholder = '';
         if ($input_type == 'checkbox') {
-            $default_input_type = '<textarea %s></textarea>';
-            $default_description =  __('Optionally define the default on/off status of the checkboxes by putting a 1 (checked) or 0 (not checked) on each line that corresponds with the options.', 'contact-form-7-dynamic-text-extension') . ' ';
-            $default_placeholder = '0' . PHP_EOL . '1';
+            //$default_input_type = '<textarea %s></textarea>';
+            $default_description =  __('Optionally define which checkboxes are checked by default by defining the checked values using an underscore (_) delimited list.', 'contact-form-7-dynamic-text-extension') . ' ';
+            $default_placeholder = 'hello-world_Foo';
         } else {
             $default_description =  __('Optionally define the option that is selected by default. This can be different than the first [blank] option. If options use key/value pairs, only define the key here.', 'contact-form-7-dynamic-text-extension') . ' ';
         }
@@ -367,6 +389,76 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
             esc_attr($utm_source), //UTM source
             esc_attr($type), //UTM content
             esc_html__('View Dynamic Select documentation', 'contact-form-7-dynamic-text-extension') //Link label
+        );
+    }
+
+    // Input field - Range attributes (only available for numeric and date fields)
+    if (in_array($input_type, array('number', 'range', 'date'))) {
+        $default_input_type = 'number';
+
+        $default_placeholder = 'Foo';
+        $step_option = '';
+        if ($input_type == 'date') {
+            $default_input_type = 'date';
+            $default_description =  __('Optionally define the minimum and/or maximum date values.', 'contact-form-7-dynamic-text-extension') . ' ';
+            $default_placeholder = 'hello-world_Foo';
+        } else {
+            $step_option = sprintf(
+                '&nbsp;<span class="wpcf7dtx-mini-att"><label for="%s">%s</label> <input %s /><input %s /></span>',
+                esc_attr($options['content'] . '-step'),
+                esc_html__('Step', 'contact-form-7-dynamic-text-extension'),
+                wpcf7_format_atts(array(
+                    'type' => 'hidden',
+                    'name' => 'step',
+                    'class' => 'option'
+                )),
+                wpcf7_format_atts(array(
+                    'type' => 'text',
+                    'name' => 'dtx-step',
+                    'id' => $options['content'] . '-step',
+                    'class' => 'dtx-option',
+                    'size' => 7
+                ))
+            );
+            $default_description =  __('Optionally define the minimum, maximum, and/or step values.', 'contact-form-7-dynamic-text-extension') . ' ';
+        }
+        $default_description .= __('Each can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+        printf(
+            '<tr><th scope="row"><label>%s</label></th><td><span class="wpcf7dtx-mini-att"><label for="%s">%s</label> <input %s /><input %s /></span> - <span class="wpcf7dtx-mini-att"><label for="%s">%s</label> <input %s /><input %s /></span>%s<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            esc_html__('Range', 'contact-form-7-dynamic-text-extension'), // field label
+            esc_attr($options['content'] . '-min'),
+            esc_html__('Min', 'contact-form-7-dynamic-text-extension'),
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'min',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'type' => 'text',
+                'name' => 'dtx-min',
+                'id' => $options['content'] . '-min',
+                'class' => 'dtx-option',
+                'size' => 7
+            )),
+            esc_attr($options['content'] . '-max'),
+            esc_html__('Max', 'contact-form-7-dynamic-text-extension'),
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'max',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'type' => 'text',
+                'name' => 'dtx-max',
+                'id' => $options['content'] . '-max',
+                'class' => 'dtx-option',
+                'size' => 7
+            )),
+            $step_option, // Optional "step" option for numbers and ranges
+            esc_html($default_description), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View documentation for Dynamic Attributes', 'contact-form-7-dynamic-text-extension') //Link label
         );
     }
 
@@ -396,8 +488,153 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         ))
     );
 
+    // Input field - Maxlenth & Minlength attributes (only available for visible text fields)
+    if (!in_array($input_type, array('hidden', 'quiz', 'submit', 'reset', 'label', 'number', 'range', 'date', 'select', 'checkbox', 'radio'))) {
+        $default_description =  __('Optionally define the minimum and/or maximum character string length. Must be a positive whole number or integer.', 'contact-form-7-dynamic-text-extension') . ' ';
+        $default_description .= __('Each can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+        printf(
+            '<tr><th scope="row"><label>%s</label></th><td><span class="wpcf7dtx-mini-att"><label for="%s">%s</label> <input %s /><input %s /></span> - <span class="wpcf7dtx-mini-att"><label for="%s">%s</label> <input %s /><input %s /></span><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            //esc_attr($options['content'] . '-default'), // field id
+            esc_html__('Character Length', 'contact-form-7-dynamic-text-extension'), // field label
+            esc_attr($options['content'] . '-minlength'),
+            esc_html__('Min', 'contact-form-7-dynamic-text-extension'),
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'minlength',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'type' => 'text',
+                'name' => 'dtx-minlength',
+                'id' => $options['content'] . '-minlength',
+                'class' => 'dtx-option',
+                'size' => 10
+            )),
+            esc_attr($options['content'] . '-maxlength'),
+            esc_html__('Max', 'contact-form-7-dynamic-text-extension'),
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'maxlength',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'type' => 'text',
+                'name' => 'dtx-maxlength',
+                'id' => $options['content'] . '-maxlength',
+                'class' => 'dtx-option',
+                'size' => 10
+            )),
+            esc_html($default_description), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View documentation for Dynamic Attributes', 'contact-form-7-dynamic-text-extension') //Link label
+        );
+    }
+
+    // Input field - Maxlenth & Minlength attributes (only available for visible text fields)
+    if (in_array($input_type, array('text', 'email', 'phone', 'url', 'password', 'textarea'))) {
+        $default_description =  __('Optionally define an autocomplete setting by the browser.', 'contact-form-7-dynamic-text-extension') . ' ';
+        $default_description .= __('Each can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+        $datalist = array(
+            'off' => __('Off', 'contact-form-7-dynamic-text-extension'),
+            'on' => __('On', 'contact-form-7-dynamic-text-extension'),
+            'name' => __('Full Name', 'contact-form-7-dynamic-text-extension'),
+            'given-name' => __('First Name', 'contact-form-7-dynamic-text-extension'),
+            'family-name' => __('Last Name', 'contact-form-7-dynamic-text-extension'),
+            'honorific-prefix' => __('Honorific prefix or title', 'contact-form-7-dynamic-text-extension'),
+            'honorific-suffix' => __('Honorific suffix or credentials', 'contact-form-7-dynamic-text-extension'),
+            'nickname' => __('Nickname', 'contact-form-7-dynamic-text-extension'),
+            'email' => __('Email Address', 'contact-form-7-dynamic-text-extension'),
+            'new-password' => __('A new password', 'contact-form-7-dynamic-text-extension'),
+            'current-password' => __('The current password', 'contact-form-7-dynamic-text-extension'),
+            'organization-title' => __('Job Title', 'contact-form-7-dynamic-text-extension'),
+            'organization' => __('Company/Organization Name', 'contact-form-7-dynamic-text-extension'),
+            'street-address' => __('Full Street Address', 'contact-form-7-dynamic-text-extension'),
+            'shipping' => __('Full Shipping Address', 'contact-form-7-dynamic-text-extension'),
+            'billing' => __('Full Billing Address', 'contact-form-7-dynamic-text-extension'),
+            'address-line1' => __('Address Line 1', 'contact-form-7-dynamic-text-extension'),
+            'address-line2' => __('Address Line 2', 'contact-form-7-dynamic-text-extension'),
+            'address-line3' => __('Address Line 3', 'contact-form-7-dynamic-text-extension'),
+            'address-level1' => __('State', 'contact-form-7-dynamic-text-extension'),
+            'address-level2' => __('City', 'contact-form-7-dynamic-text-extension'),
+            'country' => __('Country', 'contact-form-7-dynamic-text-extension'),
+            'postal-code' => __('Zip Code', 'contact-form-7-dynamic-text-extension'),
+            'sex' => __('Gender Identity', 'contact-form-7-dynamic-text-extension'),
+            'tel' => __('Phone Number', 'contact-form-7-dynamic-text-extension'),
+            'tel-country-code' => __('Country Code', 'contact-form-7-dynamic-text-extension'),
+            'tel-national' => __('Full phone number without the country code', 'contact-form-7-dynamic-text-extension'),
+            'tel-area-code' => __('Area code, with country code if applicable', 'contact-form-7-dynamic-text-extension'),
+            'tel-local' => __('Phone number without the country code or area code', 'contact-form-7-dynamic-text-extension'),
+            'tel-local-prefix' => __('First part of the local phone number', 'contact-form-7-dynamic-text-extension'),
+            'tel-local-suffix' => __('Last part of the local phone number', 'contact-form-7-dynamic-text-extension'),
+            'url' => __('Website URL', 'contact-form-7-dynamic-text-extension'),
+            'webauthn' => __('Passkeys generated by the Web Authentication API', 'contact-form-7-dynamic-text-extension')
+        );
+        $datalist_html = wpcf7dtx_options_html($datalist);
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><datalist id="dtx-autocomplete-datalist">%s</datalist><input %s /><input %s /><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            esc_attr($options['content'] . '-autocomplete'), // field id
+            esc_html__('Auto-complete', 'contact-form-7-dynamic-text-extension'), // field label
+            wp_kses($datalist_html, array('datalist' => array('id' => array()), 'option' => array('value' => array()))),
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'autocomplete',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'type' => 'text',
+                'name' => 'dtx-autocomplete',
+                'id' => $options['content'] . '-autocomplete',
+                'class' => 'oneline dtx-option',
+                'list' => 'dtx-autocomplete-datalist'
+            )),
+            esc_html($default_description), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View documentation for Dynamic Attributes', 'contact-form-7-dynamic-text-extension') //Link label
+        );
+    }
+
+    //Input field - Autocapitalize attribute (only available for some fields)
+    if (in_array($input_type, array('text', 'textarea'))) {
+        $default_description =  __('Optionally define an autocapitalize attribute for input when entered via non-typing mechanisms such as virtual keyboards on mobile devices or voice-to-text.', 'contact-form-7-dynamic-text-extension') . ' ';
+        $default_description .= __('Each can be static text or a shortcode.', 'contact-form-7-dynamic-text-extension');
+        $datalist = array(
+            'none' => __('Do not automatically capitlize any text', 'contact-form-7-dynamic-text-extension'),
+            'off' => __('Do not automatically capitlize any text', 'contact-form-7-dynamic-text-extension'),
+            'on' => __('Automatically capitalize the first character of each sentence', 'contact-form-7-dynamic-text-extension'),
+            'sentences' => __('Automatically capitalize the first character of each sentence', 'contact-form-7-dynamic-text-extension'),
+            'words' => __('Automatically capitalize the first character of each word', 'contact-form-7-dynamic-text-extension'),
+            'characters' => __('Automatically capitalize every character', 'contact-form-7-dynamic-text-extension'),
+        );
+        $datalist_html = wpcf7dtx_options_html($datalist);
+        printf(
+            '<tr><th scope="row"><label for="%s">%s</label></th><td><datalist id="dtx-autocapitalize-datalist">%s</datalist><input %s /><input %s /><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
+            esc_attr($options['content'] . '-autocapitalize'), // field id
+            esc_html__('Auto-capitalize'), // field label
+            wp_kses($datalist_html, array('datalist' => array('id' => array()), 'option' => array('value' => array()))),
+            wpcf7_format_atts(array(
+                'type' => 'hidden',
+                'name' => 'autocapitalize',
+                'class' => 'option'
+            )),
+            wpcf7_format_atts(array(
+                'type' => 'text',
+                'name' => 'dtx-autocapitalize',
+                'id' => $options['content'] . '-autocapitalize', // field id
+                'class' => 'oneline dtx-option',
+                'placeholder' => $default_placeholder,
+                'list' => 'dtx-autocapitalize-datalist'
+            )),
+            esc_html($default_description), // Small note below input
+            esc_attr($utm_source), //UTM source
+            esc_attr($type), //UTM content
+            esc_html__('View documentation for Dynamic Attributes', 'contact-form-7-dynamic-text-extension') //Link label
+        );
+    }
+
     //Input field - Readonly attribute (not available for hidden, submit, or quiz fields)
-    if (!in_array($input_type, array('hidden', 'submit', 'quiz'))) {
+    if (!in_array($input_type, array('hidden', 'submit', 'label', 'quiz', 'select'))) {
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
             esc_attr($options['content'] . '-readonly'), // field id
@@ -411,6 +648,38 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
             esc_html__('Do not let users edit this field', 'contact-form-7-dynamic-text-extension') // checkbox label
         );
     }
+
+    //Input field - Disabled attribute (not available for hidden, submit, or quiz fields)
+    // if (!in_array($input_type, array('hidden', 'submit', 'quiz'))) {
+    //     printf(
+    //         '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+    //         esc_attr($options['content'] . '-disabled'), // field id
+    //         esc_html__('Disabled attribute', 'contact-form-7-dynamic-text-extension'), // field Label
+    //         wpcf7_format_atts(array(
+    //             'type' => 'checkbox',
+    //             'name' => 'disabled',
+    //             'id' => $options['content'] . '-disabled',
+    //             'class' => 'disabledvalue option'
+    //         )),
+    //         esc_html__('Prevent this data from sending on submit', 'contact-form-7-dynamic-text-extension') // checkbox label
+    //     );
+    // }
+
+    //Input field - Autofocus attribute (not available for hidden, submit, or quiz fields)
+    // if (!in_array($input_type, array('hidden', 'submit', 'quiz'))) {
+    //     printf(
+    //         '<tr><th scope="row"><label for="%s">%s</label></th><td><label><input %s />%s</label></td></tr>',
+    //         esc_attr($options['content'] . '-autofocus'), // field id
+    //         esc_html__('Autofocus attribute', 'contact-form-7-dynamic-text-extension'), // field Label
+    //         wpcf7_format_atts(array(
+    //             'type' => 'checkbox',
+    //             'name' => 'autofocus',
+    //             'id' => $options['content'] . '-autofocus',
+    //             'class' => 'autofocusvalue option'
+    //         )),
+    //         wp_kses_post('Automatically focus on this field <small>Use careful consideration for accessibility.</small>', 'contact-form-7-dynamic-text-extension') // checkbox label
+    //     );
+    // }
 
     // Input field - Page load data attribute (triggers the loading of a frontend script)
     printf(
@@ -462,9 +731,27 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
     }
 
     //Close Form-Tag Generator
+    if (in_array($input_type, array('hidden', 'submit', 'label', 'reset'))) {
+        $demo_tag = '<input name="%s"class="tag code" readonly="readonly" onfocus="this.select()" type="text"  />';
+    } else {
+        $demo_tag = '<textarea name="%s" class="tag code"readonly="readonly" onfocus="this.select()" rows="3" ></textarea>';
+    }
+    if (in_array($input_type, array('submit', 'reset', 'label'))) {
+        $mail_description = esc_html('This value is not submitted in the contact form and should not be used in the mail template.', 'contact-form-7-dynamic-text-extension');
+    } else {
+        $mail_description = sprintf(
+            '<label>%s<input type="text" class="mail-tag code hidden" readonly="readonly" /></label>',
+            sprintf(
+                esc_html__('To use the value input through this field in a mail field, you need to insert the corresponding mail-tag (%s) into the field on the Mail tab.', 'contact-form-7-dynamic-text-extension'),
+                '<strong><span class="mail-tag"></span></strong>'
+            )
+        );
+    }
     printf(
-        '</tbody></table></fieldset></div><div class="insert-box"><input type="text" name="%s" class="tag code" readonly="readonly" onfocus="this.select()" /><div class="submitbox"><input type="button" class="button button-primary insert-tag" value="%s" /></div><br class="clear" /></div>',
+        '</tbody></table></fieldset></div><div class="insert-box">' . $demo_tag . '<div class="submitbox"><input type="button" class="button button-primary dtx-insert-tag" value="%s" /></div><br class="clear" />
+        <p class="description mail-tag">%s</p></div>',
         esc_attr($type),
-        esc_html__('Insert Tag', 'contact-form-7-dynamic-text-extension')
+        esc_html__('Insert Tag', 'contact-form-7-dynamic-text-extension'),
+        $mail_description
     );
 }
