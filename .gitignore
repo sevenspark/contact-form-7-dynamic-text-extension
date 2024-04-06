@@ -8,3 +8,4 @@ node_modules
 *.min.css
 
 _build/
+_build_assets/
