@@ -1,5 +1,15 @@
 == Changelog ==
 
+= 4.4.0 =
+
+* Update: Added *Contact Form 7* (CF7) as a requirement as introduced in WordPress version 6.5. This plugin cannot be activated until CF7 is installed and activated.
+* Feature: introduced `dynamic_label` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-label/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Feature: updated the following attributes to be dynamic: `autocapitalize`, `autocomplete`, `autofocus`, `cols`, `disabled`, `list`, `max`, `maxlength`, `min`, `minlength`, `pattern`, `readonly`, `size`, and `step`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
+* Update: Updated the form tag generator for checkboxes and radio buttons to include documentation for the `default` attribute.
+* Update: Updated the form tag generator with fields for `min`, `max`, `step`, `minlength`, `maxlength`, and `autocomplete` for appropriate form tags. The `autocomplete` and `autocapitalize` are text fields that uses a `datalist` because I always forget those things...
+* Update: Increased the tag generator size to accommodate the new attributes.
+* Update: Some form tag generators display the generated form tag in a `textarea` to accommodate lengthy generated form tags.
+
 = 4.3.1 =
 
 * Fix: Resolved the PHP warning regarding `Undefined array key "value" in /.../contact-form-7-dynamic-text-extension/contact-form-7-dynamic-text-extension.php on line 391`, [see support thread](https://wordpress.org/support/topic/undefined-array-key-value-2/).
