@@ -300,6 +300,7 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
         );
     } else {
         // Properties exclusive to text-based inputs
+$allowed_properties['autocapitalize'] = array();
         $allowed_properties['autocomplete'] = array();
         $allowed_properties['list'] = array();
 
