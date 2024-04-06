@@ -162,6 +162,11 @@ function wpcf7dtx_config()
                 'title' => __('dynamic submit', 'contact-form-7-dynamic-text-extension'), //title
                 'options' => array(),
                 'description' =>  __('a submit button', 'contact-form-7-dynamic-text-extension')
+            ),
+            'dynamic_label' => array(
+                'title' => __('dynamic label', 'contact-form-7-dynamic-text-extension'), //title
+                'options' => array(),
+                'description' =>  __('a label element', 'contact-form-7-dynamic-text-extension')
             )
         );
     }
@@ -193,6 +198,10 @@ function wpcf7dtx_add_shortcodes()
             case 'submit':
             case 'reset':
                 $callback = 'wpcf7dtx_button_shortcode_handler';
+                $features['name-attr'] = false;
+                break;
+            case 'label':
+                $callback = 'wpcf7dtx_label_shortcode_handler';
                 $features['name-attr'] = false;
                 break;
             default:
@@ -535,6 +544,51 @@ function wpcf7dtx_button_shortcode_handler($tag)
     return wp_kses(
         wpcf7dtx_input_html($atts),
         array('input' => wpcf7dtx_get_allowed_field_properties($atts['type']))
+    );
+}
+
+/**
+ * Form Tag Handler for Dynamic Label
+ *
+ * @param WPCF7_FormTag $tag Current Contact Form 7 tag object
+ *
+ * @return string HTML output of the shortcode
+ */
+function wpcf7dtx_label_shortcode_handler($tag)
+{
+    $atts = array();
+    $atts['id'] = strval($tag->get_id_option());
+    $atts['class'] = wpcf7_form_controls_class('wpcf7dtx wpcf7dtx-label');
+    $atts['for'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('for', '', true)), ENT_QUOTES)); // Get dynamic attribute
+
+    // Page load attribute
+    if ($tag->has_option('dtx_pageload') && is_array($tag->raw_values) && count($tag->raw_values)) {
+        $atts['data-dtx-value'] = rawurlencode(sanitize_text_field($tag->raw_values[0]));
+        $atts['class'] .= ' dtx-pageload';
+        if (wp_style_is('wpcf7dtx', 'registered') && !wp_script_is('wpcf7dtx', 'queue')) {
+            // If already registered, just enqueue it
+            wp_enqueue_script('wpcf7dtx');
+        } elseif (!wp_style_is('wpcf7dtx', 'registered')) {
+            // If not registered, do that first, then enqueue it
+            wpcf7dtx_enqueue_frontend_assets();
+            wp_enqueue_script('wpcf7dtx');
+        }
+    }
+
+    // Wrap up class attribute
+    $atts['class'] = $tag->get_class_option($atts['class']);
+
+    // Output the form field HTML
+    return wp_kses(
+        sprintf(
+            '<label %s>%s</label>',
+            wpcf7dtx_format_atts($atts),
+            wpcf7dtx_get_dynamic(false, $tag) // Evaluate the dynamic label text
+        ),
+        array_merge(
+            wp_kses_allowed_html('data'), // Get allowed HTML for inline data
+            array('label' => wpcf7dtx_get_allowed_field_properties('label')) // Include our label field
+        )
     );
 }
 
