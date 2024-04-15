@@ -12,7 +12,7 @@ module.exports = function(grunt) {
                     './_build_assets', // Assets build directory
                     // Delete minified files and source maps from working directory
                     './assets/scripts/*.min.js', './assets/scripts/*.js.map',
-                    './assets/styles/*.min.css', './assets/styles/*.css.map',
+                    './assets/styles/*.min.css', './assets/styles/*.css.map'
                 ]
             },
             blueprint: {
