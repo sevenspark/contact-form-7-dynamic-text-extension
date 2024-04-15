@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+    xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:wp="http://wordpress.org/export/1.2/">
+    <channel>
+        <language>en-US</language>
+        <wp:wxr_version>1.2</wp:wxr_version>
+        <item>
+            <title><![CDATA[Demo Form]]></title>
+            <description><![CDATA[]]></description>
+            <content:encoded><![CDATA[]]></content:encoded>
+            <excerpt:encoded><![CDATA[]]></excerpt:encoded>
+            <wp:post_id>10</wp:post_id>
+            <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+            <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+            <wp:post_name><![CDATA[contact-form-1-2]]></wp:post_name>
+            <wp:status><![CDATA[publish]]></wp:status>
+            <wp:post_parent>0</wp:post_parent>
+            <wp:menu_order>0</wp:menu_order>
+            <wp:post_type><![CDATA[wpcf7_contact_form]]></wp:post_type>
+            <wp:post_password><![CDATA[]]></wp:post_password>
+            <wp:is_sticky>0</wp:is_sticky>
+            <wp:postmeta>
+                <wp:meta_key><![CDATA[_form]]></wp:meta_key>
+                <wp:meta_value><![CDATA[<p>
+                 <label><span class="label">Post Title</span>
+                 [dynamic_text post_title "CF7_get_current_var key='post_title'"]
+                 </label></p>
+
+                 <p><label> Your email[dynamic_email your-email autocomplete:email] </label></p>
+
+                 <p><label> Subject[dynamic_text your-subject] </label></p>
+
+                 <p><label> Your message (optional)[dynamic_textarea your-message] </label></p>
+
+                 <p>[dynamic_submit "Submit"]</p>
+
+                ]]>                </wp:meta_value>
+            </wp:postmeta>
+            <wp:postmeta>
+                <wp:meta_key><![CDATA[_mail]]></wp:meta_key>
+                <wp:meta_value><![CDATA[]]></wp:meta_value>
+            </wp:postmeta>
+            <wp:postmeta>
+                <wp:meta_key><![CDATA[_mail_2]]></wp:meta_key>
+                <wp:meta_value><![CDATA[]]></wp:meta_value>
+            </wp:postmeta>
+            <wp:postmeta>
+                <wp:meta_key><![CDATA[_messages]]></wp:meta_key>
+                <wp:meta_value><![CDATA[a:22:{s:12:"mail_sent_ok";s:68:"Thank you for your message. We will respond to it as soon as we can!";s:12:"mail_sent_ng";s:71:"There was an error trying to send your message. Please try again later.";s:16:"validation_error";s:61:"One or more fields have an error. Please check and try again.";s:4:"spam";s:71:"There was an error trying to send your message. Please try again later.";s:12:"accept_terms";s:69:"You must accept the terms and conditions before sending your message.";s:16:"invalid_required";s:22:"The field is required.";s:16:"invalid_too_long";s:22:"The field is too long.";s:17:"invalid_too_short";s:23:"The field is too short.";s:12:"invalid_date";s:29:"The date format is incorrect.";s:14:"date_too_early";s:44:"The date is before the earliest one allowed.";s:13:"date_too_late";s:41:"The date is after the latest one allowed.";s:13:"upload_failed";s:46:"There was an unknown error uploading the file.";s:24:"upload_file_type_invalid";s:49:"You are not allowed to upload files of this type.";s:21:"upload_file_too_large";s:20:"The file is too big.";s:23:"upload_failed_php_error";s:38:"There was an error uploading the file.";s:14:"invalid_number";s:29:"The number format is invalid.";s:16:"number_too_small";s:47:"The number is smaller than the minimum allowed.";s:16:"number_too_large";s:46:"The number is larger than the maximum allowed.";s:23:"quiz_answer_not_correct";s:36:"The answer to the quiz is incorrect.";s:13:"invalid_email";s:38:"The e-mail address entered is invalid.";s:11:"invalid_url";s:19:"The URL is invalid.";s:11:"invalid_tel";s:32:"The telephone number is invalid.";}]]></wp:meta_value>
+            </wp:postmeta>
+            <wp:postmeta>
+                <wp:meta_key><![CDATA[_additional_settings]]></wp:meta_key>
+                <wp:meta_value><![CDATA[demo: on]]></wp:meta_value>
+            </wp:postmeta>
+            <wp:postmeta>
+                <wp:meta_key><![CDATA[_locale]]></wp:meta_key>
+                <wp:meta_value><![CDATA[en_US]]></wp:meta_value>
+            </wp:postmeta>
+            <wp:meta_key><![CDATA[_hash]]></wp:meta_key>
+            <wp:meta_value><![CDATA[d3m0Form]]></wp:meta_value>
+        </wp:postmeta>
+    </item>
+    <item>
+        <title><![CDATA[Example Page with Form]]></title>
+        <description></description>
+        <content:encoded><![CDATA[<!-- wp:contact-form-7/contact-form-selector {"id":10,"title":"Demo Form"} --><div class="wp-block-contact-form-7-contact-form-selector">[contact-form-7 id="d3m0Form" title="Demo Form"]</div><!-- /wp:contact-form-7/contact-form-selector --></div>]]></content:encoded>
+        <excerpt:encoded><![CDATA[]]></excerpt:encoded>
+        <wp:post_id>11</wp:post_id>
+        <wp:comment_status><![CDATA[closed]]></wp:comment_status>
+        <wp:ping_status><![CDATA[closed]]></wp:ping_status>
+        <wp:post_name><![CDATA[example-page-with-form]]></wp:post_name>
+        <wp:status><![CDATA[publish]]></wp:status>
+        <wp:post_parent>0</wp:post_parent>
+        <wp:menu_order>0</wp:menu_order>
+        <wp:post_type><![CDATA[page]]></wp:post_type>
+        <wp:post_password><![CDATA[]]></wp:post_password>
+        <wp:is_sticky>0</wp:is_sticky>
+    </item>
+</channel>
+</rss>
