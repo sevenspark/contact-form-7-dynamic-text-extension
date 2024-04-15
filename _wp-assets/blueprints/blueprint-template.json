@@ -1,0 +1,45 @@
+{
+    "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+    "landingPage": "/?p=2&foo=hello&bar=world",
+    "preferredVersions": {
+        "php": "latest",
+        "wp": "latest"
+    },
+    "phpExtensionBundles": [
+        "kitchen-sink"
+    ],
+    "login": true,
+    "steps": [{
+        "step": "defineWpConfigConsts",
+        "consts": {
+            "WPCF7_AUTOP": false
+        }
+    }, {
+        "step": "setSiteOptions",
+        "options": {
+            "blogname": "DTX Demo",
+            "blogdescription": "Demonstrating the plugin called Contact Form 7 - Dynamic Text Extension"
+        }
+    }, {
+        "step": "installPlugin",
+        "pluginZipFile": {
+            "resource": "wordpress.org/plugins",
+            "slug": "contact-form-7"
+        },
+        "options": {
+            "activate": true
+        }
+    }, {
+        "step": "installPlugin",
+        "pluginZipFile": {
+            "resource": "wordpress.org/plugins",
+            "slug": "contact-form-7-dynamic-text-extension"
+        },
+        "options": {
+            "activate": true
+        }
+    }, {
+        "step": "runPHP",
+        "code": "[PHP_TO_RUN]"
+    }]
+}
