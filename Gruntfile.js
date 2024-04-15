@@ -7,13 +7,20 @@ module.exports = function(grunt) {
         clean: {
             build: {
                 src: [
-                    // Delete everything in the build folder
-                    './_build',
+                    // Delete everything in the build folders
+                    './_build', // Plugin build directory
+                    './_build_assets', // Assets build directory
                     // Delete minified files and source maps from working directory
                     './assets/scripts/*.min.js', './assets/scripts/*.js.map',
-                    './assets/styles/*.min.css', './assets/styles/*.css.map'
+                    './assets/styles/*.min.css', './assets/styles/*.css.map',
                 ]
-            }
+            },
+            blueprint: {
+                src: [
+                    // Delete the generated blueprint JSON file
+                    './_wp-assets/blueprints/blueprint.json'
+                ]
+            },
         },
         cssmin: {
             /**
@@ -64,21 +71,6 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        replace: {
-            /**
-             * Update Version Number
-             *
-             * @see https://www.npmjs.com/package/grunt-text-replace
-             */
-            build: {
-                src: ['_build/readme.txt', '_build/<%= pkg.name %>.php'], // Source files array (supports minimatch)
-                overwrite: true, // Overwrite matched source files
-                replacements: [{
-                    from: 'VERSION_PLACEHOLDER',
-                    to: "<%= pkg.version %>"
-                }]
-            }
-        },
         copy: {
             build: {
                 // Copy files from working folder to build folder
@@ -94,6 +86,56 @@ module.exports = function(grunt) {
                     '!*.zip'
                 ],
                 dest: './_build'
+            },
+            assets: {
+                // Copy files from working folder to build folder
+                expand: true, // Enable dynamic expansion
+                src: [
+                    // Copy everything from the WordPress assets folder excluding its subdirectories
+                    './_wp-assets/*',
+                    // Include blueprint.json
+                    './_wp-assets/blueprints/blueprint.json'
+                ],
+                dest: './_build_assets'
+            }
+        },
+        replace: {
+            /**
+             * Update Version Number
+             *
+             * @see https://www.npmjs.com/package/grunt-text-replace
+             */
+            build: {
+                src: ['_build/readme.txt', '_build/<%= pkg.name %>.php'], // Source files array (supports minimatch)
+                overwrite: true, // Overwrite matched source files
+                replacements: [{
+                    from: 'VERSION_PLACEHOLDER',
+                    to: "<%= pkg.version %>"
+                }]
+            },
+            /**
+             * Replace [PHP_TO_RUN] placeholder in blueprint.json
+             * with the PHP code in blueprint_code.php
+             */
+            blueprint_code: {
+                src: ['./_wp-assets/blueprints/blueprint.json'], // Source files array (supports minimatch)
+                overwrite: true,
+                replacements: [{
+                    from: '[PHP_TO_RUN]',
+                    to: function(matchedWord, index, fullText, regexMatches) {
+                        //var code = grunt.file.read('./_wp-assets/blueprints/blueprint_code.php').toString();
+                        var code = grunt.file.read('./_wp-assets/blueprints/blueprint_code.php').toString();
+                        code = code.replace(/\\'/g, "\\\\'"); // Double escape all escaped single quotes
+                        code = code.replace(/"/g, '\\"'); // Escape all double quotes
+                        code = code.replace(/    /g, ''); // Remove my tabbed spaces (4 spaces)
+                        //code = code.replace(/\r?\n/g, '\\n'); // Remove all line breaks
+                        code = code.replace(/\r?\n/g, ''); // Replace all line breaks with a single space
+                        code = code.replace(/  /g, ''); // Replace all double spaces with single space
+                        code = code.replace(/\s*=>\s*/g, "=>"); // Minify array assignments
+                        code = code.replace('<?php', '<?php '); // Ensure there is a space after the opening PHP tag
+                        return code.trim();
+                    }
+                }]
             }
         },
         wp_deploy: {
@@ -125,6 +167,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-wp-deploy'); // Deploy to WordPress SVN
 
     // Register Tasks
-    grunt.registerTask('build', ['clean:build', 'cssmin', 'uglify:build', 'copy:build', 'replace:build']); // Register build task, usage: `grunt build`
+    grunt.registerTask('create_blueprint', 'Generates blueprint.json in the assets folder.', function() {
+        // Copy blueprint template to blueprint.json
+        grunt.file.write('./_wp-assets/blueprints/blueprint.json', grunt.file.read('./_wp-assets/blueprints/blueprint-template.json').toString());
+    });
+    grunt.registerTask('blueprint', ['clean:blueprint', 'create_blueprint', 'replace:blueprint_code']); // Register build task, usage: `grunt build`
+    //grunt.registerTask('build', ['clean:build', 'cssmin', 'uglify:build', 'blueprint', 'replace:blueprint_php', 'copy:build', 'replace:build', 'copy:assets', 'replace:preview_url']); // Register build task, usage: `grunt build`
+    grunt.registerTask('build', ['clean:build', 'cssmin', 'uglify:build', 'blueprint', 'copy:build', 'replace:build', 'copy:assets']); // Register build task, usage: `grunt build`
     grunt.registerTask('deploy', ['wp_deploy:deploy']); // Register deploy task, usage `grunt wp_deploy`
 };
