@@ -6,14 +6,37 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:wp="http://wordpress.org/export/1.2/">
     <channel>
+        <title>WordPress Playground</title>
+        <link>https://playground.wordpress.com</link>
+        <description>A sandbox environment to test features in WordPress.</description>
+        <pubDate>Mon, 15 Apr 2024 14:43:32 +0000</pubDate>
         <language>en-US</language>
         <wp:wxr_version>1.2</wp:wxr_version>
+        <wp:base_site_url>https://playground.wordpress.com/</wp:base_site_url>
+        <wp:base_blog_url>https://playground.wordpress.com</wp:base_blog_url>
+        <wp:author>
+            <wp:author_id>1</wp:author_id>
+            <wp:author_login><![CDATA[admin]]></wp:author_login>
+            <wp:author_email><![CDATA[admin@localhost.com]]></wp:author_email>
+            <wp:author_display_name><![CDATA[Site Admin]]></wp:author_display_name>
+            <wp:author_first_name><![CDATA[]]></wp:author_first_name>
+            <wp:author_last_name><![CDATA[]]></wp:author_last_name>
+        </wp:author>
+        <generator>https://wordpress.org/?v=6.5.2</generator>
         <item>
             <title><![CDATA[Demo Form]]></title>
-            <description><![CDATA[]]></description>
+            <link>https://playground.wordpress.com/?post_type=wpcf7_contact_form&#038;p=10</link>
+            <pubDate>Mon, 15 Apr 2024 14:00:00 +0000</pubDate>
+            <dc:creator><![CDATA[admin]]></dc:creator>
+            <guid isPermaLink="false">https://playground.wordpress.com/?post_type=wpcf7_contact_form&#038;p=10</guid>
+            <description></description>
             <content:encoded><![CDATA[]]></content:encoded>
             <excerpt:encoded><![CDATA[]]></excerpt:encoded>
             <wp:post_id>10</wp:post_id>
+            <wp:post_date><![CDATA[2024-04-15 14:00:00]]></wp:post_date>
+            <wp:post_date_gmt><![CDATA[2024-04-15 14:00:00]]></wp:post_date_gmt>
+            <wp:post_modified><![CDATA[2024-04-15 14:00:00]]></wp:post_modified>
+            <wp:post_modified_gmt><![CDATA[2024-04-15 14:00:00]]></wp:post_modified_gmt>
             <wp:comment_status><![CDATA[closed]]></wp:comment_status>
             <wp:ping_status><![CDATA[closed]]></wp:ping_status>
             <wp:post_name><![CDATA[contact-form-1-2]]></wp:post_name>
@@ -66,10 +89,18 @@
     </item>
     <item>
         <title><![CDATA[Example Page with Form]]></title>
+        <link>https://playground.wordpress.com/example-page-with-form/</link>
+        <pubDate>Mon, 15 Apr 2024 15:00:00 +0000</pubDate>
+        <dc:creator><![CDATA[admin]]></dc:creator>
+        <guid isPermaLink="false">https://playground.wordpress.com/?page_id=11</guid>
         <description></description>
         <content:encoded><![CDATA[<!-- wp:contact-form-7/contact-form-selector {"id":10,"title":"Demo Form"} --><div class="wp-block-contact-form-7-contact-form-selector">[contact-form-7 id="d3m0Form" title="Demo Form"]</div><!-- /wp:contact-form-7/contact-form-selector --></div>]]></content:encoded>
         <excerpt:encoded><![CDATA[]]></excerpt:encoded>
         <wp:post_id>11</wp:post_id>
+        <wp:post_date><![CDATA[2024-04-15 11:00:00]]></wp:post_date>
+        <wp:post_date_gmt><![CDATA[2024-04-15 15:00:00]]></wp:post_date_gmt>
+        <wp:post_modified><![CDATA[2024-04-15 11:00:00]]></wp:post_modified>
+        <wp:post_modified_gmt><![CDATA[2024-04-15 15:00:00]]></wp:post_modified_gmt>
         <wp:comment_status><![CDATA[closed]]></wp:comment_status>
         <wp:ping_status><![CDATA[closed]]></wp:ping_status>
         <wp:post_name><![CDATA[example-page-with-form]]></wp:post_name>
