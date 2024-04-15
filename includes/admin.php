@@ -395,7 +395,6 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
     // Input field - Range attributes (only available for numeric and date fields)
     if (in_array($input_type, array('number', 'range', 'date'))) {
         $default_input_type = 'number';
-
         $default_placeholder = 'Foo';
         $step_option = '';
         if ($input_type == 'date') {
@@ -623,7 +622,6 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
                 'name' => 'dtx-autocapitalize',
                 'id' => $options['content'] . '-autocapitalize', // field id
                 'class' => 'oneline dtx-option',
-                'placeholder' => $default_placeholder,
                 'list' => 'dtx-autocapitalize-datalist'
             )),
             esc_html($default_description), // Small note below input
