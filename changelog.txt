@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 4.4.1 =
+
+* Fix: Addressed PHP warnings for undefined array keys introduced in version 4.4.0, [see support thread](https://wordpress.org/support/topic/tons-of-errors-in-error_log/)
+
 = 4.4.0 =
 
 * Update: Added *Contact Form 7* (CF7) as a requirement as introduced in WordPress version 6.5. This plugin cannot be activated until CF7 is installed and activated.
