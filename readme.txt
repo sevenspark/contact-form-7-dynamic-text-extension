@@ -41,6 +41,8 @@ For over 10 years, DTX only handled `<input type="text" />` and `<input type="hi
 
 The possibilities are endless!
 
+(View Demo)[[PREVIEW_URL]]
+
 ## WHAT DOES IT DO? ##
 
 DTX provides flexibility to WordPress users in creating dynamic forms in Contact Form 7. DTX comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
@@ -389,9 +391,13 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Introducing dynamic attributes and the new `dynamic_label` form tag! See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Addressed PHP warnings introduced in version 4.4.0. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
+
+= 4.4.1 =
+
+* Fix: Addressed PHP warnings for undefined array keys introduced in version 4.4.0, [see support thread](https://wordpress.org/support/topic/tons-of-errors-in-error_log/)
 
 = 4.4.0 =
 
