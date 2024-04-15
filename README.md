@@ -19,6 +19,8 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 
 The possibilities are endless!
 
+<a href="https://wordpress.org/plugins/contact-form-7-dynamic-text-extension/?preview=1" target="_blank" rel="noopener" style="border: 1px solid;border-radius: 3px;box-sizing: border-box;cursor: pointer;display: inline-block;height: auto;line-height: 1;margin: 0;padding: 8px 16px;text-decoration: none;white-space: nowrap; line-height: 1;background: #0085ba;border-color: #0073aa #006799 #006799;box-shadow: 0 1px 0 #006799;color: #ffffff;font-size:20px">View Demo</a>
+
 ## WHAT DOES IT DO? ##
 
 DTX gives you two new form tags, dynamic text and dynamic hidden, to use in your contact forms. Using these dynamic form tags, you can dynamically pre-populate them with almost anything!
@@ -27,7 +29,7 @@ DTX gives you two new form tags, dynamic text and dynamic hidden, to use in your
 
 New users can use the form tag generators while advanced users can dive straight into the shortcodes.
 
-<img src="/wp-assets/screenshot-2.png" alt="The form tag generator screen for the dynamic text form tag" width="300" /> <img src="/wp-assets/screenshot-3.png" alt="The form tag generator screen for the dynamic hidden form tag" width="300" />
+<img src="_/wp-assets/screenshot-2.png" alt="The form tag generator screen for the dynamic text form tag" width="300" /> <img src="_/wp-assets/screenshot-3.png" alt="The form tag generator screen for the dynamic hidden form tag" width="300" />
 
 DTX also comes with several built-in shortcodes that will allow the contact form to be populated from HTTPS GET variable or any info from the `get_bloginfo()` function, among others. See below for included shortcodes.
 
@@ -301,6 +303,14 @@ In the form editor of Contact Form 7, your form tag would look like: `[dynamicte
 Learn more and see examples from [the DTX Knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-guid/?utm_source=github.com&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
 
 ## Installation ##
+
+### Minimum Requirements ###
+
+To ensure your WordPress installation meets these requirements, you can login to your WordPress website and navigate to *Tools > Site Health* and click on the *Info* tab. Expand the *WordPress*, *Active Plugins*, and *Server* accordions and compare that information with the details below.
+
+* WordPress version 5.5 or greater
+* PHP version 7.4 or greater
+* [Contact Form 7](https://wordpress.org/plugins/contact-form-7/) version 5.7 or greater
 
 There are three (3) ways to install this plugin: automatically, upload, or manually.
 

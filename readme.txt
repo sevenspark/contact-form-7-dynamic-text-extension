@@ -25,6 +25,10 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 * Getting custom theme modifications
 * Any value using custom shortcodes
 
+The possibilities are endless!
+
+(View Demo)[https://wordpress.org/plugins/contact-form-7-dynamic-text-extension/?preview=1]
+
 For over 10 years, DTX only handled `<input type="text" />` and `<input type="hidden" />` form fields, but version 4 finally introduces more:
 
 * email
@@ -38,10 +42,6 @@ For over 10 years, DTX only handled `<input type="text" />` and `<input type="hi
 * radio buttons
 * date
 * submit (yes, a submit button where you can have dynamic text!)
-
-The possibilities are endless!
-
-(View Demo)[[PREVIEW_URL]]
 
 ## WHAT DOES IT DO? ##
 
@@ -391,9 +391,16 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Addressed PHP warnings introduced in version 4.4.0. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Addressed another PHP warning introduced in version 4.4.0. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
+
+= 4.4.2 =
+
+= 4.4.2 =
+
+* Fix: Addressed PHP warning for undefined variable $default_placeholder introduced in version 4.4.0, [see support thread](https://wordpress.org/support/topic/php-warning-undefined-variable-default_placeholder/)
+* Minor: Create preview link using WordPress Playground, [check it out](https://wordpress.org/plugins/contact-form-7-dynamic-text-extension/?preview=1)
 
 = 4.4.1 =
 
