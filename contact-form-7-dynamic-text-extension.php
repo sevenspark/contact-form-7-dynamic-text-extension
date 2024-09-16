@@ -74,6 +74,22 @@ function wpcf7dtx_init()
 add_action('plugins_loaded', 'wpcf7dtx_init', 20);
 
 /**
+ * Add the current DTX version in the form's hidden fields
+ *
+ * @since 4.3.1
+ *
+ * @param array $hidden_fields An array of key/value pairs to insert at the top of the CF7 forms.
+ *
+ * @return array The filtered hidden fields.
+ */
+function wpcf7dtx_hidden_field($hidden_fields)
+{
+    $hidden_fields['_wpcf7dtx_version'] = WPCF7DTX_VERSION;
+    return $hidden_fields;
+}
+add_filter('wpcf7_form_hidden_fields', 'wpcf7dtx_hidden_field');
+
+/**
  * DTX Formg Tag Configuration
  *
  * @since 4.0.0
