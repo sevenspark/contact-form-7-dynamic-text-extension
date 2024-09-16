@@ -518,6 +518,7 @@ function wpcf7dtx_shortcode_handler($tag)
                 $atts['id'] ? sprintf(' id="%s"', esc_attr($atts['id'])) : ''
             ), array_merge($allowed_html, array(
                 'label' => array('for' => array()),
+                'image' => array('src' => array(), 'alt' => array(), 'title' => array(), 'class' => array(), 'id' => array(), 'style' => array(), 'width' => array(), 'height' => array(), 'loading' => array(), 'longdesc' => array(), 'sizes' => array(), 'srcset' => array()),
                 'input' => wpcf7dtx_get_allowed_field_properties($atts['type'])
             )));
         case 'select':
