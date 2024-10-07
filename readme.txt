@@ -2,7 +2,7 @@
 Contributors: sevenspark, tessawatkinsllc
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, dynamic form, form field
-Tested up to: 6.5
+Tested up to: 6.6
 Stable tag: VERSION_PLACEHOLDER
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
