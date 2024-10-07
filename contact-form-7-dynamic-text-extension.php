@@ -8,7 +8,7 @@
  * Author: AuRise Creative, SevenSpark
  * Author URI: https://aurisecreative.com
  * Plugin URI: https://aurisecreative.com/products/wordpress-plugin/contact-form-7-dynamic-text-extension/
- * License: GPL v3
+ * License: GPLv3 or later
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  * Requires at least: 5.5
  * Requires PHP: 7.4
