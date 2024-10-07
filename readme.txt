@@ -391,11 +391,15 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Addressed another PHP warning introduced in version 4.4.0. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Images can now be used in checkbox and radio buttons, textarea's placeholders work again, and the plugin version is submitted with form data. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
 
-= 4.4.2 =
+= 4.5.0 =
+
+* Feature: Added the hidden field `_wpcf7dtx_version` to include the current version of this plugin automatically in forms. It can be accessed via `$_POST` in `wpcf7_before_send_mail` hook or viewed in the page's source code along with Contact Form 7's other default hidden fields.
+* Minor: Allowed images to be added in checkbox and radio button options, [see support thread](https://wordpress.org/support/topic/allow-images-in-radio-button-options/).
+* Fix: Addressed the bug that prevented textarea fields to use placeholders, [see support thread](https://wordpress.org/support/topic/dynamic_textarea-placeholder-not-working/).
 
 = 4.4.2 =
 

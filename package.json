@@ -1,6 +1,6 @@
 {
     "name": "contact-form-7-dynamic-text-extension",
-    "version": "4.4.2",
+    "version": "4.5.0",
     "devDependencies": {
         "grunt": "^1.6.1",
         "grunt-contrib-clean": "^2.0.1",
