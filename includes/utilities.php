@@ -313,7 +313,7 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
         $allowed_properties['list'] = array();
 
         // Placeholder
-        if (in_array($type, array('text', 'search', 'url', 'tel', 'email', 'password', 'number'))) {
+        if (in_array($type, array('text', 'textarea', 'search', 'url', 'tel', 'email', 'password', 'number'))) {
             $allowed_properties['placeholder'] = array();
         }
 
@@ -361,7 +361,12 @@ function wpcf7dtx_format_atts($atts)
     if (is_array($atts) && count($atts)) {
         $sanitized_atts = array();
         static $boolean_attributes = array(
-            'checked', 'disabled', 'multiple', 'readonly', 'required', 'selected'
+            'checked',
+            'disabled',
+            'multiple',
+            'readonly',
+            'required',
+            'selected'
         );
         foreach ($atts as $key => $value) {
             $key = sanitize_key(strval($key));
