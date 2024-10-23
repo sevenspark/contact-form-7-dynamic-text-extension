@@ -168,11 +168,11 @@ class CF7DTX_Plugin_Settings
                     /* (sections are registered for "cf7dtx", each field is registered to a specific section) */
                     do_settings_sections('cf7dtx_settings');
                     /* output save settings button */
-                    submit_button('Save Settings');
+                    submit_button(__( 'Save Settings', 'contact-form-7-dynamic-text-extension' ));
                     ?>
                 </form>
 
-                <a href="<?php echo wpcf7dtx_get_admin_scan_screen_url(); ?>">Scan Forms for Post Meta and User Data Keys</a>
+                <a href="<?php echo wpcf7dtx_get_admin_scan_screen_url(); ?>"><?php esc_html_e( 'Scan Forms for Post Meta and User Data Keys', 'contact-form-7-dynamic-text-extension' ); ?></a>
             </div>
             <?php
         }
@@ -607,12 +607,12 @@ class CF7DTX_Plugin_Settings
 $sections = [
     'post_meta_access' => [
         'title' => __('Post Meta Access', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Control which post metadata the CF7 DTX shortcodes (CF7_get_custom_field) can access.  By default, all metadata is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.') .
+        'description' => __('Control which post metadata the CF7 DTX shortcodes (CF7_get_custom_field) can access.  By default, all metadata is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.', 'contact-form-7-dynamic-text-extension') .
             ' <a href="' . WPCF7DTX_DATA_ACCESS_KB_URL . '" target="_blank">' . __('More Information', 'contact-form-7-dynamic-text-extension') . '</a>',
     ],
     'user_data_access' => [
         'title' => __('User Data Access', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Control which user data the CF7 DTX shortcodes (CF7_get_current_user) can access.  By default, all user data is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.') .
+        'description' => __('Control which user data the CF7 DTX shortcodes (CF7_get_current_user) can access.  By default, all user data is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.', 'contact-form-7-dynamic-text-extension') .
             ' <a href="' . WPCF7DTX_DATA_ACCESS_KB_URL . '" target="_blank">' . __('More Information', 'contact-form-7-dynamic-text-extension') . '</a>',
     ],
 ];
