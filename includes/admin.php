@@ -190,7 +190,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s /><input %s /><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
             esc_attr($options['content'] . '-for'), // field id
-            esc_html__('For attribute'), // field label
+            esc_html__('For attribute', 'contact-form-7-dynamic-text-extension'), // field label
             wpcf7_format_atts(array(
                 'type' => 'hidden',
                 'name' => 'for',
@@ -372,7 +372,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><input %s />' . $default_input_type . '<br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
             esc_attr($options['content'] . '-default'), // field id
-            esc_html__('Selected Default'), // field label
+            esc_html__('Selected Default', 'contact-form-7-dynamic-text-extension'), // field label
             wpcf7_format_atts(array(
                 'type' => 'hidden',
                 'name' => 'default',
@@ -610,7 +610,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         printf(
             '<tr><th scope="row"><label for="%s">%s</label></th><td><datalist id="dtx-autocapitalize-datalist">%s</datalist><input %s /><input %s /><br /><small>%s <a href="https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=%s&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=form-tag-generator-%s" target="_blank" rel="noopener">%s</a></small></td></tr>',
             esc_attr($options['content'] . '-autocapitalize'), // field id
-            esc_html__('Auto-capitalize'), // field label
+            esc_html__('Auto-capitalize', 'contact-form-7-dynamic-text-extension'), // field label
             wp_kses($datalist_html, array('datalist' => array('id' => array()), 'option' => array('value' => array()))),
             wpcf7_format_atts(array(
                 'type' => 'hidden',
@@ -735,7 +735,7 @@ function wpcf7dtx_tag_generator($contact_form, $options = '')
         $demo_tag = '<textarea name="%s" class="tag code"readonly="readonly" onfocus="this.select()" rows="3" ></textarea>';
     }
     if (in_array($input_type, array('submit', 'reset', 'label'))) {
-        $mail_description = esc_html('This value is not submitted in the contact form and should not be used in the mail template.', 'contact-form-7-dynamic-text-extension');
+        $mail_description = esc_html__('This value is not submitted in the contact form and should not be used in the mail template.', 'contact-form-7-dynamic-text-extension');
     } else {
         $mail_description = sprintf(
             '<label>%s<input type="text" class="mail-tag code hidden" readonly="readonly" /></label>',
