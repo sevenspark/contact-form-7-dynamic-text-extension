@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 4.5.1 =
+
+* Security: Addressed security vulnerability #352992 responsibly reported by Francesco Carlucci to Wordfence. All built-in shortcodes now check for appropriate access and user permissions before returning information from any post.
+
 = 4.5.0 =
 
 * Feature: Added the hidden field `_wpcf7dtx_version` to include the current version of this plugin automatically in forms. It can be accessed via `$_POST` in `wpcf7_before_send_mail` hook or viewed in the page's source code along with Contact Form 7's other default hidden fields.
