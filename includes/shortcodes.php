@@ -244,8 +244,8 @@ function wpcf7dtx_get_post_var($atts = array())
         default:
             break;
     }
-    $atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id']);
-    $raw = $atts['post_id'] ? get_post_field($key, $atts['post_id']) : '';
+    $atts['post_id'] = wpcf7dtx_validate_post_id($atts['post_id']);
+    $raw = get_post_field($key, $atts['post_id']);
     return apply_filters(
         'wpcf7dtx_shortcode', // DTX built-in shortcode hook
         apply_filters('wpcf7dtx_escape', $raw, $atts['obfuscate']), // Sanitized & escaped value to output
@@ -280,7 +280,7 @@ function wpcf7dtx_get_custom_field($atts = array())
     }
 
     $key = apply_filters('wpcf7dtx_sanitize', $atts['key'], 'text');
-    $atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id']);
+    $atts['post_id'] = wpcf7dtx_validate_post_id($atts['post_id']);
     $raw = $atts['post_id'] && $key ? get_post_meta($atts['post_id'], $key, true) : '';
     return apply_filters(
         'wpcf7dtx_shortcode', // DTX built-in shortcode hook
@@ -488,7 +488,7 @@ function wpcf7dtx_get_attachment($atts = array())
 
     // No attachment ID was provided, check for post ID to get it's featured image
     if (empty($atts['id'])) {
-        if ($atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id'])) {
+        if ($atts['post_id'] = wpcf7dtx_validate_post_id($atts['post_id'])) {
             //If a post ID was provided, get it's featured image
             $atts['id'] = get_post_thumbnail_id($atts['post_id']);
         }
@@ -571,7 +571,7 @@ function wpcf7dtx_get_taxonomy($atts = array())
         'fields' => 'names', // Return an array of term names
         'obfuscate' => '' // Optionally obfuscate returned value
     ), array_change_key_case((array)$atts, CASE_LOWER));
-    $atts['post_id'] = wpcf7dtx_get_post_id($atts['post_id']);
+    $atts['post_id'] = wpcf7dtx_validate_post_id($atts['post_id']);
     $fields = apply_filters('wpcf7dtx_sanitize', $atts['fields'], 'key');
     $raw = '';
     $value = '';
