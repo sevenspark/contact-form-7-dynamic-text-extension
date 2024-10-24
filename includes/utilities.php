@@ -208,7 +208,7 @@ function wpcf7dtx_user_can_view_post($post_id = null)
 
 /**
  * Sanitize/Get Post ID
-*
+ *
  * Sanitizes the post id passed to the function. If omitted, it will get the current
  * post or page id prioritizing the global `$post` object.
  *
@@ -469,11 +469,16 @@ function wpcf7dtx_input_html($atts)
  * @since 4.0.0
  *
  * @param array $atts An associative array of select input attributes.
- * @param string $label_text Optional. The text to display next to the checkbox or radio button.
- * @param bool $label_ui Optional. If true, will place input and label text inside a `<label>` element. Default is true.
- * @param bool $reverse Optional. If true, will reverse the order to display the text label first then the button. Has no effect if label text is empty. Default is false.
+ * @param string $label_text Optional. The text to display next to the checkbox or
+ *      radio button.
+ * @param bool $label_ui Optional. If true, will place input and label text inside
+ *      a `<label>` element. Default is true.
+ * @param bool $reverse Optional. If true, will reverse the order to display the
+ *      text label first then the button. Has no effect if label text is empty.
+ *      Default is false.
  *
- * @return string HTML output of the checkbox or radio button or empty string on failure.
+ * @return string HTML output of the checkbox or radio button or empty string on
+ *      failure.
  */
 function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reverse = false)
 {
@@ -525,8 +530,10 @@ function wpcf7dtx_checkbox_html($atts, $label_text = '', $label_ui = true, $reve
  * group's options. It also accepts a string value of HTML already formatted as options or
  * option groups. It also accepts a string value of a self-closing shortcode that is
  * evaluated and its output is either options or option groups.
- * @param bool $label_ui Optional. If true, will place input and label text inside a `<label>` element. Default is true.
- * @param bool $reverse Optional. If true, will reverse the order to display the text label first then the button. Has no effect if label text is empty. Default is false.
+ * @param bool $label_ui Optional. If true, will place input and label text inside a `<label>`
+ *      element. Default is true.
+ * @param bool $reverse Optional. If true, will reverse the order to display the text label
+ *      first then the button. Has no effect if label text is empty. Default is false.
  *
  * @return string HTML output of the checkbox or radio button or empty string on failure.
  */
@@ -682,15 +689,15 @@ function wpcf7dtx_options_html($options, $selected_value = '')
  *
  * @param array $atts An associative array of select input attributes.
  * @param array|string $options Accepts an associative array of key/value pairs to use as the
- * select option's value/label pairs. It also accepts an associative array of associative
- * arrays with the keys being used as option group labels and the array values used as that
- * group's options. It also accepts a string value of HTML already formatted as options or
- * option groups. It also accepts a string value of a self-closing shortcode that is
- * evaluated and its output is either options or option groups.
+ *      select option's value/label pairs. It also accepts an associative array of associative
+ *      arrays with the keys being used as option group labels and the array values used as that
+ *      group's options. It also accepts a string value of HTML already formatted as options or
+ *      option groups. It also accepts a string value of a self-closing shortcode that is
+ *      evaluated and its output is either options or option groups.
  * @param bool $hide_blank Optional. If true, the first blank placeholder option will have the
- * `hidden` attribute added to it. Default is false.
+ *      `hidden` attribute added to it. Default is false.
  * @param bool $disable_blank Optional. If true, the first blank placeholder option will have
- * the `disabled` attribute added to it. Default is false.
+ *      the `disabled` attribute added to it. Default is false.
  *
  * @return string HTML output of select field
  */
@@ -780,7 +787,7 @@ function wpcf7dtx_select_html($atts, $options, $hide_blank = false, $disable_bla
  * @param string|int $key The key to search for in the array.
  * @param array $array The array to search.
  * @param mixed $default The default value to return if not found or is empty. Default is
- * an empty string.
+ *      an empty string.
  *
  * @return mixed The value of the key found in the array if it exists or the value of
  * `$default` if not found or is empty.
