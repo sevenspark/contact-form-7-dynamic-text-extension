@@ -400,6 +400,7 @@ Addressed security vulnerability #352992 responsibly reported by Francesco Carlu
 = 4.5.1 =
 
 * Security: Addressed security vulnerability #352992 responsibly reported by Francesco Carlucci to Wordfence. Thank you Carlucci. All built-in shortcodes now check for appropriate access and user permissions before returning information from any post.
+* Translation: Added I18N improvements by alexclassroom, thanks!
 
 = 4.5.0 =
 
