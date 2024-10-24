@@ -159,6 +159,25 @@ function wpcf7dtx_obfuscate($value = '')
 add_filter('wpcf7dtx_obfuscate', 'wpcf7dtx_obfuscate', 10, 1);
 
 /**
+ * Validate Post ID
+ *
+ * Sanitizes or gets the post id and then checks if the current user can access the post.
+ *
+ * @since 4.5.1
+ *
+ * @param int|WP_Post|null|false $post_id Optional. Post ID or post object. Defaults
+ *      to global $post.
+ * @param string $context Optional. The context in which type of value to return on
+ *      failure. Options are `acf` and `dtx`. Default is `dtx`.
+ *
+ * @return int|WP_Post|null|false The `$post_id` parameter on sucess, 0 otherwise.
+ */
+function wpcf7dtx_validate_post_id($post_id = null, $context = 'dtx')
+{
+    return wpcf7dtx_user_can_view_post(wpcf7dtx_get_post_id($post_id, $context));
+}
+
+/**
  * Checks if Current User Can Access Post
  *
  * Returns the post id on the following conditions:
