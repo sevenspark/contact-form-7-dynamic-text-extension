@@ -159,15 +159,22 @@ function wpcf7dtx_obfuscate($value = '')
 add_filter('wpcf7dtx_obfuscate', 'wpcf7dtx_obfuscate', 10, 1);
 
 /**
- * Get Post ID
+ * Sanitize/Get Post ID
+*
+ * Sanitizes the post id passed to the function. If omitted, it will get the current
+ * post or page id prioritizing the global `$post` object.
  *
  * @access private
  *
- * @param mixed $post_id
+ * @param int|string $post_id Optional. The post id to sanitize or a falsy value to
+ *      get the current post or page id.
+ * @param string $context Optional. The context in which type of value to return on
+ *      failure. Options are `acf` and `dtx`. Default is `dtx`.
  *
- * @return int An integer value of the passed post ID or the post ID of the current `$post` global object. 0 on Failure.
+ * @return int|false The post id on suceess. 0 on failure with `dtx` $context, boolean
+ *      false with `acf` $context.
  */
-function wpcf7dtx_get_post_id($post_id, $context = 'dtx')
+function wpcf7dtx_get_post_id($post_id = '', $context = 'dtx')
 {
     $post_id = $post_id ? intval(sanitize_text_field(strval($post_id))) : '';
     if (!$post_id || !is_numeric($post_id)) {
@@ -199,8 +206,11 @@ function wpcf7dtx_get_post_id($post_id, $context = 'dtx')
  * @param string $value The form tag value.
  * @param WPCF7_FormTag|false $tag Optional. Use to look up default value.
  * @param string $sanitize Optional. Specify type of sanitization. Default is `auto`.
- * @param string $option_name Optional. Specify an option from the $tag to retrieve and decode. Default is `value`.
- * @param string $option_pattern Optional. A regular expression pattern or one of the keys of preset patterns. If specified, only options whose value part matches this pattern will be returned.
+ * @param string $option_name Optional. Specify an option from the $tag to retrieve and
+ *      decode. Default is `value`.
+ * @param string $option_pattern Optional. A regular expression pattern or one of the
+ *      keys of preset patterns. If specified, only options whose value part matches
+ *      this pattern will be returned.
  *
  * @return string The dynamic output or the original value, not escaped or sanitized.
  */
