@@ -159,6 +159,35 @@ function wpcf7dtx_obfuscate($value = '')
 add_filter('wpcf7dtx_obfuscate', 'wpcf7dtx_obfuscate', 10, 1);
 
 /**
+ * Checks if Current User Can Access Post
+ *
+ * Returns the post id on the following conditions:
+ *  1. If the post is publicly published and is a
+ *
+ * @see https://developer.wordpress.org/reference/functions/is_post_publicly_viewable/
+ * @see https://developer.wordpress.org/reference/functions/post_password_required/
+ *
+ * @since 4.5.1
+ *
+ * @param int|WP_Post|null|false $post_id Optional. Post ID or post object. Defaults to global $post.
+ *
+ * @return int|WP_Post|null|false The `$post_id` parameter on sucess, 0 otherwise.
+ */
+function wpcf7dtx_user_can_view_post($post_id = null)
+{
+    // Ensure we have a valid post id or null as functions allow, ACF context may pass boolean false as post id
+    $_post_id = is_int($post_id) || $post_id instanceof WP_Post ? $post_id : null;
+    if (
+        (is_post_publicly_viewable($_post_id) && !post_password_required($_post_id)) ||  // Allows publicly published posts of post types and status that are publicly visible that have no password or user can access the password protected post
+        current_user_can('edit_post', $_post_id) || // Allows anyone with edit access to this specific post (author, editor, admin, etc.)
+        (get_post_status($_post_id) == 'private' && current_user_can('read_private_posts')) // Allows anyone with private capability to read private post
+    ) {
+        return $post_id; // Return the original, unaltered post id
+    }
+    return 0;
+}
+
+/**
  * Sanitize/Get Post ID
 *
  * Sanitizes the post id passed to the function. If omitted, it will get the current
