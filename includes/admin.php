@@ -8,10 +8,6 @@ defined('ABSPATH') || exit; // Exit if accessed directly
 include_once 'admin/settings.php';
 include_once 'admin/update-check.php';
 
-if (!wpcf7dtx_dependencies(WPCF7DTX_MINVERSION_TAGGEN)) {
-    return;
-}
-
 use WPCF7_TagGenerator;
 
 /**
@@ -91,6 +87,16 @@ class TagGenerator
     }
 
     /**
+     * Check Dependency
+     *
+     * @return bool True if Contact Form 7 is version 6.0 or higher. False otherwise.
+     */
+    private function dependency()
+    {
+        return wpcf7dtx_dependencies(WPCF7DTX_MINVERSION_TAGGEN);
+    }
+
+    /**
      * Admin Scripts and Styles
      *
      * Enqueue scripts and styles to be used on the admin pages
@@ -103,6 +109,9 @@ class TagGenerator
      */
     public function load_assets($hook)
     {
+        if (!$this->dependency()) {
+            return;
+        }
         // Only load on CF7 Form pages (both editing forms and creating new forms)
         if ($hook === 'toplevel_page_wpcf7' || $hook === 'contact_page_wpcf7-new') {
             $prefix = 'wpcf7dtx-';
@@ -135,6 +144,9 @@ class TagGenerator
      */
     public function init()
     {
+        if (!$this->dependency()) {
+            return;
+        }
         // Loop fields to add them
         $tag_generator = WPCF7_TagGenerator::get_instance();
         foreach (wpcf7dtx_config() as $id => $field) {

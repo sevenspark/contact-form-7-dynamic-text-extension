@@ -58,7 +58,7 @@ function wpcf7dtx_dependencies($minversion = WPCF7DTX_MINVERSION_MAILVALIDATION)
  */
 function wpcf7dtx_init()
 {
-    if (!wpcf7dtx_dependencies()) {
+    if (!wpcf7dtx_dependencies(WPCF7DTX_MINVERSION_MAILVALIDATION)) {
         add_action('admin_notices', function () {
             echo (wp_kses_post(sprintf(
                 '<div class="notice notice-error is-dismissible"><p><strong>%s</strong> %s</p></div>',
