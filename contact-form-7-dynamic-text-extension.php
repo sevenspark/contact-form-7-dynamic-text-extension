@@ -217,6 +217,86 @@ function wpcf7dtx_config()
     return $wpcf7_dynamic_fields_config;
 }
 
+function wpcf7dtx_builtin_shortcodes_config()
+{
+    global $wpcf7dtx_builtin_shortcodes_config;
+    if (!isset($wpcf7dtx_builtin_shortcodes_config)) {
+        $wpcf7dtx_builtin_shortcodes_config = array(
+            array(
+                'tag' => 'CF7_GET',
+                'callback' => 'wpcf7dtx_get',
+                'description' => __('Get variable from $_GET', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_POST',
+                'callback' => 'wpcf7dtx_post',
+                'description' => __('Get variable from $_POST', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_URL',
+                'callback' => 'wpcf7dtx_url',
+                'description' => __('Get current URL or part', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_referrer',
+                'callback' => 'wpcf7dtx_referrer',
+                'description' => __('Get referring URL', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_bloginfo',
+                'callback' => 'wpcf7dtx_bloginfo',
+                'description' => __('Get variable from current blog', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_post_var',
+                'callback' => 'wpcf7dtx_get_post_var',
+                'description' => __('Get variable from any post object', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_custom_field',
+                'callback' => 'wpcf7dtx_get_custom_field',
+                'description' => __('Get value from post meta field', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_current_var',
+                'callback' => 'wpcf7dtx_get_current_var',
+                'description' => __('Get variable from the current post object', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_current_user',
+                'callback' => 'wpcf7dtx_get_current_user',
+                'description' => __('Get value from current user', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_attachment',
+                'callback' => 'wpcf7dtx_get_attachment',
+                'description' => __("Retrieves an id or absolute URL for a media attachment or a post object's featured image", 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_cookie',
+                'callback' => 'wpcf7dtx_get_cookie',
+                'description' => __('Retrieves the value of a cookie', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_taxonomy',
+                'callback' => 'wpcf7dtx_get_taxonomy',
+                'description' => __('Retrieves a list of taxonomy values', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_get_theme_option',
+                'callback' => 'wpcf7dtx_get_theme_option',
+                'description' => __('Retrieves theme modification value for the active theme', 'contact-form-7-dynamic-text-extension')
+            ),
+            array(
+                'tag' => 'CF7_guid',
+                'callback' => 'wpcf7dtx_guid',
+                'description' => __('Generates a random GUID (globally unique identifier)', 'contact-form-7-dynamic-text-extension')
+            ),
+        );
+    }
+    return $wpcf7dtx_builtin_shortcodes_config;
+}
+
 /**
  * Add Custom Shortcodes to Contact Form 7
  *
