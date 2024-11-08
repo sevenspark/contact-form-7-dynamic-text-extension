@@ -115,12 +115,14 @@ function wpcf7dtx_config()
     if (!isset($wpcf7_dynamic_fields_config)) {
         $wpcf7_dynamic_fields_config = array(
             'dynamic_text' => array(
-                'title' => __('dynamic text', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic text field', 'contact-form-7-dynamic-text-extension'), // Form tag generator title
+'label' => __('dynamic text'), // button label
                 'options' => array('placeholder', 'readonly'),
-                'description' => __('a single-line plain text', 'contact-form-7-dynamic-text-extension')
+                'description' => __('a single-line plain text input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_hidden' => array(
-                'title' => __('dynamic hidden', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic hidden field', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic hidden'), // button label
                 'options' => array(),
                 'description' => __('a single-line plain text hidden input field', 'contact-form-7-dynamic-text-extension'),
                 'features' => array(
@@ -128,37 +130,44 @@ function wpcf7dtx_config()
                 )
             ),
             'dynamic_email' => array(
-                'title' => __('dynamic email', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic email address field', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic email'), // button label
                 'options' => array('placeholder', 'readonly'),
                 'description' => __('a single-line email address input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_url' => array(
-                'title' => __('dynamic URL', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic URL field', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic URL'), // button label
                 'options' => array('placeholder', 'readonly'),
                 'description' => __('a single-line URL input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_tel' => array(
-                'title' => __('dynamic tel', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic phone number field', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic tel'), // button label
                 'options' => array('placeholder', 'readonly', 'pattern'),
                 'description' => __('a single-line telephone number input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_number' => array(
-                'title' => __('dynamic number', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic number field', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic number'), // button label
                 'options' => array('placeholder', 'readonly', 'min', 'max', 'step', 'pattern'),
                 'description' =>  __('a numeric input field displayed as a number spinbox', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_range' => array(
-                'title' => __('dynamic range', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic range slider', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic range'), // button label
                 'options' => array('placeholder', 'readonly', 'min', 'max', 'step', 'pattern'),
                 'description' =>  __('a numeric input field displayed as a slider between a minimum and maximum range', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_textarea' => array(
-                'title' => __('dynamic textarea', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic textarea', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic text area'), // button label
                 'options' => array('placeholder', 'readonly'),
                 'description' => __('a multi-line plain text input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_select' => array(
-                'title' => __('dynamic drop-down menu', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic select field', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic select'), // button label
                 'options' => array('placeholder', 'readonly', 'multiple', 'include_blank'),
                 'description' => __('a drop-down menu (i.e select input field)', 'contact-form-7-dynamic-text-extension'),
                 'features' => array(
@@ -166,37 +175,42 @@ function wpcf7dtx_config()
                 )
             ),
             'dynamic_checkbox' => array(
-                'title' => __('dynamic checkboxes', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic checkboxes', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic checkboxes'), // button label
                 'options' => array('readonly', 'label_first', 'use_label_element', 'exclusive'),
-                'description' => __('a group of checkboxes', 'contact-form-7-dynamic-text-extension'),
+                'description' => __('a group of checkboxes where users can select one or more options', 'contact-form-7-dynamic-text-extension'),
                 'features' => array(
                     'multiple-controls-container' => true, // Generates an HTML element that can contain multiple form controls
                     'selectable-values' => true // Generates an option (or group of options) from which you can select one or more options
                 )
             ),
             'dynamic_radio' => array(
-                'title' => __('dynamic radio buttons', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic radio buttons', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic radio buttons'), // button label
                 'options' => array('readonly', 'label_first', 'use_label_element'),
-                'description' => __('a group of radio buttons', 'contact-form-7-dynamic-text-extension'),
+                'description' => __('a group of radio buttons where users can only select one option', 'contact-form-7-dynamic-text-extension'),
                 'features' => array(
                     'multiple-controls-container' => true, // Generates an HTML element that can contain multiple form controls
                     'selectable-values' => true // Generates an option (or group of options) from which you can select one or more options
                 )
             ),
             'dynamic_date' => array(
-                'title' => __('dynamic date', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic date picker field', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic date'), // button label
                 'options' => array('placeholder', 'readonly', 'min', 'max', 'step'),
-                'description' =>  __('a date input field', 'contact-form-7-dynamic-text-extension')
+                'description' =>  __('a date picker input field', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_submit' => array(
-                'title' => __('dynamic submit', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic submit button', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic submit'), // button label
                 'options' => array(),
-                'description' =>  __('a submit button', 'contact-form-7-dynamic-text-extension')
+                'description' =>  __('a form submit button', 'contact-form-7-dynamic-text-extension')
             ),
             'dynamic_label' => array(
-                'title' => __('dynamic label', 'contact-form-7-dynamic-text-extension'), //title
+                'title' => __('Dynamic label', 'contact-form-7-dynamic-text-extension'), //title
+'label' => __('dynamic label'), // button label
                 'options' => array(),
-                'description' =>  __('a label element', 'contact-form-7-dynamic-text-extension')
+                'description' =>  __('a form label element', 'contact-form-7-dynamic-text-extension')
             )
         );
     }
