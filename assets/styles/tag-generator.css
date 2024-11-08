@@ -1,36 +1,98 @@
-.tag-generator-panel[data-id^="dynamic_"]:not([data-id*="hidden"]):not([data-id*="label"]):not([data-id*="submit"]) {
-    /* Set size of tag generator to be larger for dynamic fields, except for these because they don't have a lot of options */
-    height: 775px;
+:root {
+    --wpcf7dtx-text-color: #5333a4;
+    --wpcf7dtx-accent-color: #765cb9;
 }
 
-#tag-generator-list a.button.dtx-form-tag {
-    border-color: #765cb9;
-    color: #765cb9;
+
+/* Buttons */
+
+#tag-generator-list button.dtx-form-tag {
+    border: 1px solid var(--wpcf7dtx-accent-color);
+    color: var(--wpcf7dtx-text-color);
+    border-radius: 2px;
 }
 
-.tag-generator-panel table.form-table th {
-    width: 130px;
+#tag-generator-list button.dtx-form-tag:active,
+#tag-generator-list button.dtx-form-tag:focus,
+#tag-generator-list button.dtx-form-tag:hover {
+    background: rgba(0, 0, 0, 0.05);
 }
 
-.tag-generator-panel table.form-table td small {
+
+/* Tag Generator Dialog */
+
+form.tag-generator-panel[data-version="2"] header.dtx-taggen h3 span {
+    font-weight: 700;
+    color: var(--wpcf7dtx-text-color);
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset::after {
+    content: '';
     display: block;
-    margin-top: 0.25em;
-}
-
-.tag-generator-panel .control-box input.oneline,
-.tag-generator-panel .control-box input.multiline,
-.tag-generator-panel .control-box textarea {
     width: 100%;
+    height: 0;
+    clear: both;
 }
 
-.tag-generator-panel .control-box input[list],
-.tag-generator-panel .control-box input.multiline,
-.tag-generator-panel .control-box textarea {
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset {
+    display: block;
+    width: 100%;
+    margin: 1em 1em 1em 0;
+    box-sizing: border-box;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset>legend,
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset>div {
+    display: block;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset>legend {
+    width: 130px;
+    margin: 0;
+    float: left;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset>div {
+    margin-left: 130px;
+    padding-left: 2em;
+    padding-right: 1em;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset small {
+    display: block;
+    margin: 0.25em auto auto 0.5em;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset legend small {
+    margin-left: 0;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset small a {
+    line-height: inherit;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen input[type="text"],
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen textarea {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+}
+
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen input[list],
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen input.multiline,
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen textarea {
     height: 30px;
     min-height: 30px;
 }
 
-.tag-generator-panel .control-box input.multiline {
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen input.multiline {
     display: inline-block;
     /* -webkit-appearance: none;
     -moz-appearance: none;
@@ -40,28 +102,14 @@
     overflow-y: scroll;
 }
 
-.tag-generator-panel .control-box textarea {
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen textarea {
     height: 3.5em;
 }
 
-.tag-generator-panel table.form-table td .wpcf7dtx-mini-att,
-.tag-generator-panel table.form-table td .wpcf7dtx-mini-att label,
-.tag-generator-panel table.form-table td .wpcf7dtx-mini-att input[type="text"] {
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset .wpcf7dtx-mini-att,
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset .wpcf7dtx-mini-att label,
+form.tag-generator-panel[data-version="2"] .control-box.dtx-taggen>fieldset .wpcf7dtx-mini-att input[type="text"] {
+    display: inline-block;
+    width: 10em;
     vertical-align: middle;
-}
-
-.tag-generator-panel .insert-box textarea.tag {
-    border-radius: 4px;
-    border: 1px solid #8c8f94;
-    color: #2c3338;
-    /* padding: 0 8px; */
-    /* line-height: 2; */
-    min-height: 30px;
-    width: 500px;
-    float: left;
-    background-color: transparent;
-    box-shadow: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
 }
