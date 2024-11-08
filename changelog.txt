@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 5.0.0 =
+
+* Update: The form tag generator has been upgraded to version 2 to be compatible with [version 6.0 of Contact Form 7](https://contactform7.com/2024/11/03/contact-form-7-60/). Related prefixed functions have been replaced with a class. [See support thread](https://wordpress.org/support/topic/getting-deprecated-error-after-recent-update/).
+
 = 4.5.1 =
 
 * Security: Addressed security vulnerability #352992 responsibly reported by Francesco Carlucci to Wordfence. All built-in shortcodes now check for appropriate access and user permissions before returning information from any post.

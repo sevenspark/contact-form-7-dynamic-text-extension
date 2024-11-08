@@ -393,9 +393,13 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Addressed security vulnerability #352992 responsibly reported by Francesco Carlucci to Wordfence. Thank you Carlucci. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Contact Form 7 version 6.0 overhauled their form tag generator, so we followed suit with DTX 5.0! See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
+
+= 5.0.0 =
+
+* Update: The form tag generator has been upgraded to version 2 to be compatible with [version 6.0 of Contact Form 7](https://contactform7.com/2024/11/03/contact-form-7-60/). Related prefixed functions have been replaced with a class. [See support thread](https://wordpress.org/support/topic/getting-deprecated-error-after-recent-update/).
 
 = 4.5.1 =
 
@@ -416,92 +420,6 @@ Addressed security vulnerability #352992 responsibly reported by Francesco Carlu
 = 4.4.1 =
 
 * Fix: Addressed PHP warnings for undefined array keys introduced in version 4.4.0, [see support thread](https://wordpress.org/support/topic/tons-of-errors-in-error_log/)
-
-= 4.4.0 =
-
-* Update: Added *Contact Form 7* (CF7) as a requirement as introduced in WordPress version 6.5. This plugin cannot be activated until CF7 is installed and activated.
-* Feature: introduced `dynamic_label` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-label/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: updated the following attributes to be dynamic: `autocapitalize`, `autocomplete`, `autofocus`, `cols`, `disabled`, `list`, `max`, `maxlength`, `min`, `minlength`, `pattern`, `readonly`, `size`, and `step`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/dynamic-attributes/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Update: Updated the form tag generator for checkboxes and radio buttons to include documentation for the `default` attribute.
-* Update: Updated the form tag generator with fields for `min`, `max`, `step`, `minlength`, `maxlength`, and `autocomplete` for appropriate form tags. The `autocomplete` and `autocapitalize` are text fields that uses a `datalist` because I always forget those things...
-* Update: Increased the tag generator size to accommodate the new attributes.
-* Update: Some form tag generators display the generated form tag in a `textarea` to accommodate lengthy generated form tags.
-
-= 4.3.1 =
-
-* Fix: Resolved the PHP warning regarding `Undefined array key "value" in /.../contact-form-7-dynamic-text-extension/contact-form-7-dynamic-text-extension.php on line 391`, [see support thread](https://wordpress.org/support/topic/undefined-array-key-value-2/).
-* Fix: Resolved a bug introduced in version 4.2.1 that prevented the mail template validator from recognizing DTX form tags, [see support thread](https://wordpress.org/support/topic/email-field-validation-4/).
-* Fix: The `default` attribute for `dynamic_checkbox` can now accept multiple values that are delimited by an underscore (_), making it consistent with [Contact Form 7](https://contactform7.com/checkboxes-radio-buttons-and-menus/#checkbox-radio), [see support thread](https://wordpress.org/support/topic/help-dynamic_checkbox-and-default-values/).
-
-= 4.3.0 =
-
-* Feature: Added the `wpcf7dtx_shortcode` filter to all built-in shortcodes as requested. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/filter-modify-built-in-shortcode-responses/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
-* Fix: Resolved a bug that prevented using the number zero as the value for select fields, checkboxes, and radio buttons, [see support thread](https://wordpress.org/support/topic/error-with-option-value-0-for-a-dynamic-radio-button/).
-
-= 4.2.2 =
-
-* Feature: Cache compatibility JavaScript triggers the custom `dtx_init` event on enabled input fields, [see support thread](https://wordpress.org/support/topic/dynamic_text-cf7_url-dont-fire-onchange-event/).
-
-= 4.2.1 =
-
-* Feature: Allows text-based fields to use `autocapitalize` attribute
-* Feature: Allows text-based fields to use `autofocus` attribute
-* Feature: Allows text-based fields to use `list` attribute
-* Feature: Allows text-based fields to use `pattern` attribute
-* Feature: Allows textareas to use `wrap` attribute
-* Fix: Resolved the bug that prevented the `dynamic_date` shortcode from using `min`, `max`, and `step` attributes, [see support thread](https://wordpress.org/support/topic/dynamic_date-min-max-step-options-ignored/).
-* Fix: Added minimum version check for Contact Form 7, [see support thread](https://wordpress.org/support/topic/str_contains-is-php-8-0-only-broken-compatibility/).
-* Fix: Resolved an issue that used a function introduced in PHP 8 while plugin compatibility setting is currently still set to 7.4+, [see support thread](https://wordpress.org/support/topic/str_contains-is-php-8-0-only-broken-compatibility/).
-
-= 4.2.0 =
-
-* Security Update: ** Please be sure to review this doc, as you may need to adjust the settings: [Documentation by SevenSpark](https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access), [Documentation by AuRise Creative](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/security/) **
-* Feature: Added Settings Screen with Allow Lists
-* Feature: Added Form Scanner
-* Feature: Added Allow List key validation in CF7 Form Validator
-
-= 4.1.0 =
-
-* Feature: Looks for a `dtx.php` file in the `wp_content` directory to maybe load custom shortcodes, [see support thread](https://wordpress.org/support/topic/how-to-avoid-custom-shortcodes-being-overwritten-on-updates/)
-* Feature: Looks for a `dtx.php` file in the current active theme's directory to maybe load custom shortcodes, [see support thread](https://wordpress.org/support/topic/how-to-avoid-custom-shortcodes-being-overwritten-on-updates/)
-* Feature: Looks for a `dtx.php` file in the current active theme's parent directory to maybe load custom shortcodes, [see support thread](https://wordpress.org/support/topic/how-to-avoid-custom-shortcodes-being-overwritten-on-updates/)
-* Fix: addressed user reported bug, [see support thread](https://wordpress.org/support/topic/fatal-error-v4-0-3/)
-
-= 4.0.3 =
-
-* Feature: Added `exclusive` option to checkbox tag generator
-* Fix: addressed bug that put all dynamic checkbox/radio options into one
-* Fix: addressed bug in frontend validator for multiple selected values
-
-= 4.0.2 =
-
-* Fix: addressed bug that put all dynamic select options into one, [see support thread](https://wordpress.org/support/topic/dynamic-select-get-option-values-from-shortcode/)
-* Update: sanitizing and escaping filters now accept `none` as value for `$type` to bypass. Use with caution.
-
-= 4.0.1 =
-
-* Fix: addressed bug that prevented translation for cache compatibility description
-
-= 4.0.0 =
-
-* Major: modified function names
-* Major: deprecated `dynamictext` and `dynamichidden` form tags in favor of `dynamic_text` and `dynamic_hidden`. For more information, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_email` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-email/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_url` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-url/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_tel` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-tel/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_number` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-number/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_range` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-range/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_textarea` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-textarea/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_select` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_radio` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-radio/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_date` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-date/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dynamic_submit` form tag. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-submit/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dtx_hide_blank` form tag attribute for `dynamic_select`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: introduced `dtx_disable_blank` form tag attribute for `dynamic_select`. For usage details, see the [knowledge base](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/form-tags/dynamic-select/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: added mail validation for `dynamic_email` and `dynamic_hidden` for backend configuration. For more information, see the [FAQ](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/frequently-asked-questions/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme)
-* Feature: added the Akismet feature to DTX text, email, and URL form tags.
-* Update: adjusted how queued values were sent for cache compatibility mode to allow for multiline values in textareas
-* Removed unused utility functions
 
 = Older Releases =
 
