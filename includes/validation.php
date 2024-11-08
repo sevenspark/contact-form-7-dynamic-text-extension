@@ -312,13 +312,13 @@ function wpcf7dtx_validate($validator)
 /**
  * Initialise Custom Mail Template Validator
  *
- * Validator requires a minimum version of Contact Form 7.
+ * Validator requires a version 5.7 or higher of Contact Form 7.
  *
  * @return void
  */
 function wpcf7dtx_init_validator()
 {
-    if (wpcf7dtx_dependencies()) {
+    if (wpcf7dtx_dependencies(WPCF7DTX_MINVERSION_MAILVALIDATION)) {
         add_action('wpcf7_config_validator_validate', 'wpcf7dtx_validate');
     }
 }

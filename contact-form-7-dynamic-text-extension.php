@@ -33,7 +33,8 @@
  */
 
 define('WPCF7DTX_VERSION', 'VERSION_PLACEHOLDER'); // Define current version of DTX
-define('WPCF7DTX_MINVERSION', '5.7'); // The minimum version of CF7 required to use mail validator
+define('WPCF7DTX_MINVERSION_MAILVALIDATION', '5.7'); // The minimum version of CF7 required to use mail validator
+define('WPCF7DTX_MINVERSION_TAGGEN', '6.0'); // The minimum version of CF7 required to use tag generator
 defined('WPCF7DTX_DIR') || define('WPCF7DTX_DIR', __DIR__); // Define root directory
 defined('WPCF7DTX_FILE') || define('WPCF7DTX_FILE', __FILE__); // Define root file
 define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/security/');
@@ -45,9 +46,9 @@ define('WPCF7DTX_DATA_ACCESS_KB_URL', 'https://aurisecreative.com/docs/contact-f
  *
  * @return bool True if minimum version of Contact Form 7 is met. False otherwise.
  */
-function wpcf7dtx_dependencies()
+function wpcf7dtx_dependencies($minversion = WPCF7DTX_MINVERSION_MAILVALIDATION)
 {
-    return defined('WPCF7_VERSION') && version_compare(constant('WPCF7_VERSION'), WPCF7DTX_MINVERSION, '>=');
+    return defined('WPCF7_VERSION') && version_compare(constant('WPCF7_VERSION'), $minversion, '>=');
 }
 
 /**
@@ -64,7 +65,19 @@ function wpcf7dtx_init()
                 __('Form validation for dynamic fields created with <em>Contact Form 7 - Dynamic Text Extension</em> is not available!', 'contact-form-7-dynamic-text-extension'),
                 sprintf(
                     __('<em>Contact Form 7</em> version %s or higher is required.', 'contact-form-7-dynamic-text-extension'),
-                    esc_html(WPCF7DTX_MINVERSION)
+                    esc_html(WPCF7DTX_MINVERSION_MAILVALIDATION)
+                )
+            )));
+        });
+    }
+    if (!wpcf7dtx_dependencies(WPCF7DTX_MINVERSION_TAGGEN)) {
+        add_action('admin_notices', function () {
+            echo (wp_kses_post(sprintf(
+                '<div class="notice notice-error is-dismissible"><p><strong>%s</strong> %s</p></div>',
+                __('Form tag generators for dynamic fields provided by <em>Contact Form 7 - Dynamic Text Extension</em> are not available!', 'contact-form-7-dynamic-text-extension'),
+                sprintf(
+                    __('<em>Contact Form 7</em> version %s or higher is required.', 'contact-form-7-dynamic-text-extension'),
+                    esc_html(WPCF7DTX_MINVERSION_TAGGEN)
                 )
             )));
         });
