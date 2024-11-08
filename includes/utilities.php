@@ -429,11 +429,22 @@ function wpcf7dtx_format_atts($atts)
         foreach ($atts as $key => $value) {
             $key = sanitize_key(strval($key));
             if ($key) {
-                if (in_array($key, $boolean_attributes) || is_bool($value)) {
+                if ($key == 'class' && is_array($value)) {
+                    $sanitized_atts['class'] = array();
+                    $value = array_values(array_unique(array_filter($value))); // Remove duplicates, empty values, and reindex keys
+                    foreach ($value as $i => $class) {
+                        // Sanitize the class and add it if it's not empty
+                        if ($class = trim(sanitize_html_class(sanitize_text_field($class)))) {
+                            $sanitized_atts['class'][] = $class;
+                        }
+                    }
+                    $sanitized_atts['class'] = implode(' ', $sanitized_atts['class']); // Implode all classes to be a single attribute value
+                } elseif (in_array($key, $boolean_attributes) || is_bool($value)) {
                     if ($value) {
                         $sanitized_atts[$key] = $key;
                     }
-                } elseif (is_numeric($value) || (is_string($value) || !empty($value))) {
+                } elseif (is_numeric($value) || is_string($value)) {
+                    // Allow all numbers and strings, even if falsy
                     $sanitized_atts[$key] = $value;
                 }
             }
