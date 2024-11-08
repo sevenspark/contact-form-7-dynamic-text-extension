@@ -162,7 +162,7 @@ function wpcf7dtx_url($atts = array())
 }
 
 /**
- * Get Referrering URL
+ * Get Referring URL
  *
  * @shortcode CF7_referrer
  *
