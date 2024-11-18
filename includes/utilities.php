@@ -483,6 +483,10 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
 /**
  * Returns a formatted string of HTML attributes
  *
+ * Boolean attributes are set to themselves if the value is a boolean itself
+ * or if the key is checked, disabled, multiple, readonly, required, or selected.
+ * The value of the key class can be array for sanitizing.
+ *
  * @since 4.0.0
  *
  * @param array $atts Associative array of attribute name and value pairs
