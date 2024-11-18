@@ -620,7 +620,7 @@ function wpcf7dtx_shortcode_handler($tag)
                 $atts['id'] ? sprintf(' id="%s"', esc_attr($atts['id'])) : ''
             ), array_merge($allowed_html, array(
                 'label' => array('for' => true),
-                'image' => array('src' => true, 'alt' => true, 'title' => true, 'class' => true, 'id' => true, 'style' => true, 'width' => true, 'height' => true, 'loading' => true, 'longdesc' => true, 'sizes' => true, 'srcset' => true),
+                'img' => array('src' => true, 'alt' => true, 'title' => true, 'class' => true, 'id' => true, 'style' => true, 'width' => true, 'height' => true, 'loading' => true, 'longdesc' => true, 'sizes' => true, 'srcset' => true),
                 'input' => wpcf7dtx_get_allowed_field_properties($atts['type'])
             )));
         case 'select':

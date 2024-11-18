@@ -4,6 +4,7 @@
 
 * Fix: updated the `wpcf7dtx_format_atts()` function to only include attributes with string values if the string exists to avoid adding empty attributes like `id` where they are supposed to be unique, [see support thread](https://wordpress.org/support/topic/exposure-of-sensitive-date-in-html/).
 * Update: updated getting dynamic attributes to be more consistent across handler functions.
+* Fix: Fixed allowed html so images could be used in checkbox and radio buttons, [see support thread](https://wordpress.org/support/topic/allow-images-in-radio-button-options/).
 * Fix: Marked compatible with WordPress core version 6.7.
 
 = 5.0.0 =

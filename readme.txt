@@ -29,7 +29,7 @@ Contact Form 7 is an excellent WordPress plugin and one of the top choices of fr
 
 The possibilities are endless!
 
-(View Demo)[https://wordpress.org/plugins/contact-form-7-dynamic-text-extension/?preview=1]
+[View Demo](https://wordpress.org/plugins/contact-form-7-dynamic-text-extension/?preview=1)
 
 For over 10 years, DTX only handled `<input type="text" />` and `<input type="hidden" />` form fields, but version 4 finally introduces more:
 
