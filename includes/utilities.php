@@ -506,7 +506,7 @@ function wpcf7dtx_format_atts($atts)
             'selected'
         );
         foreach ($atts as $key => $value) {
-            $key = sanitize_key(strval($key));
+            $key = trim(sanitize_title($key));
             if ($key) {
                 if ($key == 'class' && is_array($value)) {
                     $sanitized_atts['class'] = array();
@@ -530,8 +530,8 @@ function wpcf7dtx_format_atts($atts)
         }
         if (count($sanitized_atts)) {
             $output = array();
-            foreach ($sanitized_atts as $key => $value) {
-                $output[] = sprintf('%s="%s"', esc_attr($key), esc_attr($value));
+            foreach ($sanitized_atts as $sanitized_key => $sanitized_value) {
+                $output[] = sprintf('%s="%s"', esc_attr($sanitized_key), esc_attr($sanitized_value));
             }
             return implode(' ', $output);
         }
