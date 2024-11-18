@@ -672,16 +672,11 @@ function wpcf7dtx_button_shortcode_handler($tag)
 {
     //Configure input attributes
     $atts = array();
-    $atts['type'] = sanitize_key(str_replace('dynamic_', '', $tag->basetype));
-    $atts['id'] = strval($tag->get_id_option());
-    $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
+    $atts['type'] = trim(sanitize_key(str_replace('dynamic_', '', $tag->basetype)));
+    $atts['id'] = wpcf7dtx_get_dynamic_attr('id', $tag, 'text');
+    $atts['tabindex'] = wpcf7dtx_get_dynamic_attr('tabindex', $tag, 'text', $atts['type'], 'signed_int');
+    $atts['class'] = wpcf7dtx_get_dynamic_attr('class', $tag, 'text', $atts['type']);
     $atts['value'] = wpcf7dtx_get_dynamic(false, $tag); // Evaluate the dynamic value
-    $atts['class'] = explode(' ', wpcf7_form_controls_class($atts['type']));
-    $atts['class'][] = 'wpcf7dtx';
-    $atts['class'][] = sanitize_html_class('wpcf7dtx-' . $atts['type']);
-    if ($atts['type'] == 'submit') {
-        $atts['class'][] = 'has-spinner';
-    }
 
     // Default value if empty
     if (empty($atts['value'])) {
@@ -708,9 +703,6 @@ function wpcf7dtx_button_shortcode_handler($tag)
             wp_enqueue_script('wpcf7dtx');
         }
     }
-
-    // Wrap up class attribute
-    $atts['class'] = $tag->get_class_option($atts['class']);
 
     // Output the form field HTML
     return wp_kses(
