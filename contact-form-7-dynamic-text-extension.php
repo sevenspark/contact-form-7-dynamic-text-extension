@@ -443,10 +443,9 @@ function wpcf7dtx_shortcode_handler($tag)
     // Identify placeholder
     if ($tag->has_option('placeholder') || $tag->has_option('watermark')) {
         //Reverse engineer what JS did (converted quotes to HTML entities --> URL encode) then sanitize
-        $placeholder = html_entity_decode(urldecode($tag->get_option('placeholder', '', true)), ENT_QUOTES);
+        $placeholder = wpcf7dtx_get_dynamic_attr('placeholder', $tag);
         if ($placeholder) {
             // If a different placeholder text has been specified, set both attributes
-            $placeholder = wpcf7dtx_get_dynamic($placeholder, false, $sanitize_type);
             $atts['placeholder'] = $placeholder;
             $atts['value'] = $value;
         } else {
