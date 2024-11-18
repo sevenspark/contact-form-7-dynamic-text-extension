@@ -477,7 +477,7 @@ function wpcf7dtx_shortcode_handler($tag)
          * Configuration for selection-based fields
          */
         if ($tag->has_option('default')) {
-            $atts['dtx-default'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('default', '', true)), ENT_QUOTES));
+            $atts['dtx-default'] = wpcf7dtx_get_dynamic_attr('default', $tag);
         }
 
         // Get options for selection-based fields
