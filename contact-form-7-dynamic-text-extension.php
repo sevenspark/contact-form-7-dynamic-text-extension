@@ -595,24 +595,7 @@ function wpcf7dtx_shortcode_handler($tag)
         if (array_key_exists('max', $atts) && array_key_exists('min', $atts) && is_numeric($atts['max']) && is_numeric($atts['min']) && floatval($atts['max']) < floatval($atts['min'])) {
             unset($atts['max'], $atts['min']);
         }
-
-        // Client-side validation by type
-        switch ($atts['type']) {
-            case 'range':
-                $atts['class'][] =  'wpcf7-validates-as-number';
-                break;
-            case 'date':
-            case 'number':
-            case 'email':
-            case 'url':
-            case 'tel':
-                $atts['class'][] =  sanitize_html_class('wpcf7-validates-as-' . $atts['type']);
-                break;
-        }
     }
-
-    // Wrap up class attribute
-    $atts['class'] = $tag->get_class_option($atts['class']);
 
     // Output the form field HTML
     $wrapper = '<span class="wpcf7-form-control-wrap %1$s" data-name="%1$s">%2$s%3$s</span>';
