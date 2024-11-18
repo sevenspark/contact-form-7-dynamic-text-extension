@@ -498,7 +498,7 @@ function wpcf7dtx_shortcode_handler($tag)
             $atts['placeholder'] = wpcf7dtx_array_has_key('placeholder', $atts, __('&#8212;Please choose an option&#8212;', 'contact-form-7-dynamic-text-extension'));
         }
         if ($atts['type'] == 'select') {
-            $atts['size'] = wpcf7dtx_get_dynamic(false, $tag, 'text', 'size'); // Get dynamic attribute
+            $atts['size'] = wpcf7dtx_get_dynamic_attr('size', $tag, 'text');
             if ($atts['size'] === '') {
                 $atts['size'] = $tag->get_size_option('1'); // Set default value
             }
@@ -514,7 +514,7 @@ function wpcf7dtx_shortcode_handler($tag)
         foreach ($dynamic_atts as $dynamic_att) {
             // Don't override existing attributes
             if (!array_key_exists($dynamic_att, $atts) && $tag->has_option($dynamic_att)) {
-                $atts[$dynamic_att] = wpcf7dtx_get_dynamic(false, $tag, 'text', $dynamic_att); // Get dynamic attribute
+                $atts[$dynamic_att] = wpcf7dtx_get_dynamic_attr($dynamic_att, $tag, 'text');
                 switch ($dynamic_att) {
                     case 'autocapitalize':
                         if (!in_array($atts[$dynamic_att], array('none', 'off', 'on', 'sentences', 'words', 'characters'))) {
