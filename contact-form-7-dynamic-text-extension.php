@@ -397,13 +397,11 @@ function wpcf7dtx_shortcode_handler($tag)
 
     //Configure input attributes
     $atts = array();
-    $atts['type'] = sanitize_key(str_replace(array('dynamic_', 'dynamic'), '', $tag->basetype));
+    $atts['type'] = trim(sanitize_key(str_replace(array('dynamic_', 'dynamic'), '', $tag->basetype)));
     $atts['name'] = $tag->name;
-    $atts['id'] = strval($tag->get_id_option());
-    $atts['tabindex'] = $tag->get_option('tabindex', 'signed_int', true);
-    $atts['class'] = explode(' ', wpcf7_form_controls_class($atts['type']));
-    $atts['class'][] = 'wpcf7dtx';
-    $atts['class'][] = sanitize_html_class('wpcf7dtx-' . $atts['type']);
+    $atts['id'] = wpcf7dtx_get_dynamic_attr('id', $tag, 'text');
+    $atts['tabindex'] = wpcf7dtx_get_dynamic_attr('tabindex', $tag, 'text', $atts['type'], 'signed_int');
+    $atts['class'] = wpcf7dtx_get_dynamic_attr('class', $tag, 'text', $atts['type']);
     if ($validation_error) {
         $atts['class'][] = 'wpcf7-not-valid';
         $atts['aria-invalid'] = 'true';
