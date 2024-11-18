@@ -550,7 +550,7 @@ function wpcf7dtx_format_atts($atts)
  */
 function wpcf7dtx_input_html($atts)
 {
-    return sprintf('<input %s />', wpcf7dtx_format_atts($atts));
+    return sprintf('<input %s>', wpcf7dtx_format_atts($atts));
 }
 
 /**
