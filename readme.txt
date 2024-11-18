@@ -423,10 +423,6 @@ Contact Form 7 version 6.0 overhauled their form tag generator, so we followed s
 * Fix: Addressed PHP warning for undefined variable $default_placeholder introduced in version 4.4.0, [see support thread](https://wordpress.org/support/topic/php-warning-undefined-variable-default_placeholder/)
 * Minor: Create preview link using WordPress Playground, [check it out](https://wordpress.org/plugins/contact-form-7-dynamic-text-extension/?preview=1)
 
-= 4.4.1 =
-
-* Fix: Addressed PHP warnings for undefined array keys introduced in version 4.4.0, [see support thread](https://wordpress.org/support/topic/tons-of-errors-in-error_log/)
-
 = Older Releases =
 
 Please see our [additional changelog.txt file](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt)
