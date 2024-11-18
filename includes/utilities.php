@@ -385,52 +385,52 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
     if (in_array($type, array('option', 'optgroup'))) {
         return array(
             'optgroup' => array(
-                'label' => array(),
-                'disabled' => array(),
-                'hidden' => array()
+                'label' => true,
+                'disabled' => true,
+                'hidden' => true
             ),
             'option' => array(
-                'value' => array(),
-                'selected' => array(),
-                'disabled' => array(),
-                'hidden' => array()
+                'value' => true,
+                'selected' => true,
+                'disabled' => true,
+                'hidden' => true
             )
         );
     }
     $allowed_properties = array(
         // Global properties
-        'type' => array(),
-        'id' => array(),
-        'name' => array(),
-        'value' => array(),
-        'class' => array(),
-        'disabled' => array(),
-        'tabindex' => array(),
-        'title' => array(),
+        'type' => true,
+        'id' => true,
+        'name' => true,
+        'value' => true,
+        'class' => true,
+        'disabled' => true,
+        'tabindex' => true,
+        'title' => true,
         // ARIA properties
-        'aria-invalid' => array(),
-        'aria-describedby' => array(),
+        'aria-invalid' => true,
+        'aria-describedby' => true,
         // DTX properties
-        'data-dtx-value' => array(),
+        'data-dtx-value' => true,
     );
     if ($type != 'hidden') {
-        $allowed_properties['autofocus'] = array();
-        $allowed_properties['readonly'] = array();
-        $allowed_properties['required'] = array();
+        $allowed_properties['autofocus'] = true;
+        $allowed_properties['readonly'] = true;
+        $allowed_properties['required'] = true;
     }
     if (in_array($type, array('checkbox', 'radio', 'acceptance'))) {
         // Properties exclusive to checkboxes and radio buttons
-        $allowed_properties['checked'] = array();
-        $allowed_properties['dtx-default'] = array();
+        $allowed_properties['checked'] = true;
+        $allowed_properties['dtx-default'] = true;
     } elseif ($type == 'select') {
         // Properties exclusive to select fields
-        $allowed_properties['size'] = array();
-        $allowed_properties['multiple'] = array();
-        $allowed_properties['dtx-default'] = array();
+        $allowed_properties['size'] = true;
+        $allowed_properties['multiple'] = true;
+        $allowed_properties['dtx-default'] = true;
         unset($allowed_properties['type'], $allowed_properties['value']); // Remove invalid select attributes
     } elseif ($type == 'label') {
         // Properties exclusive to label elements
-        $allowed_properties['for'] = array();
+        $allowed_properties['for'] = true;
         // Remove invalid label attributes
         unset(
             $allowed_properties['type'],
@@ -441,40 +441,40 @@ function wpcf7dtx_get_allowed_field_properties($type = 'text', $extra = array())
         );
     } else {
         // Properties exclusive to text-based inputs
-        $allowed_properties['autocapitalize'] = array();
-        $allowed_properties['autocomplete'] = array();
-        $allowed_properties['list'] = array();
+        $allowed_properties['autocapitalize'] = true;
+        $allowed_properties['autocomplete'] = true;
+        $allowed_properties['list'] = true;
 
         // Placeholder
         if (in_array($type, array('text', 'textarea', 'search', 'url', 'tel', 'email', 'password', 'number'))) {
-            $allowed_properties['placeholder'] = array();
+            $allowed_properties['placeholder'] = true;
         }
 
         // Textarea
         if ($type == 'textarea') {
             // Additional properties exclusive to textarea fields
-            $allowed_properties['cols'] = array();
-            $allowed_properties['rows'] = array();
-            $allowed_properties['minlength'] = array();
-            $allowed_properties['maxlength'] = array();
-            $allowed_properties['wrap'] = array();
+            $allowed_properties['cols'] = true;
+            $allowed_properties['rows'] = true;
+            $allowed_properties['minlength'] = true;
+            $allowed_properties['maxlength'] = true;
+            $allowed_properties['wrap'] = true;
             unset($allowed_properties['type'], $allowed_properties['value']); // Remove invalid textarea attributes
         } elseif (in_array($type, array('text', 'search', 'url', 'tel', 'email', 'password'))) {
             // Additional properties exclusive to these text-based fields
-            $allowed_properties['size'] = array();
-            $allowed_properties['minlength'] = array();
-            $allowed_properties['maxlength'] = array();
-            $allowed_properties['pattern'] = array();
+            $allowed_properties['size'] = true;
+            $allowed_properties['minlength'] = true;
+            $allowed_properties['maxlength'] = true;
+            $allowed_properties['pattern'] = true;
         } elseif (in_array($type, array('number', 'range', 'date', 'datetime-local', 'time'))) {
             // Number and date inputs
-            $allowed_properties['min'] = array();
-            $allowed_properties['max'] = array();
-            $allowed_properties['step'] = array();
+            $allowed_properties['min'] = true;
+            $allowed_properties['max'] = true;
+            $allowed_properties['step'] = true;
         }
     }
     if (is_array($extra) && count($extra)) {
         foreach ($extra as $property) {
-            $allowed_properties[sanitize_title($property)] = array();
+            $allowed_properties[sanitize_title($property)] = true;
         }
     }
     return $allowed_properties;
