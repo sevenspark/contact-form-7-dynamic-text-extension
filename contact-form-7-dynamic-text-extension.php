@@ -730,13 +730,13 @@ function wpcf7dtx_label_shortcode_handler($tag)
 {
     $atts = array();
     $atts['id'] = strval($tag->get_id_option());
-    $atts['class'] = wpcf7_form_controls_class('wpcf7dtx wpcf7dtx-label');
-    $atts['for'] = wpcf7dtx_get_dynamic(html_entity_decode(urldecode($tag->get_option('for', '', true)), ENT_QUOTES)); // Get dynamic attribute
+    $atts['class'] = wpcf7dtx_get_dynamic_attr('class', $tag, 'text', 'label');
+    $atts['for'] = wpcf7dtx_get_dynamic_attr('for', $tag, 'text');
 
     // Page load attribute
     if ($tag->has_option('dtx_pageload') && is_array($tag->raw_values) && count($tag->raw_values)) {
         $atts['data-dtx-value'] = rawurlencode(sanitize_text_field($tag->raw_values[0]));
-        $atts['class'] .= ' dtx-pageload';
+        $atts['class'][] = 'dtx-pageload';
         if (wp_style_is('wpcf7dtx', 'registered') && !wp_script_is('wpcf7dtx', 'queue')) {
             // If already registered, just enqueue it
             wp_enqueue_script('wpcf7dtx');
@@ -746,9 +746,6 @@ function wpcf7dtx_label_shortcode_handler($tag)
             wp_enqueue_script('wpcf7dtx');
         }
     }
-
-    // Wrap up class attribute
-    $atts['class'] = $tag->get_class_option($atts['class']);
 
     // Output the form field HTML
     return wp_kses(
