@@ -307,12 +307,11 @@ function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto', $option_
  */
 function wpcf7dtx_get_dynamic_attr($option_name, $tag, $sanitize = 'auto', $basetype = '', $option_pattern = '')
 {
-    $single = !in_array($option_name, array('class'));
-    $value = $tag->get_option($option_name, $option_pattern, $single);
-    if ($value === false) {
-        return '';
-    }
-    if (!is_array($value)) {
+    if ($option_name !== 'class') {
+        $value = $tag->get_option($option_name, $option_pattern, true);
+        if ($value === false) {
+            return '';
+        }
         return wpcf7dtx_dynamic_attr($value, $sanitize);
     }
     $values = array();
@@ -343,8 +342,11 @@ function wpcf7dtx_get_dynamic_attr($option_name, $tag, $sanitize = 'auto', $base
     }
 
     // Add in the user-added possibly dynamic user values
-    foreach ($value as $v) {
-        $values[] = wpcf7dtx_dynamic_attr($v, $sanitize);
+    $classes = $tag->get_option($option_name, $option_pattern, false);
+    if (is_array($classes)) {
+        foreach ($classes as $class) {
+            $values[] = wpcf7dtx_dynamic_attr($class, $sanitize);
+        }
     }
     return $values;
 }
