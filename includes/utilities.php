@@ -290,6 +290,81 @@ function wpcf7dtx_get_dynamic($value, $tag = false, $sanitize = 'auto', $option_
 }
 
 /**
+ * Get Dynamic Attribute
+ *
+ * @since 5.0.1
+ *
+ * @param string $option_name Specify an option from the $tag to retrieve and decode.
+ * @param WPCF7_FormTag $tag Use to look up default value.
+ * @param string $sanitize Optional. Specify type of sanitization. Default is `auto`.
+ * @param string $basetype Optional. Specify a basetype to use in the class instead
+ *      of what is in the tag.
+ * @param string $option_pattern Optional. A regular expression pattern or one of the
+ *      keys of preset patterns. If specified, only options whose value part matches
+ *      this pattern will be returned.
+ *
+ * @return string The dynamic output or the original value, not escaped or sanitized.
+ */
+function wpcf7dtx_get_dynamic_attr($option_name, $tag, $sanitize = 'auto', $basetype = '', $option_pattern = '')
+{
+    $single = !in_array($option_name, array('class'));
+    $value = $tag->get_option($option_name, $option_pattern, $single);
+    if ($value === false) {
+        return '';
+    }
+    if (!is_array($value)) {
+        return wpcf7dtx_dynamic_attr($value, $sanitize);
+    }
+    $values = array();
+    if ($option_name == 'class') {
+        $type = trim(sanitize_key($basetype ? $basetype : str_replace(array('dynamic_', 'dynamic'), '', $tag->basetype)));
+        $values = explode(' ', wpcf7_form_controls_class($type));
+        $values[] = 'wpcf7dtx';
+        $values[] = sanitize_html_class('wpcf7dtx-' . $type);
+
+        // Client-side validation by type
+        switch ($type) {
+            case 'range':
+                $values[] =  'wpcf7-validates-as-number';
+                break;
+            case 'date':
+            case 'number':
+            case 'email':
+            case 'url':
+            case 'tel':
+                $values[] =  sanitize_html_class('wpcf7-validates-as-' . $type);
+                break;
+            case 'submit':
+                $values[] = 'has-spinner';
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Add in the user-added possibly dynamic user values
+    foreach ($value as $v) {
+        $values[] = wpcf7dtx_dynamic_attr($v, $sanitize);
+    }
+    return $values;
+}
+
+/**
+ * Decode and Evaluate Dynamic Attribute
+ *
+ * @since 5.0.1
+ *
+ * @param string $value The value of the attribute.
+ * @param string $sanitize Optional. Specify type of sanitization. Default is `auto`.
+ *
+ * @param string The dynamic output or the original value, not escaped or sanitized.
+ */
+function wpcf7dtx_dynamic_attr($value, $sanitize = 'auto')
+{
+    return wpcf7dtx_get_dynamic(html_entity_decode(urldecode(strval($value)), ENT_QUOTES), false, $sanitize); // Get dynamic attribute
+}
+
+/**
  * Get Allowed HTML for Form Field Properties
  *
  * @see https://www.w3schools.com/tags/tag_input.asp
