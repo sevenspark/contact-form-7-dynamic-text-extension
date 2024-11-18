@@ -599,7 +599,10 @@ function wpcf7dtx_shortcode_handler($tag)
 
     // Output the form field HTML
     $wrapper = '<span class="wpcf7-form-control-wrap %1$s" data-name="%1$s">%2$s%3$s</span>';
-    $allowed_html = array('br' => array(), 'span' => array('id' => array(), 'class' => array(), 'data-name' => array(), 'aria-hidden' => array()));
+    $allowed_html = array(
+        'br' => true,
+        'span' => array('id' => true, 'class' => true, 'data-name' => true, 'aria-hidden' => true)
+    );
     switch ($atts['type']) {
         case 'checkbox':
         case 'radio':
@@ -616,8 +619,8 @@ function wpcf7dtx_shortcode_handler($tag)
                 $validation_error,
                 $atts['id'] ? sprintf(' id="%s"', esc_attr($atts['id'])) : ''
             ), array_merge($allowed_html, array(
-                'label' => array('for' => array()),
-                'image' => array('src' => array(), 'alt' => array(), 'title' => array(), 'class' => array(), 'id' => array(), 'style' => array(), 'width' => array(), 'height' => array(), 'loading' => array(), 'longdesc' => array(), 'sizes' => array(), 'srcset' => array()),
+                'label' => array('for' => true),
+                'image' => array('src' => true, 'alt' => true, 'title' => true, 'class' => true, 'id' => true, 'style' => true, 'width' => true, 'height' => true, 'loading' => true, 'longdesc' => true, 'sizes' => true, 'srcset' => true),
                 'input' => wpcf7dtx_get_allowed_field_properties($atts['type'])
             )));
         case 'select':
