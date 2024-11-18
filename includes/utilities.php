@@ -524,8 +524,8 @@ function wpcf7dtx_format_atts($atts)
                     if ($value) {
                         $sanitized_atts[$key] = $key;
                     }
-                } elseif (is_numeric($value) || (is_string($value) && ($value || $key != 'id'))) {
-                    // Allow all numbers and strings, even if falsy (except for id attributes, if those are empty, do not add it)
+                } elseif (is_numeric($value) || (is_string($value) && $value)) {
+                    // Allow all numbers (even if falsey) and strings (only if value)
                     $sanitized_atts[$key] = $value;
                 }
             }
