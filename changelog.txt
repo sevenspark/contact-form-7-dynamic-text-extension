@@ -1,5 +1,11 @@
 == Changelog ==
 
+= 5.0.1 =
+
+* Fix: updated the `wpcf7dtx_format_atts()` function to only include attributes with string values if the string exists to avoid adding empty attributes like `id` where they are supposed to be unique, [see support thread](https://wordpress.org/support/topic/exposure-of-sensitive-date-in-html/).
+* Update: updated getting dynamic attributes to be more consistent across handler functions.
+* Fix: Marked compatible with WordPress core version 6.7.
+
 = 5.0.0 =
 
 * Update: The form tag generator has been upgraded to version 2 to be compatible with [version 6.0 of Contact Form 7](https://contactform7.com/2024/11/03/contact-form-7-60/). Related prefixed functions have been replaced with a class. [See support thread](https://wordpress.org/support/topic/getting-deprecated-error-after-recent-update/).
