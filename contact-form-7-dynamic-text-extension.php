@@ -426,16 +426,12 @@ function wpcf7dtx_shortcode_handler($tag)
     foreach ($dynamic_atts as $dynamic_att) {
         // Don't override existing attributes
         if (!array_key_exists($dynamic_att, $atts) && $tag->has_option($dynamic_att)) {
-            switch ($dynamic_att) {
-                default:
-                    $atts[$dynamic_att] = wpcf7dtx_get_dynamic(false, $tag, 'text', $dynamic_att); // Get dynamic attribute
-                    if ($atts[$dynamic_att] === '') {
-                        $atts[$dynamic_att] = $dynamic_att;  // Empty values are valid since boolean values just need to exist
-                    }
-                    if ($atts[$dynamic_att] !== $dynamic_att) {
-                        unset($atts[$dynamic_att]); // Remove attribute if it doesn't equal it's own name
-                    }
-                    break;
+            $atts[$dynamic_att] = wpcf7dtx_get_dynamic_attr($dynamic_att, $tag, 'text');
+            if ($atts[$dynamic_att] === '') {
+                $atts[$dynamic_att] = $dynamic_att;  // Empty values are valid since boolean values just need to exist
+            }
+            if ($atts[$dynamic_att] !== $dynamic_att) {
+                unset($atts[$dynamic_att]); // Remove attribute if it doesn't equal it's own name
             }
         }
     }
