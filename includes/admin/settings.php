@@ -120,8 +120,22 @@ class CF7DTX_Plugin_Settings
         }
         if (isset($_GET['scan-meta-keys'])) {
 
-
-            if (isset($_POST['save-allows'])) {
+            // Form submission
+            if (array_key_exists('save-allows', $_POST)) {
+                if (!wp_verify_nonce(trim(sanitize_text_field(wpcf7dtx_array_has_key('_wpnonce', $_POST))), 'cf7dtx_settings-options')) {
+                    echo wp_kses_post(sprintf(
+                        '<div class="notice notice-error dtx-notice"><p><strong>%s</strong></p><p>%s</p><p>%s</p></div>',
+                        esc_html__('Error saving allowlist.', 'contact-form-7-dynamic-text-extension'),
+                        esc_html__('Please try again. If this continues, contact support.', 'contact-form-7-dynamic-text-extension'),
+                        $this->render_back_to_settings_button(false)
+                    ));
+                    return; // Failed nonce challenge
+                }
+                echo wp_kses_post(sprintf(
+                    '<div class="notice notice-success dtx-notice"><p><strong>%s</strong></p><p>%s</p></div>',
+                    esc_html__('Successfully saved allowlist.', 'contact-form-7-dynamic-text-extension'),
+                    $this->render_back_to_settings_button(false)
+                ));
                 $r = $this->handle_save_allows();
             ?>
                 <div class="wrap">
@@ -510,7 +524,7 @@ class CF7DTX_Plugin_Settings
      *
      * @return array Save results.
      */
-    function handle_save_allows()
+    private function handle_save_allows()
     {
         $user_keys = [];
         $meta_keys = [];

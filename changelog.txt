@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 5.0.2 =
+
+* Security: Addressed security vulnerability responsibly reported by Rafie Muhammad to Patchstack.
+
 = 5.0.1 =
 
 * Fix: updated the `wpcf7dtx_format_atts()` function to only include attributes with string values if the string exists to avoid adding empty attributes like `id` where they are supposed to be unique, [see support thread](https://wordpress.org/support/topic/exposure-of-sensitive-date-in-html/).
@@ -13,7 +17,7 @@
 
 = 4.5.1 =
 
-* Security: Addressed security vulnerability #352992 responsibly reported by Francesco Carlucci to Wordfence. All built-in shortcodes now check for appropriate access and user permissions before returning information from any post.
+* Security: Addressed security vulnerability CVE-2024-10084 responsibly reported by Francesco Carlucci to Wordfence. All built-in shortcodes now check for appropriate access and user permissions before returning information from any post.
 * Translation: Added I18N improvements by alexclassroom, thanks!
 
 = 4.5.0 =
@@ -73,7 +77,7 @@
 
 = 4.2.0 =
 
-* Security Update: ** Please be sure to review this doc, as you may need to adjust the settings: [Documentation by SevenSpark](https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access), [Documentation by AuRise Creative](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/security/) **
+* Security: ** Please be sure to review this doc, as you may need to adjust the settings: [Documentation by AuRise Creative](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/security/), [Documentation by SevenSpark](https://sevenspark.com/docs/contact-form-7-dynamic-text-extension/allow-data-access) **
 * Feature: Added Settings Screen with Allow Lists
 * Feature: Added Form Scanner
 * Feature: Added Allow List key validation in CF7 Form Validator
