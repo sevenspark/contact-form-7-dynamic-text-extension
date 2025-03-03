@@ -15,22 +15,90 @@ class CF7DTX_Plugin_Settings
      */
     private $capability = 'manage_options';
 
-    private $sections;
-    private $fields;
+    private $_sections;
+
+    private $_fields;
 
     private $num_forms_to_scan = 20;
 
     /**
      * The Plugin Settings constructor.
      */
-    function __construct($sections, $fields)
+    function __construct()
     {
         add_action('admin_init', [$this, 'settings_init']);
         add_action('admin_menu', [$this, 'options_page']);
-
-        $this->sections = $sections;
-        $this->fields = $fields;
     }
+
+    /**
+     * Array of fields that should be displayed in the settings page.
+     *
+     * @var array $fields
+     */
+    private function fields()
+    {
+        if (!is_array($this->_fields)) {
+            $this->_fields = [
+                [
+                    'id' => 'post_meta_allow_keys',
+                    'label' => __('Meta Key Allow List', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('Allow access to these specific post metadata keys.  Enter one per line.', 'contact-form-7-dynamic-text-extension'),
+                    'type' => 'textarea',
+                    'section' => 'post_meta_access',
+                ],
+                [
+                    'id' => 'post_meta_allow_all',
+                    'label' => __('Allow Access to All Post Metadata', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('**Use with caution.**  Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data.  All metadata from any post (including custom post types) will be accessible via the CF7_get_custom_field shortcode.  If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
+                    'type' => 'select',
+                    'options' => [
+                        'disabled' => __('Disabled - Only Allow Access to Meta Key Allow List', 'contact-form-7-dynamic-text-extension'),
+                        'enabled' => __('Enabled - Allow Access to All Post Metadata', 'contact-form-7-dynamic-text-extension'),
+                    ],
+                    'section' => 'post_meta_access',
+                ],
+                [
+                    'id' => 'user_data_allow_keys',
+                    'label' => __('User Data Key Allow List', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('Allow access to these specific user data keys.   Enter one per line.', 'contact-form-7-dynamic-text-extension'),
+                    'type' => 'textarea',
+                    'section' => 'user_data_access',
+                ],
+                [
+                    'id' => 'user_data_allow_all',
+                    'label' => __('Allow Access to All User Data', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('**Use with caution.**  Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data.  All of the current user\'s data fields will be accessible via the CF7_get_current_user shortcode.  If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
+                    'type' => 'select',
+                    'options' => [
+                        'disabled' => __('Disabled - Only Allow Access to User Data Key Allow List', 'contact-form-7-dynamic-text-extension'),
+                        'enabled' => __('Enabled - Allow Access to User Data', 'contact-form-7-dynamic-text-extension'),
+                    ],
+                    'section' => 'user_data_access',
+                ],
+            ];
+        }
+        return $this->_fields;
+    }
+
+    private function sections()
+    {
+        if (!is_array($this->_sections)) {
+            $this->_sections = [
+                'post_meta_access' => [
+                    'title' => __('Post Meta Access', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('Control which post metadata the CF7 DTX shortcodes (CF7_get_custom_field) can access.  By default, all metadata is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.', 'contact-form-7-dynamic-text-extension') .
+                        ' <a href="' . WPCF7DTX_DATA_ACCESS_KB_URL . '" target="_blank">' . __('More Information', 'contact-form-7-dynamic-text-extension') . '</a>',
+                ],
+                'user_data_access' => [
+                    'title' => __('User Data Access', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('Control which user data the CF7 DTX shortcodes (CF7_get_current_user) can access.  By default, all user data is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.', 'contact-form-7-dynamic-text-extension') .
+                        ' <a href="' . WPCF7DTX_DATA_ACCESS_KB_URL . '" target="_blank">' . __('More Information', 'contact-form-7-dynamic-text-extension') . '</a>',
+                ],
+            ];
+        }
+        return $this->_sections;
+    }
+
 
     /**
      * Register the settings and all fields.
@@ -45,7 +113,7 @@ class CF7DTX_Plugin_Settings
         // Register a new setting this page.
         register_setting('cf7dtx_settings', 'cf7dtx_settings');
 
-        foreach ($this->sections as $section_id => $section) {
+        foreach ($this->sections() as $section_id => $section) {
             // Register a new section.
             add_settings_section(
                 $section_id,
@@ -57,7 +125,7 @@ class CF7DTX_Plugin_Settings
 
 
         /* Register All The Fields. */
-        foreach ($this->fields as $field) {
+        foreach ($this->fields() as $field) {
             // Register a new field in the main section.
             add_settings_field(
                 $field['id'], /* ID for the field. Only used internally. To set the HTML ID attribute, use $args['label_for']. */
@@ -337,9 +405,11 @@ class CF7DTX_Plugin_Settings
      */
     function render_section(array $args): void
     {
-        ?>
-        <p id="<?php echo esc_attr($args['id']); ?>"><?php echo $this->sections[$args['id']]['description']; ?></p>
-    <?php
+        echo sprintf(
+            '<p id="%s">%s</p>',
+            esc_attr($args['id']),
+            wp_kses_data($this->sections()[$args['id']]['description'])
+        );
     }
 
     /**
@@ -616,68 +686,7 @@ class CF7DTX_Plugin_Settings
     }
 }
 
-
-
-$sections = [
-    'post_meta_access' => [
-        'title' => __('Post Meta Access', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Control which post metadata the CF7 DTX shortcodes (CF7_get_custom_field) can access.  By default, all metadata is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.', 'contact-form-7-dynamic-text-extension') .
-            ' <a href="' . WPCF7DTX_DATA_ACCESS_KB_URL . '" target="_blank">' . __('More Information', 'contact-form-7-dynamic-text-extension') . '</a>',
-    ],
-    'user_data_access' => [
-        'title' => __('User Data Access', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Control which user data the CF7 DTX shortcodes (CF7_get_current_user) can access.  By default, all user data is protected, so you can open up access through these settings.  Keep in mind that users with Contributor+ credentials can add shortcodes and therefore access this data, so make sure not to expose anything sensitive.', 'contact-form-7-dynamic-text-extension') .
-            ' <a href="' . WPCF7DTX_DATA_ACCESS_KB_URL . '" target="_blank">' . __('More Information', 'contact-form-7-dynamic-text-extension') . '</a>',
-    ],
-];
-
-/**
- * Array of fields that should be displayed in the settings page.
- *
- * @var array $fields
- */
-$fields = [
-    [
-        'id' => 'post_meta_allow_keys',
-        'label' => __('Meta Key Allow List', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Allow access to these specific post metadata keys.  Enter one per line.', 'contact-form-7-dynamic-text-extension'),
-        'type' => 'textarea',
-        'section' => 'post_meta_access',
-    ],
-    [
-        'id' => 'post_meta_allow_all',
-        'label' => __('Allow Access to All Post Metadata', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('**Use with caution.**  Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data.  All metadata from any post (including custom post types) will be accessible via the CF7_get_custom_field shortcode.  If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
-        'type' => 'select',
-        'options' => [
-            'disabled' => __('Disabled - Only Allow Access to Meta Key Allow List', 'contact-form-7-dynamic-text-extension'),
-            'enabled' => __('Enabled - Allow Access to All Post Metadata', 'contact-form-7-dynamic-text-extension'),
-        ],
-        'section' => 'post_meta_access',
-    ],
-    [
-        'id' => 'user_data_allow_keys',
-        'label' => __('User Data Key Allow List', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('Allow access to these specific user data keys.   Enter one per line.', 'contact-form-7-dynamic-text-extension'),
-        'type' => 'textarea',
-        'section' => 'user_data_access',
-    ],
-    [
-        'id' => 'user_data_allow_all',
-        'label' => __('Allow Access to All User Data', 'contact-form-7-dynamic-text-extension'),
-        'description' => __('**Use with caution.**  Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data.  All of the current user\'s data fields will be accessible via the CF7_get_current_user shortcode.  If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
-        'type' => 'select',
-        'options' => [
-            'disabled' => __('Disabled - Only Allow Access to User Data Key Allow List', 'contact-form-7-dynamic-text-extension'),
-            'enabled' => __('Enabled - Allow Access to User Data', 'contact-form-7-dynamic-text-extension'),
-        ],
-        'section' => 'user_data_access',
-    ],
-];
-
-
-new CF7DTX_Plugin_Settings($sections, $fields);
-
+new CF7DTX_Plugin_Settings();
 
 function wpcf7dtx_get_admin_scan_screen_url($offset = 0)
 {
