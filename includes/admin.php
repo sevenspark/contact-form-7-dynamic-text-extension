@@ -532,7 +532,7 @@ class TagGenerator
         $description = sprintf(
             __('Generate a form-tag for %s with %s. For more details, see %s in the %s.', 'contact-form-7-dynamic-text-extension'),
             esc_html($config[$this->form_tag]['description']), // dynamic description
-            esc_html(in_array($tag_type, array('select', 'checkbox', 'radio')) ? __('dynamic options and a default value') : __('a default value')),
+            esc_html(in_array($tag_type, array('select', 'checkbox', 'radio')) ? __('dynamic options and a default value', 'contact-form-7-dynamic-text-extension') : __('a default value', 'contact-form-7-dynamic-text-extension')),
             // Link to specific form-tag documentation
             sprintf(
                 '<a href="%s" title="%s" target="_blank" rel="noopener">%s</a>',
@@ -861,7 +861,7 @@ class TagGenerator
                 $step_option = sprintf(
                     '&nbsp;&nbsp;&nbsp;<label title="%s">%s <span class="wpcf7dtx-mini-att">%s</span></label>',
                     __('Allow the user to increment or decrement this number using the arrow keys', 'contact-form-7-dynamic-text-extension'),
-                    esc_html__('Step'),
+                    esc_html__('Step', 'contact-form-7-dynamic-text-extension'),
                     $this->input(
                         'step',
                         array(
@@ -1131,7 +1131,7 @@ class TagGenerator
                 esc_html__('This value is not submitted in the contact form and should not be used in the mail template.', 'contact-form-7-dynamic-text-extension') :
                 sprintf(
                     /* translators: %s: mail-tag corresponding to the form-tag */
-                    esc_html__('To use the user input in the email, insert the corresponding mail-tag %s into the email template.', 'contact-form-7'),
+                    esc_html__('To use the user input in the email, insert the corresponding mail-tag %s into the email template.', 'contact-form-7-dynamic-text-extension'),
                     '<strong data-tag-part="mail-tag"></strong>'
                 )
         ), $this->allowed_tags('footer'), array('https'));
