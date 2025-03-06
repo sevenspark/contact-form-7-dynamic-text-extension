@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 5.0.3 =
+
+* Fix: Moved settings translations to load as needed instead of immediately hoping to address the `Function _load_textdomain_just_in_time was called incorrectly` notice added in WordPress core version 6.7, [see support thread](https://wordpress.org/support/topic/https://wordpress.org/support/topic/error-loading-textdomain-since-wp-6-7/).
+
 = 5.0.2 =
 
 * Security: Addressed security vulnerability responsibly reported by Rafie Muhammad to Patchstack.
