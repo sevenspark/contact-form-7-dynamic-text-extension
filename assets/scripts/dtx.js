@@ -70,7 +70,8 @@ var dtx = {
                         dataType: 'json', // only accept strict JSON objects
                         data: {
                             'action': 'wpcf7dtx',
-                            'shortcodes': dtx.queue
+                            'shortcodes': dtx.queue,
+                            'n': dtx_obj.n
                         },
                         cache: false,
                         error: function(xhr, status, error) {
