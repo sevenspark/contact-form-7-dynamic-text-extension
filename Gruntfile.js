@@ -79,7 +79,7 @@ module.exports = function(grunt) {
                     // Copy everything to the build folder except...
                     '**',
                     // Exclude GIT
-                    '!**/__/**', '!**/node_modules/**', '!.gitignore', '!package.json', '!package-lock.json', '!README.md', '!Gruntfile.js',
+                    '!**/__/**', '!**/node_modules/**', '!.gitignore', '!package.json', '!package-lock.json', '!README.md', '!Gruntfile.js', '!SECURITY.md',
                     // Exclude WordPress Assets
                     '!**/_wp-assets/**',
                     // Exclude any zip files
