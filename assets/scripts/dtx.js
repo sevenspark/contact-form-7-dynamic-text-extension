@@ -1,29 +1,27 @@
-const dtx = {}; // Allow the variable to be globally accessible to avoid breaking code that use these functions externally
-
-// Contain everything else to avoid scoping issues with jQuery
-(($) => {
-    dtx.queue = [];
-    dtx.init = function() {
-        let $inputs = $('input.dtx-pageload[data-dtx-value]');
+window['$'] = window['$'] || jQuery.noConflict();
+var dtx = {
+    queue: [],
+    init: function() {
+        var $inputs = $('input.dtx-pageload[data-dtx-value]');
         if ($inputs.length) {
             // If this is any of our built-in shortcodes, see if there's any that can be duplicated via client side
             $inputs.each(function(i, el) {
-                let $input = $(el),
+                var $input = $(el),
                     raw_value = $input.attr('data-dtx-value'),
                     v = decodeURIComponent(raw_value).split(' ');
                 if (v.length) {
-                    let tag = v[0],
+                    var tag = v[0],
                         atts = {};
                     if (v.length > 1) {
-                        for (let x = 1; x < v.length; x++) {
-                            let att = v[x].split('=');
+                        for (var x = 1; x < v.length; x++) {
+                            var att = v[x].split('=');
                             if (att.length === 2) {
-                                let key = att[0];
+                                var key = att[0];
                                 atts[key] = att[1].split("'").join('');
                             }
                         }
                     }
-                    let value = '';
+                    var value = '';
                     switch (tag) {
                         case 'CF7_GET':
                             value = dtx.get(atts);
@@ -82,7 +80,7 @@ const dtx = {}; // Allow the variable to be globally accessible to avoid breakin
                         success: function(data, status, xhr) {
                             if (typeof(data) == 'object' && data.length) {
                                 $.each(data, function(i, obj) {
-                                    let $inputs = $('.wpcf7 form input.dtx-pageload[data-dtx-value="' + obj.raw_value + '"]');
+                                    var $inputs = $('.wpcf7 form input.dtx-pageload[data-dtx-value="' + obj.raw_value + '"]');
                                     if ($inputs.length) {
                                         $inputs.addClass('dtx-ajax-loaded');
                                         dtx.set($inputs, obj.value);
@@ -94,76 +92,69 @@ const dtx = {}; // Allow the variable to be globally accessible to avoid breakin
                 }, 10);
             }
         }
-    }
-
+    },
     /**
      * Check if Key Exists in Object
      */
-    dtx.validKey = function(obj, key) {
-        return typeof(obj) == 'object' && (typeof(key) == 'number' || (typeof(key) == 'string' && key)) && // Valid object and key
-            obj.hasOwnProperty(key) && typeof(obj[key]) == 'string' && obj[key].trim();
-    }
-
+    validKey: function(obj, key) {
+        return obj.hasOwnProperty(key) && typeof(obj[key]) == 'string' && obj[key].trim();
+    },
     /**
      * Maybe Obfuscate Value
      *
      * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-attribute-obfuscate/
      */
-    dtx.obfuscate = function(value, atts) {
+    obfuscate: function(value, atts) {
         value = value.trim();
         if (dtx.validKey(atts, 'obfuscate') && atts.obfuscate) {
-            let o = '';
-            for (let i = 0; i < value.length; i++) {
+            var o = '';
+            for (var i = 0; i < value.length; i++) {
                 o += '&#' + value.codePointAt(i) + ';';
             }
             return o;
         }
         return value;
-    }
-
+    },
     /**
      * Set Value for Form Field
      */
-    dtx.set = function($input, value) {
+    set: function($input, value) {
         $input
             .attr('value', value)
             .addClass('dtx-loaded')
             .trigger('dtx_init');
-    }
-
+    },
     /**
-     * Get Value from URL Query by Key
+     * Get Value form URL Query by Key
      *
      * @see @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-php-get-variables/
      */
-    dtx.get = function(atts) {
+    get: function(atts) {
         if (dtx.validKey(atts, 'key')) {
-            let query = window.location.search;
+            var query = window.location.search;
             if (query) {
                 query = new URLSearchParams(query);
                 return dtx.obfuscate(query.get(atts.key).trim(), atts);
             }
         }
         return '';
-    }
-
+    },
     /**
      * Get Referrering URL
      *
      * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-referrer-url/
      */
-    dtx.referrer = function(atts) {
+    referrer: function(atts) {
         return dtx.obfuscate(document.referrer, atts);
-    }
-
+    },
     /**
      * Get Current URL or Part
      *
      * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-current-url/
      */
-    dtx.current_url = function(atts) {
+    current_url: function(atts) {
         if (atts.hasOwnProperty('part')) {
-            let parts = [
+            var parts = [
                 'scheme', // e.g. `http`
                 'host',
                 'port',
@@ -194,8 +185,7 @@ const dtx = {}; // Allow the variable to be globally accessible to avoid breakin
             return dtx.obfuscate(window.location.href, atts); // Return the full url
         }
         return '';
-    }
-
+    },
     /**
      * Get Cookie Value
      *
@@ -203,30 +193,29 @@ const dtx = {}; // Allow the variable to be globally accessible to avoid breakin
      *
      * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-cookie/
      */
-    dtx.get_cookie = function(atts) {
+    get_cookie: function(atts) {
         if (atts.hasOwnProperty('key') && typeof(atts.key) == 'string' && atts.key.trim() != '') {
-            let keyValue = document.cookie.match('(^|;) ?' + atts.key.trim() + '=([^;]*)(;|$)');
+            var keyValue = document.cookie.match('(^|;) ?' + atts.key.trim() + '=([^;]*)(;|$)');
             return keyValue ? dtx.obfuscate(keyValue[2], atts) : '';
         }
         return '';
-    }
-
+    },
     /**
      * Generate a random GUID (globally unique identifier)
      *
      * @see https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/shortcodes/dtx-shortcode-guid/
      */
-    dtx.guid = function() {
+    guid: function() {
         if (typeof(window.crypto) != 'undefined' && typeof(window.crypto.getRandomValues) != 'undefined') {
             return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
                 (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
             ).toUpperCase();
         }
         console.warn('[CF7 DTX] Cryptographically secure PRNG is not available for generating GUID value');
-        let d = new Date().getTime(), //Timestamp
+        var d = new Date().getTime(), //Timestamp
             d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0; //Time in microseconds since page-load or 0 if unsupported
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            let r = Math.random() * 16; //random number between 0 and 16
+            var r = Math.random() * 16; //random number between 0 and 16
             if (d > 0) { //Use timestamp until depleted
                 r = (d + r) % 16 | 0;
                 d = Math.floor(d / 16);

@@ -186,24 +186,23 @@ class CF7DTX_Plugin_Settings
             <?php
             return;
         }
-        if (isset($_GET['scan-meta-keys'])) {
+
+        /**
+         * Perform Scan
+         */
+        if (array_key_exists('scan-meta-keys', $_GET)) {
 
             // Form submission
             if (array_key_exists('save-allows', $_POST)) {
+                // Verify options nonce
                 if (!wp_verify_nonce(trim(sanitize_text_field(wpcf7dtx_array_has_key('_wpnonce', $_POST))), 'cf7dtx_settings-options')) {
                     echo wp_kses_post(sprintf(
-                        '<div class="notice notice-error dtx-notice"><p><strong>%s</strong></p><p>%s</p><p>%s</p></div>',
+                        '<div class="notice notice-error dtx-notice"><p><strong>%s</strong></p><p>%s</p></div>',
                         esc_html__('Error saving allowlist.', 'contact-form-7-dynamic-text-extension'),
-                        esc_html__('Please try again. If this continues, contact support.', 'contact-form-7-dynamic-text-extension'),
-                        $this->render_back_to_settings_button(false)
+                        esc_html__('Please try again. If this continues, contact support.', 'contact-form-7-dynamic-text-extension')
                     ));
                     return; // Failed nonce challenge
                 }
-                echo wp_kses_post(sprintf(
-                    '<div class="notice notice-success dtx-notice"><p><strong>%s</strong></p><p>%s</p></div>',
-                    esc_html__('Successfully saved allowlist.', 'contact-form-7-dynamic-text-extension'),
-                    $this->render_back_to_settings_button(false)
-                ));
                 $r = $this->handle_save_allows();
             ?>
                 <div class="wrap">
@@ -214,6 +213,17 @@ class CF7DTX_Plugin_Settings
                 </div>
             <?php
             } else {
+                // URL query
+                // Verify scan nonce
+                if (!wp_verify_nonce(trim(sanitize_text_field(wpcf7dtx_array_has_key('_wpnonce', $_GET))), 'dtx-scan')) {
+                    echo wp_kses_post(sprintf(
+                        '<div class="notice notice-error dtx-notice"><p><strong>%s</strong></p><p>%s</p></div>',
+                        esc_html__('An unexpected error occurred.', 'contact-form-7-dynamic-text-extension'),
+                        esc_html__('Please try again. If this continues, contact support.', 'contact-form-7-dynamic-text-extension'),
+                    ));
+                    return; // Failed nonce challenge
+                }
+
                 $offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
                 $results = wpcf7dtx_scan_forms_for_access_keys($this->num_forms_to_scan, $offset);
 
@@ -652,7 +662,7 @@ class CF7DTX_Plugin_Settings
      *
      * @return void
      */
-    function render_allow_keys_submission($r)
+    private function render_allow_keys_submission($r)
     {
 
     ?>
@@ -688,13 +698,18 @@ class CF7DTX_Plugin_Settings
 
 new CF7DTX_Plugin_Settings();
 
+/**
+ * Get URL to Admin Scan Screen
+ *
+ * @param int $offset Optional.
+ */
 function wpcf7dtx_get_admin_scan_screen_url($offset = 0)
 {
     $path = 'admin.php?page=cf7dtx_settings&scan-meta-keys';
     if ($offset) {
         $path .= '&offset=' . $offset;
     }
-    return admin_url($path);
+    return wp_nonce_url(admin_url($path), 'dtx-scan');
 }
 function wpcf7dtx_get_admin_settings_screen_url()
 {

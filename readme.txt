@@ -390,12 +390,22 @@ This method is the most involved as it requires you to be familiar with the proc
 
 Please check out the [FAQ on our website](https://aurisecreative.com/docs/contact-form-7-dynamic-text-extension/frequently-asked-questions/?utm_source=wordpress.org&utm_medium=link&utm_campaign=contact-form-7-dynamic-text-extension&utm_content=readme).
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of _Contact Form 7 - Dynamic Text Extension_ WordPress plugin through the [Wordfence Intelligence Vulnerability Submission Form](https://www.wordfence.com/threat-intel/vulnerabilities/submit). Alternatively, you can report them through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/56e65af9-b50c-4307-b670-7d69463bd829). Both platforms will assist you with verification, CVE assignment, and notify me.
+
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Addressed security vulnerability responsibly reported by NosleeP++ to Wordfence. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Fixed a type-o in nonce verification. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
+
+= 5.0.5 =
+
+**Release Date: 02/17/2026**
+
+* Fix: Fixed a type-o in nonce verification where it compared the value against 0 instead of 1, [see support thread](https://wordpress.org/support/topic/nonce-issue-in-cf7-dte/).
 
 = 5.0.4 =
 
@@ -420,11 +430,6 @@ Addressed security vulnerability responsibly reported by NosleeP++ to Wordfence.
 = 5.0.0 =
 
 * Update: The form tag generator has been upgraded to version 2 to be compatible with [version 6.0 of Contact Form 7](https://contactform7.com/2024/11/03/contact-form-7-60/). Related prefixed functions have been replaced with a class. [See support thread](https://wordpress.org/support/topic/getting-deprecated-error-after-recent-update/).
-
-= 4.5.1 =
-
-* Security: Addressed security vulnerability #352992 responsibly reported by Francesco Carlucci to Wordfence. Thank you Carlucci. All built-in shortcodes now check for appropriate access and user permissions before returning information from any post.
-* Translation: Added I18N improvements by alexclassroom, thanks!
 
 = Older Releases =
 
