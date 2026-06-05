@@ -1,11 +1,81 @@
-.DS_Store
+########################################
+## System Generated Files
+########################################
+[Tt]humbs.db
+[Dd]esktop.ini
+*.DS_store
+.DS_store?
 
+########################################
+## IDEs
+########################################
+
+*.pydevproject
+.project
+.metadata
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+.cproject
+.buildpath
+nbproject/
+composer.json
+composer.lock
+package-lock.json
 npm-debug.log
 node_modules
 
+########################################
+## Old Files, Logs, and Backups
+########################################
+debug.log
+*.old
+*.OLD
+*.php.*
+*.css.*
+*.js.*
 *.report.txt
+*.log
+*.bak
+
+########################################
+## Build Directories
+########################################
+_build
+_build_assets
+_svn
+.svn
+
+########################################
+## Minified Assets
+########################################
 *.min.js
 *.min.css
 
-_build/
-_build_assets/
+########################################
+## Sensitive, Temp, and Misc
+########################################
+bin/
+tmp/
+*.tmp
+*.[Cc]ache
+*.cpr
+*.orig
+*.php.in
+.idea/
+temp/
+._*
+.Trashes
+*.codekit
+*.scssc
+.htaccess
+.htaccess*
+.user.ini
+wp-config.php
+wp-config*.php*
+*.zip
