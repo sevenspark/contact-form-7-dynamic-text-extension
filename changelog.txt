@@ -1,5 +1,19 @@
 == Changelog ==
 
+= 5.0.6 =
+
+**Release Date: 06/05/2026**
+
+Special thanks to Shane Hollis (@webkiwinz) for these security fixes!
+
+* Security: Fixed stored XSS in admin scan results page; form titles and shortcode key names were echoed without HTML escaping. This addresses security vulnerability CVE-2026-5116 responsibly reported by Satyarth Prakash to Wordfence.
+* Security: Fixed CSRF vulnerability on notice dismissal; `dismiss-access-keys-notice` action now requires a valid nonce.
+* Security: Fixed unsanitised `$_GET['offset']` parameter; now it's always cast to a non-negative integer before use.
+* Security: Fixed potential regex injection in JavaScript `get_cookie()`; cookie key is now escaped before use in a regex pattern.
+* Fix: Fixed switch fall-through logic bug in `wpcf7dtx_get_current_var()`; missing `break` statements caused user/term/archive context data to be overwritten by post context data.
+
+_Note from Tessa: the AJAX nonce validation that checks `!== 1` was intentional to only target the first 12-hour window to be more strict. That AJAX call was intended to run once on page load, so allowing the validation to persist beyond 12 hours is unnecessary._
+
 = 5.0.5 =
 
 **Release Date: 02/17/2026**

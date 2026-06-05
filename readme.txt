@@ -392,14 +392,32 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 = Where do I report security bugs found in this plugin? =
 
-Please report security bugs found in the source code of _Contact Form 7 - Dynamic Text Extension_ WordPress plugin through the [Wordfence Intelligence Vulnerability Submission Form](https://www.wordfence.com/threat-intel/vulnerabilities/submit). Alternatively, you can report them through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/56e65af9-b50c-4307-b670-7d69463bd829). Both platforms will assist you with verification, CVE assignment, and notify me.
+Please report security bugs found in the source code of _Contact Form 7 - Dynamic Text Extension_ WordPress plugin through the [Wordfence Intelligence Vulnerability Submission Form](https://www.wordfence.com/threat-intel/vulnerabilities/submit) or the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/56e65af9-b50c-4307-b670-7d69463bd829). Both platforms can assist you with verification, CVE assignment, and notify me without publicly disclosing details that could put websites at risk.
+
+= Where can I contribute? =
+
+Feel free to check out the [GitHub repository](https://github.com/sevenspark/contact-form-7-dynamic-text-extension). Thanks!
 
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Fixed a type-o in nonce verification. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Special thanks to Shane Hollis (@webkiwinz) for these security fixes! See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
+
+= 5.0.6 =
+
+**Release Date: 06/05/2026**
+
+Special thanks to Shane Hollis (@webkiwinz) for these security fixes!
+
+* Security: Fixed stored XSS in admin scan results page; form titles and shortcode key names were echoed without HTML escaping. This addresses security vulnerability CVE-2026-5116 responsibly reported by Satyarth Prakash to Wordfence.
+* Security: Fixed CSRF vulnerability on notice dismissal; `dismiss-access-keys-notice` action now requires a valid nonce.
+* Security: Fixed unsanitised `$_GET['offset']` parameter; now it's always cast to a non-negative integer before use.
+* Security: Fixed potential regex injection in JavaScript `get_cookie()`; cookie key is now escaped before use in a regex pattern.
+* Fix: Fixed switch fall-through logic bug in `wpcf7dtx_get_current_var()`; missing `break` statements caused user/term/archive context data to be overwritten by post context data.
+
+_Note from Tessa: the AJAX nonce validation that checks `!== 1` was intentional to only target the first 12-hour window to be more strict. That AJAX call was intended to run once on page load, so allowing the validation to persist beyond 12 hours is unnecessary._
 
 = 5.0.5 =
 
@@ -420,16 +438,6 @@ Fixed a type-o in nonce verification. See [the changelog](https://plugins.trac.w
 = 5.0.2 =
 
 * Security: Addressed security vulnerability responsibly reported by Rafie Muhammad to Patchstack.
-
-= 5.0.1 =
-
-* Fix: updated the `wpcf7dtx_format_atts()` function to only include attributes with string values if the string exists to avoid adding empty attributes like `id` where they are supposed to be unique, [see support thread](https://wordpress.org/support/topic/exposure-of-sensitive-date-in-html/).
-* Update: updated getting dynamic attributes to be more consistent across handler functions.
-* Fix: Marked compatible with WordPress core version 6.7.
-
-= 5.0.0 =
-
-* Update: The form tag generator has been upgraded to version 2 to be compatible with [version 6.0 of Contact Form 7](https://contactform7.com/2024/11/03/contact-form-7-60/). Related prefixed functions have been replaced with a class. [See support thread](https://wordpress.org/support/topic/getting-deprecated-error-after-recent-update/).
 
 = Older Releases =
 
