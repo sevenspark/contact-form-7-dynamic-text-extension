@@ -373,6 +373,7 @@ function wpcf7dtx_get_current_var($atts = array())
                         $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
                         break;
                 }
+                break;
             case 'post': // This is a post object
                 switch ($temp_key) {
                     case 'image':
@@ -414,6 +415,7 @@ function wpcf7dtx_get_current_var($atts = array())
                         $value = apply_filters('wpcf7dtx_escape', $raw, $obfuscate);
                         break;
                 }
+                break;
             case 'archive': // Possibly a date or formats archive
                 switch ($temp_key) {
                     case 'title': // Get archive title
@@ -423,6 +425,7 @@ function wpcf7dtx_get_current_var($atts = array())
                     default:
                         break;
                 }
+                break;
             default: // Possibly a search or 404 page at this point
                 if ($temp_key == 'slug') {
                     // no idea what else to get except the slug maybe
