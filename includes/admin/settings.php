@@ -177,14 +177,15 @@ class CF7DTX_Plugin_Settings
         }
 
         if (isset($_GET['dismiss-access-keys-notice'])) {
-            wpcf7dtx_set_update_access_scan_check_status('notice_dismissed');
-?>
+            if (!wp_verify_nonce(trim(sanitize_text_field(wpcf7dtx_array_has_key('_wpnonce', $_GET))), 'dtx-dismiss-notice')) {
+                wp_die(__('Security check failed.', 'contact-form-7-dynamic-text-extension'));
+            }
+            wpcf7dtx_set_update_access_scan_check_status('notice_dismissed'); ?>
             <div class="notice notice-success dtx-notice">
                 <p><?php _e('Notice Dismissed.  You can run the scan any time from the CF7 DTX settings page', 'contact-form-7-dynamic-text-extension'); ?></p>
                 <p><?php $this->render_back_to_settings_button(); ?></p>
             </div>
-            <?php
-            return;
+            <?php return;
         }
 
         /**
@@ -224,7 +225,7 @@ class CF7DTX_Plugin_Settings
                     return; // Failed nonce challenge
                 }
 
-                $offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
+                $offset = isset($_GET['offset']) ? max(0, intval($_GET['offset'])) : 0; // [SECURITY FIX] cast to non-negative integer
                 $results = wpcf7dtx_scan_forms_for_access_keys($this->num_forms_to_scan, $offset);
 
             ?>
@@ -445,7 +446,7 @@ class CF7DTX_Plugin_Settings
 
         // Check if we need to scan another batch
         if ($results['forms_scanned'] === $this->num_forms_to_scan) {
-            $offset = isset($_GET['offset']) ? $_GET['offset'] : 0;
+            $offset = isset($_GET['offset']) ? max(0, intval($_GET['offset'])) : 0; // [SECURITY FIX] cast to non-negative integer
             $next_offset = $offset + $this->num_forms_to_scan;
             echo '<div class="notice notice-warning dtx-notice"><p>';
             echo sprintf(
@@ -541,8 +542,8 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <div class="postbox">
                         <div class="postbox-header">
-                            <h2><?php echo $r['title']; ?></h2>
-                            <a href="<?php echo $r['admin_url']; ?>" target="_blank">View form</a>
+                            <h2><?php echo esc_html($r['title']); ?></h2>
+                            <a href="<?php echo esc_url($r['admin_url']); ?>" target="_blank">View form</a>
                         </div>
                         <div class="inside">
                             <?php if (count($r['meta_keys'])) : ?>
@@ -555,8 +556,8 @@ class CF7DTX_Plugin_Settings
                                         ?>
                                             <div>
                                                 <label <?php if ($already_allowed) echo 'class="key-disabled" title="Already in Allow List"'; ?>>
-                                                    <input name="<?php echo $name; ?>" id="<?php echo $name; ?>" type="checkbox" value="1" <?php if ($already_allowed) echo 'checked="checked" disabled'; ?> />
-                                                    <?php echo $key; ?>
+                                                    <input name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($name); ?>" type="checkbox" value="1" <?php if ($already_allowed) echo 'checked="checked" disabled'; ?> />
+                                                    <?php echo esc_html($key); ?>
                                                 </label>
                                             </div>
                                         <?php
@@ -575,8 +576,8 @@ class CF7DTX_Plugin_Settings
                                             ?>
                                                 <div>
                                                     <label <?php if ($already_allowed) echo 'class="key-disabled" title="Already in Allow List"'; ?>>
-                                                        <input name="<?php echo $name; ?>" id="<?php echo $name; ?>" type="checkbox" value="1" <?php if ($already_allowed) echo 'checked="checked" disabled'; ?> />
-                                                        <?php echo $key; ?>
+                                                        <input name="<?php echo esc_attr($name); ?>" id="<?php echo esc_attr($name); ?>" type="checkbox" value="1" <?php if ($already_allowed) echo 'checked="checked" disabled'; ?> />
+                                                        <?php echo esc_html($key); ?>
                                                     </label>
                                                 </div>
                                             <?php
@@ -667,10 +668,10 @@ class CF7DTX_Plugin_Settings
 
     ?>
         <?php if (count($r['meta'])) : ?>
-            <p><?php _e('Meta Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo implode(', ', $r['meta']); ?></p>
+            <p><?php _e('Meta Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['meta'])); ?></p>
         <?php endif; ?>
         <?php if (count($r['user'])) : ?>
-            <p><?php _e('User Data Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo implode(', ', $r['user']); ?></p>
+            <p><?php _e('User Data Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['user'])); ?></p>
         <?php endif; ?>
 
         <?php if (!count($r['meta']) && !count($r['user'])) : ?>

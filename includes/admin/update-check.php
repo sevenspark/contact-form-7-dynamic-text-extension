@@ -117,7 +117,7 @@ function wpcf7dtx_access_keys_notice()
             |
             <a href="<?php echo WPCF7DTX_DATA_ACCESS_KB_URL; ?>" target="_blank"><?php _e('More Information', 'contact-form-7-dynamic-text-extension'); ?></a>
             <?php if (isset($_GET['page']) && $_GET['page'] === 'cf7dtx_settings') : ?>
-                | <a href="<?php echo admin_url('admin.php?page=cf7dtx_settings&dismiss-access-keys-notice'); ?>"><?php _e('Dismiss', 'contact-form-7-dynamic-text-extension'); ?></a>
+                | <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin.php?page=cf7dtx_settings&dismiss-access-keys-notice'), 'dtx-dismiss-notice')); ?>"><?php _e('Dismiss', 'contact-form-7-dynamic-text-extension'); ?></a>
             <?php endif; ?>
         </p>
     </div>
