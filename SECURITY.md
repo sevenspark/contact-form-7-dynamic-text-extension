@@ -2,11 +2,11 @@
 
 ## Minimum Versions Required
 
-| Item | Version |
-| --- | --- |
-| PHP | 7.4 |
-| WordPress | 5.5 |
-| Contact Form 7 | 6.0 |
+| Item | Minimum Version Required | Tested up to |
+| --- | --- | --- |
+| PHP | 7.4 | 8.3 |
+| WordPress | 5.5 | 7.0 |
+| Contact Form 7 | 6.0 | 6.1 |
 
 ## Reporting a Vulnerability
 
