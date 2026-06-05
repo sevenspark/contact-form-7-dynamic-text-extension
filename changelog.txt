@@ -1,5 +1,17 @@
 == Changelog ==
 
+= 5.0.5 =
+
+**Release Date: 02/17/2026**
+
+* Fix: Fixed a type-o in nonce verification where it compared the value against 0 instead of 1, [see support thread](https://wordpress.org/support/topic/nonce-issue-in-cf7-dte/).
+
+= 5.0.4 =
+
+**Release Date: 01/01/2026**
+
+* Security: Addressed security vulnerability CVE-2025-13146 responsibly reported by NosleeP++ to Wordfence. Thank you NosleeP++! The JavaScript Fetch/AJAX request now includes nonce verification.
+
 = 5.0.3 =
 
 * Fix: Moved settings translations to load as needed instead of immediately hoping to address the `Function _load_textdomain_just_in_time was called incorrectly` notice added in WordPress core version 6.7, [see support thread](https://wordpress.org/support/topic/https://wordpress.org/support/topic/error-loading-textdomain-since-wp-6-7/).
