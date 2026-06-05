@@ -72,8 +72,8 @@ const dtx = {}; // Allow the variable to be globally accessible to avoid breakin
                         dataType: 'json', // only accept strict JSON objects
                         data: {
                             'action': 'wpcf7dtx',
-                            'n': dtx_obj.n,
-                            'shortcodes': dtx.queue
+                            'shortcodes': dtx.queue,
+                            'n': dtx_obj.n
                         },
                         cache: false,
                         error: function(xhr, status, error) {
@@ -237,7 +237,5 @@ const dtx = {}; // Allow the variable to be globally accessible to avoid breakin
             return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16).toUpperCase();
         }).toUpperCase();;
     }
-
-    $(document).ready(dtx.init);
-
-})(window['$'] || jQuery.noConflict());
+};
+$(document).ready(dtx.init);

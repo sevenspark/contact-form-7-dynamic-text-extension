@@ -1,8 +1,8 @@
 === Contact Form 7 - Dynamic Text Extension ===
-Contributors: sevenspark, tessawatkinsllc
+Contributors: tessawatkinsllc, sevenspark
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, dynamic form, form field
-Tested up to: 6.7
+Tested up to: 6.9
 Stable tag: VERSION_PLACEHOLDER
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -393,9 +393,15 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 == Upgrade Notice ==
 
 = VERSION_PLACEHOLDER =
-Hopefully addressed the `Function _load_textdomain_just_in_time was called incorrectly` notice added in WordPress core version 6.7 triggered by this plugin. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
+Addressed security vulnerability responsibly reported by NosleeP++ to Wordfence. See [the changelog](https://plugins.trac.wordpress.org/browser/contact-form-7-dynamic-text-extension/trunk/changelog.txt) for more details.
 
 == Changelog ==
+
+= 5.0.4 =
+
+**Release Date: 01/01/2026**
+
+* Security: Addressed security vulnerability CVE-2025-13146 responsibly reported by NosleeP++ to Wordfence. Thank you NosleeP++! The JavaScript Fetch/AJAX request now includes nonce verification.
 
 = 5.0.3 =
 
