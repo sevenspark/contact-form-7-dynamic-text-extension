@@ -195,7 +195,7 @@ var dtx = {
      */
     get_cookie: function(atts) {
         if (atts.hasOwnProperty('key') && typeof(atts.key) == 'string' && atts.key.trim() != '') {
-            var keyValue = document.cookie.match('(^|;) ?' + atts.key.trim() + '=([^;]*)(;|$)');
+            var keyValue = document.cookie.match('(^|;) ?' + (atts.key.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) + '=([^;]*)(;|$)');
             return keyValue ? dtx.obfuscate(keyValue[2], atts) : '';
         }
         return '';
