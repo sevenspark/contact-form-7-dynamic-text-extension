@@ -1,7 +1,7 @@
-Contact Form 7 - Dynamic Text Extension (DTX)
+DTX - Dynamic Text Extension for Contact Form 7
 =======================================
 
-Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. Contact Form 7 - Dynamic Text Extension (DTX) makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields pulled from other locations. Some examples might include:
+Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. DTX - Dynamic Text Extension for Contact Form 7 makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields pulled from other locations. Some examples might include:
 
 * Auto-filling a URL or just getting the domain name or path
 * Auto-filling a post ID, title, or slug

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Contact Form 7 - Dynamic Text Extension
+ * Plugin Name: DTX - Dynamic Text Extension for Contact Form 7
  * Description: Extends Contact Form 7 by adding dynamic form fields that accepts shortcodes to prepopulate form fields with default values and dynamic placeholders.
  * Version: VERSION_PLACEHOLDER
  * Text Domain: contact-form-7-dynamic-text-extension

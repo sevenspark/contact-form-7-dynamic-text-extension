@@ -1,4 +1,4 @@
-=== Contact Form 7 - Dynamic Text Extension ===
+=== DTX - Dynamic Text Extension for Contact Form 7 ===
 Contributors: tessawatkinsllc, sevenspark
 Donate link: https://just1voice.com/donate/
 Tags: Contact Form 7, autofill, prepopulate, dynamic form, form field
@@ -11,7 +11,7 @@ Extends Contact Form 7 by adding dynamic form fields that accepts shortcodes to 
 
 == Description ==
 
-Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. Contact Form 7 - Dynamic Text Extension (DTX) makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields pulled from other locations. Some examples might include:
+Contact Form 7 is an excellent WordPress plugin and one of the top choices of free WordPress plugins for contact forms. _DTX - Dynamic Text Extension for Contact Form 7_ makes it even more awesome by adding dynamic content capabilities. While default values in Contact Form 7 are static, DTX lets you create pre-populated fields pulled from other locations. Some examples might include:
 
 * Auto-filling a URL or just getting the domain name or path
 * Auto-filling a post ID, title, or slug
@@ -392,7 +392,7 @@ Please check out the [FAQ on our website](https://aurisecreative.com/docs/contac
 
 = Where do I report security bugs found in this plugin? =
 
-Please report security bugs found in the source code of _Contact Form 7 - Dynamic Text Extension_ WordPress plugin through the [Wordfence Intelligence Vulnerability Submission Form](https://www.wordfence.com/threat-intel/vulnerabilities/submit) or the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/56e65af9-b50c-4307-b670-7d69463bd829). Both platforms can assist you with verification, CVE assignment, and notify me without publicly disclosing details that could put websites at risk.
+Please report security bugs found in the source code of _DTX - Dynamic Text Extension for Contact Form 7_ WordPress plugin through the [Wordfence Intelligence Vulnerability Submission Form](https://www.wordfence.com/threat-intel/vulnerabilities/submit) or the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/56e65af9-b50c-4307-b670-7d69463bd829). Both platforms can assist you with verification, CVE assignment, and notify me without publicly disclosing details that could put websites at risk.
 
 = Where can I contribute? =
 

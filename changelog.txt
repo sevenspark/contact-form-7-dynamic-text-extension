@@ -1,5 +1,11 @@
 == Changelog ==
 
+= 5.0.7 =
+
+**Release Date: 08/03/2026**
+
+Update: the name of this plugin was changed from _Contact Form 7 - Dynamic Text Extension_ to _DTX - Dynamic Text Extension for Contact Form 7_ to comply with the [plugin guideline #17 set by WordPress](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#17-plugins-must-respect-trademarks-copyrights-and-project-names) to respect the trademarks and copyrights of the plugin _Contact Form 7_ by Takayuki Miyoshi and Rock Lobster Inc.
+
 = 5.0.6 =
 
 **Release Date: 06/05/2026**
