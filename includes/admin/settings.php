@@ -1,5 +1,7 @@
 <?php
 
+defined('ABSPATH') || exit; // Exit if accessed directly
+
 /**
  * Class CF7DTX_Plugin_Settings
  *
@@ -42,14 +44,14 @@ class CF7DTX_Plugin_Settings
                 [
                     'id' => 'post_meta_allow_keys',
                     'label' => __('Meta Key Allow List', 'contact-form-7-dynamic-text-extension'),
-                    'description' => __('Allow access to these specific post metadata keys.  Enter one per line.', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('Allow access to these specific post metadata keys. Enter one per line.', 'contact-form-7-dynamic-text-extension'),
                     'type' => 'textarea',
                     'section' => 'post_meta_access',
                 ],
                 [
                     'id' => 'post_meta_allow_all',
                     'label' => __('Allow Access to All Post Metadata', 'contact-form-7-dynamic-text-extension'),
-                    'description' => __('**Use with caution.**  Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data.  All metadata from any post (including custom post types) will be accessible via the CF7_get_custom_field shortcode.  If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('**Use with caution.** Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data. All metadata from any post (including custom post types) will be accessible via the CF7_get_custom_field shortcode. If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
                     'type' => 'select',
                     'options' => [
                         'disabled' => __('Disabled - Only Allow Access to Meta Key Allow List', 'contact-form-7-dynamic-text-extension'),
@@ -60,14 +62,14 @@ class CF7DTX_Plugin_Settings
                 [
                     'id' => 'user_data_allow_keys',
                     'label' => __('User Data Key Allow List', 'contact-form-7-dynamic-text-extension'),
-                    'description' => __('Allow access to these specific user data keys.   Enter one per line.', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('Allow access to these specific user data keys. Enter one per line.', 'contact-form-7-dynamic-text-extension'),
                     'type' => 'textarea',
                     'section' => 'user_data_access',
                 ],
                 [
                     'id' => 'user_data_allow_all',
                     'label' => __('Allow Access to All User Data', 'contact-form-7-dynamic-text-extension'),
-                    'description' => __('**Use with caution.**  Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data.  All of the current user\'s data fields will be accessible via the CF7_get_current_user shortcode.  If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
+                    'description' => __('**Use with caution.** Should only be enabled if all authorized users with editor privileges (Contributor+) are trusted and should have access to this data. All of the current user\'s data fields will be accessible via the CF7_get_current_user shortcode. If in doubt, use the Allow List to allow only specific keys.', 'contact-form-7-dynamic-text-extension'),
                     'type' => 'select',
                     'options' => [
                         'disabled' => __('Disabled - Only Allow Access to User Data Key Allow List', 'contact-form-7-dynamic-text-extension'),
@@ -153,8 +155,8 @@ class CF7DTX_Plugin_Settings
     {
         add_submenu_page(
             'wpcf7', /* Parent Menu Slug */
-            'Contact Form 7 - Dynamic Text Extension', /* Page Title */
-            'Dynamic Text Extension', /* Menu Title */
+            'DTX - Dynamic Text Extension for Contact Form 7 by AuRise Creative', /* Page Title */
+            'DTX', /* Menu Title */
             $this->capability, /* Capability */
             'cf7dtx_settings', /* Menu Slug */
             [$this, 'render_options_page'], /* Callback */
@@ -168,8 +170,7 @@ class CF7DTX_Plugin_Settings
      *
      * @return void
      */
-    function render_options_page(): void
-    {
+    public function render_options_page() {
 
         // check user capabilities
         if (!current_user_can($this->capability)) {
@@ -204,8 +205,7 @@ class CF7DTX_Plugin_Settings
                     ));
                     return; // Failed nonce challenge
                 }
-                $r = $this->handle_save_allows();
-            ?>
+                $r = $this->handle_save_allows(); ?>
                 <div class="wrap">
                     <h1><?php _e('DTX: Keys Added To Allow List', 'contact-form-7-dynamic-text-extension'); ?></h1>
 
@@ -276,11 +276,11 @@ class CF7DTX_Plugin_Settings
      *
      * @since 4.2.0
      *
-     * @return void
-     *
      * @param array $args Args to configure the field.
+     *
+     * @return void
      */
-    function render_field(array $args): void
+    public function render_field(array $args) {
     {
 
         $field = $args['field'];
@@ -294,7 +294,7 @@ class CF7DTX_Plugin_Settings
             ?>
                     <input type="text" id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" value="<?php echo isset($options[$field['id']]) ? esc_attr($options[$field['id']]) : ''; ?>">
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
@@ -304,7 +304,7 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <input type="checkbox" id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" value="1" <?php echo isset($options[$field['id']]) ? (checked($options[$field['id']], 1, false)) : (''); ?>>
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
@@ -314,23 +314,22 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <textarea id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" style="width:400px; height:200px;"><?php echo isset($options[$field['id']]) ? esc_attr($options[$field['id']]) : ''; ?></textarea>
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
                 }
 
-            case "select": {
-                ?>
+            case "select": { ?>
                     <select id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]">
                         <?php foreach ($field['options'] as $key => $option) { ?>
-                            <option value="<?php echo $key; ?>" <?php echo isset($options[$field['id']]) ? (selected($options[$field['id']], $key, false)) : (''); ?>>
-                                <?php echo $option; ?>
+                            <option value="<?php echo esc_attr($key); ?>" <?php selected(wpcf7dtx_array_has_key($field['id'], $options), $key); ?>>
+                                <?php echo esc_html($option); ?>
                             </option>
                         <?php } ?>
                     </select>
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
@@ -340,7 +339,7 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <input type="password" id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" value="<?php echo isset($options[$field['id']]) ? esc_attr($options[$field['id']]) : ''; ?>">
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
@@ -362,7 +361,7 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <input type="email" id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" value="<?php echo isset($options[$field['id']]) ? esc_attr($options[$field['id']]) : ''; ?>">
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
@@ -372,7 +371,7 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <input type="url" id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" value="<?php echo isset($options[$field['id']]) ? esc_attr($options[$field['id']]) : ''; ?>">
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
@@ -382,7 +381,7 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <input type="color" id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" value="<?php echo isset($options[$field['id']]) ? esc_attr($options[$field['id']]) : ''; ?>">
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
                 <?php
                     break;
@@ -392,7 +391,7 @@ class CF7DTX_Plugin_Settings
                 ?>
                     <input type="date" id="<?php echo esc_attr($field['id']); ?>" name="cf7dtx_settings[<?php echo esc_attr($field['id']); ?>]" value="<?php echo isset($options[$field['id']]) ? esc_attr($options[$field['id']]) : ''; ?>">
                     <p class="description">
-                        <?php esc_html_e($field['description'], 'cf7dtx_settings'); ?>
+                        <?php echo wp_kses_data($field['description']); ?>
                     </p>
         <?php
                     break;
@@ -439,7 +438,7 @@ class CF7DTX_Plugin_Settings
 
             wpcf7dtx_set_update_access_scan_check_status('intervention_not_required');
 
-            echo '<div class="notice notice-success dtx-notice"><p>' . __('Scan complete. No keys detected.', 'contact-form-7-dynamic-text-extension') . '</p></div>';
+            echo '<div class="notice notice-success dtx-notice"><p>' . esc_html__('Scan complete. No keys detected.', 'contact-form-7-dynamic-text-extension') . '</p></div>';
             $this->render_back_to_settings_button();
             return;
         }
@@ -450,12 +449,12 @@ class CF7DTX_Plugin_Settings
             $next_offset = $offset + $this->num_forms_to_scan;
             echo '<div class="notice notice-warning dtx-notice"><p>';
             echo sprintf(
-                __('%1$s forms scanned.  There may be more forms to scan.', 'contact-form-7-dynamic-text-extension'),
+                esc_html__('%1$s forms scanned. There may be more forms to scan.', 'contact-form-7-dynamic-text-extension'),
                 $results['forms_scanned'],
             );
             echo ' ';
-            echo '<a href="' . wpcf7dtx_get_admin_scan_screen_url($next_offset) . '">' . sprintf(
-                __('Scan %1$s more forms', 'contact-form-7-dynamic-text-extension'),
+            echo '<a href="' . esc_url(wpcf7dtx_get_admin_scan_screen_url($next_offset)) . '">' . sprintf(
+                esc_html__('Scan %1$s more forms', 'contact-form-7-dynamic-text-extension'),
                 $this->num_forms_to_scan
             ) . '</a>';
             echo '</p></div>';
@@ -524,11 +523,11 @@ class CF7DTX_Plugin_Settings
                 </div>
             <?php else : ?>
                 <div class="notice notice-error dtx-notice" style="width:600px; box-sizing:border-box;">
-                    <p><strong><?php _e('Shortcodes accessing potentially sensitive Post Meta or User Data were detected in the forms listed below.', 'contact-form-7-dynamic-text-extension'); ?></strong></p>
-                    <p><?php _e('Only keys on the allow list will return their value when accessed.  Attempting to access keys that are not on the allow list via DTX shortcodes will return an empty string and throw a warning message.', 'contact-form-7-dynamic-text-extension'); ?></p>
-                    <p><?php _e('Review the keys below and confirm that you want to allow access, then select meta and/or user keys to add them to the relevant allow list.  Any keys for sensitive data should be removed by editing your contact form.', 'contact-form-7-dynamic-text-extension'); ?></p>
-                    <p><?php _e('Note that keys which are already in the allow list are displayed but marked as already selected.', 'contact-form-7-dynamic-text-extension'); ?></p>
-                    <p><a href="<?php echo WPCF7DTX_DATA_ACCESS_KB_URL; ?>" target="_blank"><?php _e('More Information', 'contact-form-7-dynamic-text-extension'); ?></a></p>
+                    <p><strong><?php esc_html_e('Shortcodes accessing potentially sensitive Post Meta or User Data were detected in the forms listed below.', 'contact-form-7-dynamic-text-extension'); ?></strong></p>
+                    <p><?php esc_html_e('Only keys on the allow list will return their value when accessed. Attempting to access keys that are not on the allow list via DTX shortcodes will return an empty string and throw a warning message.', 'contact-form-7-dynamic-text-extension'); ?></p>
+                    <p><?php esc_html_e('Review the keys below and confirm that you want to allow access, then select meta and/or user keys to add them to the relevant allow list. Any keys for sensitive data should be removed by editing your contact form.', 'contact-form-7-dynamic-text-extension'); ?></p>
+                    <p><?php esc_html_e('Note that keys which are already in the allow list are displayed but marked as already selected.', 'contact-form-7-dynamic-text-extension'); ?></p>
+                    <p><a href="<?php echo esc_url(WPCF7DTX_DATA_ACCESS_KB_URL); ?>" target="_blank"><?php esc_html_e('More Information', 'contact-form-7-dynamic-text-extension'); ?></a></p>
                 </div>
             <?php endif; ?>
 
@@ -543,11 +542,11 @@ class CF7DTX_Plugin_Settings
                     <div class="postbox">
                         <div class="postbox-header">
                             <h2><?php echo esc_html($r['title']); ?></h2>
-                            <a href="<?php echo esc_url($r['admin_url']); ?>" target="_blank">View form</a>
+                            <a href="<?php echo esc_url($r['admin_url']); ?>" target="_blank"><?php esc_html_e('View form', 'contact-form-7-dynamic-text-extension'); ?></a>
                         </div>
                         <div class="inside">
                             <?php if (count($r['meta_keys'])) : ?>
-                                <h4>Meta Keys</h3>
+                                <h4><?php esc_html_e('Meta Keys', 'contact-form-7-dynamic-text-extension'); ?></h3>
 
                                     <div>
                                         <?php foreach ($r['meta_keys'] as $key) {
@@ -568,7 +567,7 @@ class CF7DTX_Plugin_Settings
                                 <?php endif; ?>
 
                                 <?php if (count($r['user_keys'])) : ?>
-                                    <h4>User Data Keys</h3>
+                                    <h4><?php esc_html_e('User Data Keys', 'contact-form-7-dynamic-text-extension'); ?></h3>
                                         <div>
                                             <?php foreach ($r['user_keys'] as $key) {
                                                 $name = "dtx_user_key/$key";
@@ -591,7 +590,7 @@ class CF7DTX_Plugin_Settings
                 }
                 ?>
 
-                <?php if (!$all_keys_allowed) submit_button(__('Add Selected Keys to Allow Lists', 'contact-form-7-dynamic-text-extension'), 'primary', 'save-allows'); ?>
+                <?php if (!$all_keys_allowed) submit_button(esc_attr__('Add Selected Keys to Allow Lists', 'contact-form-7-dynamic-text-extension'), 'primary', 'save-allows'); ?>
             </form>
             <?php $this->render_back_to_settings_button(); ?>
         </div>
@@ -668,14 +667,14 @@ class CF7DTX_Plugin_Settings
 
     ?>
         <?php if (count($r['meta'])) : ?>
-            <p><?php _e('Meta Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['meta'])); ?></p>
+            <p><?php esc_html_e('Meta Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['meta'])); ?></p>
         <?php endif; ?>
         <?php if (count($r['user'])) : ?>
-            <p><?php _e('User Data Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['user'])); ?></p>
+            <p><?php esc_html_e('User Data Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['user'])); ?></p>
         <?php endif; ?>
 
         <?php if (!count($r['meta']) && !count($r['user'])) : ?>
-            <p><?php _e('No Keys Selected', 'contact-form-7-dynamic-text-extension'); ?></p>
+            <p><?php esc_html_e('No Keys Selected', 'contact-form-7-dynamic-text-extension'); ?></p>
         <?php endif; ?>
 
     <?php
@@ -692,7 +691,7 @@ class CF7DTX_Plugin_Settings
     function render_back_to_settings_button()
     {
     ?>
-        <a href="<?php echo wpcf7dtx_get_admin_settings_screen_url(); ?>">&laquo; <?php _e('Back to Settings', 'contact-form-7-dynamic-text-extension'); ?></a>
+        <a href="<?php echo esc_url(wpcf7dtx_get_admin_settings_screen_url()); ?>">&laquo; <?php esc_html_e('Back to Settings', 'contact-form-7-dynamic-text-extension'); ?></a>
 <?php
     }
 }
