@@ -4,7 +4,11 @@
 
 **Release Date: 08/03/2026**
 
-Update: the name of this plugin was changed from _Contact Form 7 - Dynamic Text Extension_ to _DTX - Dynamic Text Extension for Contact Form 7_ to comply with the [plugin guideline #17 set by WordPress](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#17-plugins-must-respect-trademarks-copyrights-and-project-names) to respect the trademarks and copyrights of the plugin _Contact Form 7_ by Takayuki Miyoshi and Rock Lobster Inc.
+* Update: the name of this plugin was changed from _Contact Form 7 - Dynamic Text Extension_ to _DTX - Dynamic Text Extension for Contact Form 7_ to comply with the [plugin guideline #17 set by WordPress](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#17-plugins-must-respect-trademarks-copyrights-and-project-names) to respect the trademarks and copyrights of the plugin _Contact Form 7_ by Takayuki Miyoshi and Rock Lobster Inc.
+* Security: Disallowed direct file access by adding `defined('ABSPATH') || exit;` to the top of two (2) files: `/includes/admin/settings.php` and `/contact-form-7-dynamic-text-extension.php`.
+* Security: Added escaping to more dynamic strings.
+* Optimization: Added a setting callback to sanitize the array object
+* Internationalization: addressed incidences where the text domain was incorrect or not set.
 
 = 5.0.6 =
 
