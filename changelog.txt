@@ -4,11 +4,14 @@
 
 **Release Date: 08/03/2026**
 
-* Update: the name of this plugin was changed from _Contact Form 7 - Dynamic Text Extension_ to _DTX - Dynamic Text Extension for Contact Form 7_ to comply with the [plugin guideline #17 set by WordPress](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#17-plugins-must-respect-trademarks-copyrights-and-project-names) to respect the trademarks and copyrights of the plugin _Contact Form 7_ by Takayuki Miyoshi and Rock Lobster Inc.
-* Security: Disallowed direct file access by adding `defined('ABSPATH') || exit;` to the top of two (2) files: `/includes/admin/settings.php` and `/contact-form-7-dynamic-text-extension.php`.
+* Update: the name of this plugin was changed from _"Contact Form 7 - Dynamic Text Extension"_ to _"DTX - Dynamic Text Extension for Contact Form 7"_ to comply with the [plugin guideline #17 set by WordPress](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#17-plugins-must-respect-trademarks-copyrights-and-project-names) and to respect the trademarks and copyrights of the plugin _Contact Form 7_ by Takayuki Miyoshi and Rock Lobster Inc.
+* Update: the menu item for the settings page was changed from _"Dynamic Text Extension"_ to simply _"DTX"_.
+* Security: Disallowed direct file access for files that had it missing.
 * Security: Added escaping to more dynamic strings.
 * Optimization: Added a setting callback to sanitize the array object
-* Internationalization: addressed incidences where the text domain was incorrect or not set.
+* Internationalization: addressed incidences where the text domain was not set or incorrect.
+* Update: Added a "None found" message in the form scan when no results were found.
+* Update: Gave the scan button on the settings page a secondary button style.
 
 = 5.0.6 =
 
