@@ -101,6 +101,45 @@ class CF7DTX_Plugin_Settings
         return $this->_sections;
     }
 
+    /**
+     * Sanitize Array Variable
+     *
+     * @since 5.0.7
+     *
+     * @param mixed $maybe_array The content to be sanitized.
+     *
+     * @return array The sanitized array on success. Empty array otherwise.
+     */
+    public function sanitize_array($maybe_array) {
+        if(is_string($maybe_array) && !empty($maybe_array = trim($maybe_array))) {
+            $maybe_array = unserialize($maybe_array);
+        }
+        if(!is_array($maybe_array)) {
+            return array();
+        }
+        $sanitized_array = array();
+        foreach($maybe_array as $key => $value) {
+            $sanitized_key = trim(sanitize_text_field(strval($key)));
+            if(empty($sanitized_key) || is_object($value)) {
+                continue;
+            }
+            if(is_null($value) || is_bool($value)) {
+                $sanitized_value = $value;
+            } elseif(is_array($value)) {
+                $sanitized_value = self::sanitize_array($value);
+            } elseif(is_numeric($value)) {
+                if((float)$value == $value) {
+                    $sanitized_value = floatval($value);
+                } else {
+                    $sanitized_value = intval($value);
+                }
+            } else {
+                $sanitized_value = trim(sanitize_textarea_field(strval($value)));
+            }
+            $sanitized_array[$sanitized_key] = $sanitized_value;
+        }
+        return $sanitized_array;
+    }
 
     /**
      * Register the settings and all fields.
@@ -111,9 +150,13 @@ class CF7DTX_Plugin_Settings
      */
     function settings_init(): void
     {
-
         // Register a new setting this page.
-        register_setting('cf7dtx_settings', 'cf7dtx_settings');
+        register_setting('cf7dtx_settings', 'cf7dtx_settings', array(
+            'type' => 'array',
+            'label' => __('DTX Settings', 'contact-form-7-dynamic-text-extension'),
+            'description' => __('Plugin options configuration regarding DTX - Dynamic Text Extension for Contact Form 7.', 'contact-form-7-dynamic-text-extension'),
+            'sanitize_callback' => [$this, 'sanitize_array']
+        ));
 
         foreach ($this->sections() as $section_id => $section) {
             // Register a new section.
@@ -183,7 +226,7 @@ class CF7DTX_Plugin_Settings
             }
             wpcf7dtx_set_update_access_scan_check_status('notice_dismissed'); ?>
             <div class="notice notice-success dtx-notice">
-                <p><?php _e('Notice Dismissed.  You can run the scan any time from the CF7 DTX settings page', 'contact-form-7-dynamic-text-extension'); ?></p>
+                <p><?php esc_html_e('Notice Dismissed. You can run the scan any time from the CF7 DTX settings page', 'contact-form-7-dynamic-text-extension'); ?></p>
                 <p><?php $this->render_back_to_settings_button(); ?></p>
             </div>
             <?php return;
@@ -207,8 +250,7 @@ class CF7DTX_Plugin_Settings
                 }
                 $r = $this->handle_save_allows(); ?>
                 <div class="wrap">
-                    <h1><?php _e('DTX: Keys Added To Allow List', 'contact-form-7-dynamic-text-extension'); ?></h1>
-
+                    <h1><?php esc_html_e('DTX: Keys Added To Allow List', 'contact-form-7-dynamic-text-extension'); ?></h1>
                     <?php $this->render_allow_keys_submission($r); ?>
 
                 </div>
@@ -230,8 +272,7 @@ class CF7DTX_Plugin_Settings
 
             ?>
                 <div class="wrap">
-                    <h1><?php _e('DTX: Form Shortcode Scan Results', 'contact-form-7-dynamic-text-extension'); ?></h1>
-
+                    <h1><?php esc_html_e('DTX: Form Shortcode Scan Results', 'contact-form-7-dynamic-text-extension'); ?></h1>
                     <?php $this->render_scan_results($results); ?>
 
                 </div>
@@ -413,7 +454,7 @@ class CF7DTX_Plugin_Settings
      *
      * @return void
      */
-    function render_section(array $args): void
+    public function render_section(array $args): void
     {
         echo sprintf(
             '<p id="%s">%s</p>',
@@ -438,7 +479,7 @@ class CF7DTX_Plugin_Settings
 
             wpcf7dtx_set_update_access_scan_check_status('intervention_not_required');
 
-            echo '<div class="notice notice-success dtx-notice"><p>' . esc_html__('Scan complete. No keys detected.', 'contact-form-7-dynamic-text-extension') . '</p></div>';
+            echo '<div class="notice notice-success dtx-notice"><p>' . esc_html__('Scan complete. No action required.', 'contact-form-7-dynamic-text-extension') . '</p></div>';
             $this->render_back_to_settings_button();
             return;
         }
@@ -449,12 +490,12 @@ class CF7DTX_Plugin_Settings
             $next_offset = $offset + $this->num_forms_to_scan;
             echo '<div class="notice notice-warning dtx-notice"><p>';
             echo sprintf(
-                esc_html__('%1$s forms scanned. There may be more forms to scan.', 'contact-form-7-dynamic-text-extension'),
+                __('%1$s forms scanned.  There may be more forms to scan.', 'contact-form-7-dynamic-text-extension'),
                 $results['forms_scanned'],
             );
             echo ' ';
-            echo '<a href="' . esc_url(wpcf7dtx_get_admin_scan_screen_url($next_offset)) . '">' . sprintf(
-                esc_html__('Scan %1$s more forms', 'contact-form-7-dynamic-text-extension'),
+            echo '<a href="' . wpcf7dtx_get_admin_scan_screen_url($next_offset) . '">' . sprintf(
+                __('Scan %1$s more forms', 'contact-form-7-dynamic-text-extension'),
                 $this->num_forms_to_scan
             ) . '</a>';
             echo '</p></div>';
@@ -523,11 +564,11 @@ class CF7DTX_Plugin_Settings
                 </div>
             <?php else : ?>
                 <div class="notice notice-error dtx-notice" style="width:600px; box-sizing:border-box;">
-                    <p><strong><?php esc_html_e('Shortcodes accessing potentially sensitive Post Meta or User Data were detected in the forms listed below.', 'contact-form-7-dynamic-text-extension'); ?></strong></p>
-                    <p><?php esc_html_e('Only keys on the allow list will return their value when accessed. Attempting to access keys that are not on the allow list via DTX shortcodes will return an empty string and throw a warning message.', 'contact-form-7-dynamic-text-extension'); ?></p>
-                    <p><?php esc_html_e('Review the keys below and confirm that you want to allow access, then select meta and/or user keys to add them to the relevant allow list. Any keys for sensitive data should be removed by editing your contact form.', 'contact-form-7-dynamic-text-extension'); ?></p>
-                    <p><?php esc_html_e('Note that keys which are already in the allow list are displayed but marked as already selected.', 'contact-form-7-dynamic-text-extension'); ?></p>
-                    <p><a href="<?php echo esc_url(WPCF7DTX_DATA_ACCESS_KB_URL); ?>" target="_blank"><?php esc_html_e('More Information', 'contact-form-7-dynamic-text-extension'); ?></a></p>
+                    <p><strong><?php _e('Shortcodes accessing potentially sensitive Post Meta or User Data were detected in the forms listed below.', 'contact-form-7-dynamic-text-extension'); ?></strong></p>
+                    <p><?php _e('Only keys on the allow list will return their value when accessed.  Attempting to access keys that are not on the allow list via DTX shortcodes will return an empty string and throw a warning message.', 'contact-form-7-dynamic-text-extension'); ?></p>
+                    <p><?php _e('Review the keys below and confirm that you want to allow access, then select meta and/or user keys to add them to the relevant allow list.  Any keys for sensitive data should be removed by editing your contact form.', 'contact-form-7-dynamic-text-extension'); ?></p>
+                    <p><?php _e('Note that keys which are already in the allow list are displayed but marked as already selected.', 'contact-form-7-dynamic-text-extension'); ?></p>
+                    <p><a href="<?php echo WPCF7DTX_DATA_ACCESS_KB_URL; ?>" target="_blank"><?php _e('More Information', 'contact-form-7-dynamic-text-extension'); ?></a></p>
                 </div>
             <?php endif; ?>
 
@@ -542,11 +583,11 @@ class CF7DTX_Plugin_Settings
                     <div class="postbox">
                         <div class="postbox-header">
                             <h2><?php echo esc_html($r['title']); ?></h2>
-                            <a href="<?php echo esc_url($r['admin_url']); ?>" target="_blank"><?php esc_html_e('View form', 'contact-form-7-dynamic-text-extension'); ?></a>
+                            <a href="<?php echo esc_url($r['admin_url']); ?>" target="_blank">View form</a>
                         </div>
                         <div class="inside">
                             <?php if (count($r['meta_keys'])) : ?>
-                                <h4><?php esc_html_e('Meta Keys', 'contact-form-7-dynamic-text-extension'); ?></h3>
+                                <h4>Meta Keys</h3>
 
                                     <div>
                                         <?php foreach ($r['meta_keys'] as $key) {
@@ -567,7 +608,7 @@ class CF7DTX_Plugin_Settings
                                 <?php endif; ?>
 
                                 <?php if (count($r['user_keys'])) : ?>
-                                    <h4><?php esc_html_e('User Data Keys', 'contact-form-7-dynamic-text-extension'); ?></h3>
+                                    <h4>User Data Keys</h3>
                                         <div>
                                             <?php foreach ($r['user_keys'] as $key) {
                                                 $name = "dtx_user_key/$key";
@@ -590,7 +631,7 @@ class CF7DTX_Plugin_Settings
                 }
                 ?>
 
-                <?php if (!$all_keys_allowed) submit_button(esc_attr__('Add Selected Keys to Allow Lists', 'contact-form-7-dynamic-text-extension'), 'primary', 'save-allows'); ?>
+                <?php if (!$all_keys_allowed) submit_button(__('Add Selected Keys to Allow Lists', 'contact-form-7-dynamic-text-extension'), 'primary', 'save-allows'); ?>
             </form>
             <?php $this->render_back_to_settings_button(); ?>
         </div>
@@ -667,14 +708,14 @@ class CF7DTX_Plugin_Settings
 
     ?>
         <?php if (count($r['meta'])) : ?>
-            <p><?php esc_html_e('Meta Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['meta'])); ?></p>
+            <p><?php _e('Meta Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['meta'])); ?></p>
         <?php endif; ?>
         <?php if (count($r['user'])) : ?>
-            <p><?php esc_html_e('User Data Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['user'])); ?></p>
+            <p><?php _e('User Data Keys Added', 'contact-form-7-dynamic-text-extension'); ?>: <?php echo esc_html(implode(', ', $r['user'])); ?></p>
         <?php endif; ?>
 
         <?php if (!count($r['meta']) && !count($r['user'])) : ?>
-            <p><?php esc_html_e('No Keys Selected', 'contact-form-7-dynamic-text-extension'); ?></p>
+            <p><?php _e('No Keys Selected', 'contact-form-7-dynamic-text-extension'); ?></p>
         <?php endif; ?>
 
     <?php
@@ -691,7 +732,7 @@ class CF7DTX_Plugin_Settings
     function render_back_to_settings_button()
     {
     ?>
-        <a href="<?php echo esc_url(wpcf7dtx_get_admin_settings_screen_url()); ?>">&laquo; <?php esc_html_e('Back to Settings', 'contact-form-7-dynamic-text-extension'); ?></a>
+        <a href="<?php echo wpcf7dtx_get_admin_settings_screen_url(); ?>">&laquo; <?php _e('Back to Settings', 'contact-form-7-dynamic-text-extension'); ?></a>
 <?php
     }
 }
