@@ -321,7 +321,7 @@ class CF7DTX_Plugin_Settings
      *
      * @return void
      */
-    public function render_field(array $args) {
+    public function render_field(array $args)
     {
 
         $field = $args['field'];
